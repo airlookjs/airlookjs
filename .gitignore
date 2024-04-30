@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+node_modules
+age.agekey
+/services/app/report
+.nx/cache
+.DS_Store
