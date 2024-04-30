@@ -1,32 +1,34 @@
 {
-    "compilerOptions": {
-      "lib": [
-        "ESNext",
-      ],
-      "outDir": "dist",
-      "removeComments": true,
-      "target": "ES6", 
-      "types": [
-        "node"
-      ],
-      "baseUrl": "./", 
-      "esModuleInterop": true,
-      "moduleResolution": "node", 
-      "paths": {}, 
-      "sourceMap": true, 
-      "sourceRoot": "/src", 
-      "alwaysStrict": true, 
-      "allowUnreachableCode": false,
-      "noImplicitAny": true, 
-      "strictNullChecks": true, 
-      "noImplicitReturns": true,
-      "noUncheckedIndexedAccess": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "forceConsistentCasingInFileNames": true
-    },
-    "include": ["./packages/src/**/*.ts"],
-    "exclude": [
-      "node_modules/**/*"
-    ]
-  }
+  "compilerOptions": {
+    "lib": [
+      "ESNext"
+    ],
+    "outDir": "dist",
+    "removeComments": true,
+    "target": "ES6",
+    "types": [
+      "node"
+    ],
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "paths": {},
+    "sourceMap": true,
+    "sourceRoot": "/src",
+    "alwaysStrict": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "./packages/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules/**/*"
+  ]
+}

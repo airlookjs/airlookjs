@@ -1,4 +1,8 @@
 {
-    "recommendations": ["github.copilot", "svelte.svelte-vscode"]
+  "recommendations": [
+    "github.copilot",
+    "svelte.svelte-vscode",
+    "nrwl.angular-console",
+    "esbenp.prettier-vscode"
+  ]
 }
-  
