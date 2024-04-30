@@ -1,0 +1,3 @@
+[submodule "loudness-scanner"]
+	path = loudness-scanner
+	url = https://github.com/airlookjs/loudness-scanner.git
