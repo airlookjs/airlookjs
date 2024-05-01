@@ -1,7 +1,7 @@
 {
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "nxCloudAccessToken": "ZjIzNDM1ZjgtNzJjYi00MmU5LTgyMDAtMmJjOWQyMTNiNDljfHJlYWQtd3JpdGU=",
+  "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
     "projects": ["packages/*"],
