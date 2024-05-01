@@ -1,24 +1,24 @@
-import os from 'os'
-import express from 'express'
-import cors from 'cors'
-import prometheus from 'prom-client'
+import os from 'os';
+import express from 'express';
+import cors from 'cors';
+import prometheus from 'prom-client';
 
-import { config } from './config.js'
-import { errorRequestHandler, loudnessRequestHandler } from './route.js'
+import { config } from './config.js';
+import { errorRequestHandler, loudnessRequestHandler } from './route.js';
 
-const server = express()
+const server = express();
 
-const collectDefaultMetrics = prometheus.collectDefaultMetrics
+const collectDefaultMetrics = prometheus.collectDefaultMetrics;
 // Probe every 10th second.
 // @ts-ignore
-collectDefaultMetrics({ timeout: 10000 })
+collectDefaultMetrics({ timeout: 10000 });
 
 const HOSTNAME = os.hostname;
 
-server.use(cors())
+server.use(cors());
 
 // eslint-disable-next-line no-unused-vars
-server.get(`${config.route}`,loudnessRequestHandler)
+server.get(`${config.route}`,loudnessRequestHandler);
 
 /*
 const checks = 
@@ -38,16 +38,16 @@ server.use('/status', getExpressHealthRoute(checks));
 */
 
 server.get('/', function (_req, res) {
-  res.send('Loudness scanner is running')
-})
+  res.send('Loudness scanner is running');
+});
 
 server.get('/metrics', function (_req, res) {
-  res.send(prometheus.register.metrics())
-})
+  res.send(prometheus.register.metrics());
+});
 
 // Fallthrough error handler
-server.use(errorRequestHandler)
+server.use(errorRequestHandler);
 
 server.listen(config.port, function () {
   console.log(`Loudness scanner listening on ${HOSTNAME}:${config.port}`)
-})  
+});

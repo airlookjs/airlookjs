@@ -154,26 +154,26 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
         res.json({
           ...data,
           version: config.version
-        })
+        });
       }
-      fs.rmSync(outStream.path)
+      fs.rmSync(outStream.path);
     } catch (error) {
-      console.error(error)
-      next(error)
+      console.error(error);
+      next(error);
     }
   }
 
   // if we get here, no match was found for the file in any of the shares
   if (!foundMatchingMountedFile && error === null) {
-    console.log('File was not found: ' + fileUrl)
-    next(new Error('File was not found: ' + fileUrl))
+    console.log('File was not found: ' + fileUrl);
+    next(new Error('File was not found: ' + fileUrl));
   }
 }
 
 export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
-  res.statusCode = 500
-  res.json({ error: err.message })
+  res.statusCode = 500;
+  res.json({ error: err.message });
   //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
 }
