@@ -12,4 +12,4 @@ Main monorepo for packages and services developed by airlookjs
 - [ ] Migrate mediainfo to this repo
 - [ ] Migrate node-healthcheck to this repo
 - [ ] Migrate scenedetect to this repo
-
+- [ ] Protect main branch
