@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import type { SequenceContext } from '../shared';
-	import { key } from './key';
+	import { getSequenceContext } from './SequenceContext';
 	import { uniqueClasses } from '../utils';
 
 	import TimebarLabel from './TimebarLabel.svelte';
 
-	const { time, duration, scrubOverride, selectedHandle }: SequenceContext = getContext(key);
+	const {
+		time,
+		duration,
+		scrubOverride,
+		selectedHandle,
+		formatTimeFn: sequenceFormatTimeFn
+	} = getSequenceContext();
 
-	export let formatTimeFn = (value: number) => `${Math.round(value)}`;
+	export let formatTimeFn = sequenceFormatTimeFn;
 
 	// We could instead have a store for timebarLabels that we loop over to allow showing n number of relevant times and control through context
 	let extraTime: number | null = null;
@@ -58,16 +62,17 @@
 
 <!-- @component `Timebar` must be descendent of `Sequence`. -->
 <style lang="postcss">
-	.tl-timebar-container {
-	}
+	/*.tl-timebar-container {
+	}*/
 	.tl-timebar {
-		@apply flex bg-gray-100 bg-opacity-50 rounded-md shadow-inner py-1;
+		@apply flex bg-gray-50 dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 rounded-md shadow-inner py-1;
 	}
 	.tl-timebar-left {
 		@apply flex-none;
 	}
 	.tl-timebar-center {
-		@apply flex-1 invisible;
+		visibility: hidden;
+		@apply flex-1;
 	}
 	.tl-timebar-right {
 		@apply flex-none text-right;
@@ -88,14 +93,23 @@
 	.tl-duration {
 		@apply pr-2 not-italic font-mono;
 	}
-	:global(.tl-sequence-container:hover) .tl-timebar-center,
-	.scrub-active .tl-timebar-center {
-		@apply visible;
+	:global(.tl-sequence-container:hover) .tl-timebar-center {
+		visibility: visible;
 	}
-	:global(.tl-sequence-container:hover) .tl-start,
-	:global(.tl-sequence-container:hover) .tl-duration,
+
+	.scrub-active .tl-timebar-center {
+		visibility: visible;
+	}
+
+	:global(.tl-sequence-container:hover) .tl-start {
+		visibility: hidden;
+	}
 	.scrub-active .tl-start,
 	.scrub-active .tl-duration {
-		@apply invisible;
+		visibility: hidden;
+	}
+
+	:global(.tl-sequence-container:hover) .tl-duration {
+		visibility: hidden;
 	}
 </style>

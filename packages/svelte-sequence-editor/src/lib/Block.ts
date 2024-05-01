@@ -17,6 +17,17 @@ const DEFAULT_VALIDATION_OPTIONS: Required<TValidationOptions> = {
 	}
 };
 
+type ISetTimeOptions = {
+	maintainDuration?: boolean;
+	snap?: boolean;
+	snapTimes?: number[];
+	snapThreshold?: number;
+};
+
+const DEFAULT_SET_TIME_OPTIONS = {
+	snapThreshold: 150
+};
+
 export class Block implements ISequenceChild {
 	layers: Layer[];
 	index: number;
@@ -26,7 +37,7 @@ export class Block implements ISequenceChild {
 	data?: {
 		[key: string]: unknown;
 	};
-
+	markers: { time: number; title?: string }[] = [];
 	errors: { type: string; message: string }[] = [];
 
 	private _inTime?: number;
@@ -66,6 +77,8 @@ export class Block implements ISequenceChild {
 			inTime: options.inTime,
 			outTime: options.outTime
 		};
+
+		this.markers = options.markers?.sort((a, b) => a.time - b.time) ?? [];
 
 		// Add sub layers
 		this.layers =
@@ -192,12 +205,12 @@ export class Block implements ISequenceChild {
 		this.setOutTime(this._outTime as number);
 	}
 
-	public setInTime(value: number, options: { maintainDuration?: boolean; snap?: boolean } = {}) {
+	public setInTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) {
 		const res = this.setTimeCommon(value, tHandles.inTime, options);
 		return res.apply();
 	}
 
-	public setOutTime(value: number, options: { maintainDuration?: boolean; snap?: boolean } = {}) {
+	public setOutTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) {
 		const res = this.setTimeCommon(value, tHandles.outTime, options);
 		return res.apply();
 	}
@@ -215,10 +228,17 @@ export class Block implements ISequenceChild {
 	protected setTimeCommon(
 		inputValue: number,
 		prop: tHandles,
-		options: { maintainDuration?: boolean; snap?: boolean },
+		options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS,
 		depth = 0
 	) {
 		depth++;
+
+		const {
+			maintainDuration,
+			snap,
+			snapTimes,
+			snapThreshold = DEFAULT_SET_TIME_OPTIONS.snapThreshold
+		} = options;
 
 		const value = this.roundTime(inputValue);
 		const propValidation = this.validations[prop];
@@ -265,9 +285,29 @@ export class Block implements ISequenceChild {
 		};
 
 		// Constrain value to 0 and parent duration
-		// should it return false instead?
-		// FIXME: $duration
-		let setT = Math.min(this.parent?.getDuration() ?? /*$duration*/ 3000, Math.max(value, 0));
+		let setT = Math.min(this.parent.getDuration(), Math.max(value, 0));
+
+		// if value is within a certain threshold of a value in snapTimes
+		// snap to that value
+		// TODO: parse in value bases on ui pixels
+
+		if (snapTimes) {
+			const snaps = snapTimes
+				.map((snapTime) => {
+					// make relative
+					return snapTime - this.parent.getAbsoluteInTime();
+				})
+				.filter((snapTime) => {
+					return Math.abs(setT - snapTime) < snapThreshold;
+				})
+				.sort((a, b) => {
+					return Math.abs(setT - a) - Math.abs(setT - b);
+				});
+			const snap = snaps[0];
+			if (snap) {
+				setT = snap;
+			}
+		}
 
 		if (isIn) {
 			// Constrain inTime for min duration
@@ -290,9 +330,9 @@ export class Block implements ISequenceChild {
 
 		const expanding = (fwd && prop == 'outTime') || (!fwd && prop == 'inTime');
 
-		if (options?.maintainDuration) {
+		if (maintainDuration) {
 			//console.debug(debugPrefix, 'set opposing to maintain duration');
-			const res = setOp(opC + diff, { maintainDuration: false });
+			const res = setOp(opC + diff, { maintainDuration: false, snapTimes: [] });
 
 			res.apply();
 			if (res.blocked) {
@@ -328,15 +368,10 @@ export class Block implements ISequenceChild {
 				if ((isIn && setT < adj[opProp]) || (!isIn && setT > adj[opProp])) {
 					//console.debug(debugPrefix, 'hits adjacent block');
 
-					if (options.snap) {
+					if (snap) {
 						setT = adj[opProp];
 					} else {
-						const res = adj.setTimeCommon(
-							setT,
-							opProp,
-							{ maintainDuration: options.maintainDuration },
-							depth
-						);
+						const res = adj.setTimeCommon(setT, opProp, { maintainDuration }, depth);
 						res.apply();
 						setT = res.v1;
 					}
@@ -400,23 +435,23 @@ export class Block implements ISequenceChild {
 						//
 						const lastChild = layer.blocks[layer.blocks.length - 1];
 
-						if (!isIn && setT - this.inTime < lastChild.outTime && !options.maintainDuration) {
+						if (!isIn && setT - this.inTime < lastChild.outTime && !maintainDuration) {
 							const res = lastChild.setTimeCommon(
 								setT - this.inTime,
 								tHandles.outTime,
-								options,
+								{ ...options, snapTimes: [] },
 								depth
 							);
 							res.apply();
 							setT = this.inTime + res.v1;
 
 							return res;
-						} else if (isIn && !options.maintainDuration) {
+						} else if (isIn && !maintainDuration) {
 							if (this.outTime - setT < lastChild.outTime) {
 								const res = lastChild.setTimeCommon(
 									this.outTime - setT,
 									tHandles.outTime,
-									options,
+									{ ...options, snapTimes: [] },
 									depth
 								);
 								res.apply();
@@ -432,33 +467,37 @@ export class Block implements ISequenceChild {
 		return set(setT);
 	}
 
-	public move(delta: number, options: { snap?: boolean } = {}) {
+	public move(
+		delta: number,
+		options: Omit<ISetTimeOptions, 'maintainDuration'> = DEFAULT_SET_TIME_OPTIONS
+	) {
 		if (delta == 0) return;
 
 		const res = this.setTimeCommon(
 			(delta > 0 ? this.inTime : this.outTime) + delta,
 			delta > 0 ? tHandles.inTime : tHandles.outTime,
-			{ maintainDuration: true, snap: options.snap }
+			{ maintainDuration: true, snap: options.snap, snapTimes: options.snapTimes }
 		);
 		return res.apply();
 	}
 
 	public validate() {
-		const errors = [];
+		const errors: { type: string; message: string }[] = [];
+
 		if (this.inTime > this.outTime) {
-			errors.push('inTime can not be above outTime');
+			errors.push({ type: 'validation', message: 'inTime can not be above outTime' });
 		}
 		if (this.inTime < 0) {
-			errors.push('inTime can not be below 0');
+			errors.push({ type: 'validation', message: 'inTime can not be below 0' });
 		}
 		if (this.outTime > this.parent.getOutTime()) {
-			errors.push('outTime can not be above parent outTime');
+			errors.push({ type: 'validation', message: 'outTime can not be above parent outTime' });
 		}
 		if (this.getDuration() < this.getMinDuration()) {
-			errors.push('duration can not be below minDuration');
+			errors.push({ type: 'validation', message: 'duration can not be below minDuration' });
 		}
 		if (this.getDuration() > this.getMaxDuration()) {
-			errors.push('duration can not be above maxDuration');
+			errors.push({ type: 'validation', message: 'duration can not be above maxDuration' });
 		}
 
 		this.layers.forEach((layer) => {
