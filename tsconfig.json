@@ -6,9 +6,6 @@
     "outDir": "dist",
     "removeComments": true,
     "target": "ES6",
-    "types": [
-      "node"
-    ],
     "baseUrl": "./",
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -26,7 +23,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./packages/src/**/*.ts"
+    "./packages/**/src/**/*.ts"
   ],
   "exclude": [
     "node_modules/**/*"
