@@ -21,7 +21,7 @@ export interface GetLoudnessOutput {
 export async function getLoudness(file: string, sampleRate: number) {
 	console.log('Measuring loudness for: ' + file)
 
-	var cmd = path.resolve('loudness-scanner-build', 'loudness.exe') // TODO: move to config
+	var cmd = path.resolve('loudness-scanner-build', 'loudness.exe'); // TODO: move to config
 
 	if (os.platform() === 'darwin') {
 		cmd = './loudness-scanner-osx/build/loudness'
@@ -73,7 +73,7 @@ export async function getLoudness(file: string, sampleRate: number) {
 
 		exec(integratedCmd)
 			.then(({ stdout, stderr }) => {
-				if (stderr) console.error('stderr', stderr)
+				if (stderr) console.error('stderr', stderr);
 				console.info(integratedCmd, 'done')
 				var lines = stdout.toString().split('\n')
 				lines.pop()
@@ -81,7 +81,6 @@ export async function getLoudness(file: string, sampleRate: number) {
         lines.forEach((line) => {
           if (os.platform() !== 'darwin' && os.platform() !== 'linux') {
             if (line == '-1.$\r') {
-
               output.loudness.integratedValues!.push(null);
               // return early to avoid pushing twice
               return;
