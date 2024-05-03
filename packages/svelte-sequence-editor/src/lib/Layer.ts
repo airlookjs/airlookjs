@@ -13,7 +13,7 @@ export class Layer implements ISequenceChild {
 		[key: string]: unknown;
 	};
 
-	errors: string[] = [];
+	errors: { type: string; message: string }[] = [];
 
 	constructor(options: TSequenceLayerOptions, parent: Block | Sequence) {
 		this.parent = parent;

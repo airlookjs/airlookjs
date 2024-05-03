@@ -11,6 +11,8 @@ export class Sequence implements ISequenceCommon {
 	layers: Layer[];
 	options: TSequenceOptions;
 
+	errors: { type: string; message: string }[] = [];
+
 	constructor(layers: TSequenceLayerOptions[], duration: number, options: TSequenceOptions) {
 		this.duration = duration;
 		this.options = options;
@@ -43,12 +45,10 @@ export class Sequence implements ISequenceCommon {
 		//const durationDiff = duration - this.duration;
 
 		if (duration < this.getMinDuration()) {
-			if (this.options.errorHandler) {
-				this.options.errorHandler({
-					type: 'duration',
-					message: `Duration can not be set below ${this.getMinDuration()}. Try to remove some elements.`
-				});
-			}
+			this.errorHandler({
+				type: 'duration',
+				message: `Duration can not be set below ${this.getMinDuration()}. Try to remove some elements.`
+			});
 
 			duration = this.getMinDuration();
 		}

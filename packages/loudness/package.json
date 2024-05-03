@@ -8,9 +8,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "dev": "tsc-watch --onSuccess \"nodemon dist/index.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc && node dist/app.js",
+    "dev": "tsc-watch --onSuccess \"nodemon dist/app.js\""
   },
   "engine": "node > 18",
   "dependencies": {
