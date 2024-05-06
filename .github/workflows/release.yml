@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - initial-ci
+      - initial-ci # TODO: remove this line when finished testing
     #tags:
     #  - v*.*.*
 
@@ -12,6 +12,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     permissions:
       contents: write
     timeout-minutes: 10
@@ -49,6 +51,8 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     needs: release
     permissions:
       contents: read
