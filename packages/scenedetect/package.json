@@ -1,5 +1,5 @@
 {
-	"name": "scenedetect",
+	"name": "@airlookjs/scenedetect",
 	"version": "0.3.0",
 	"description": "scenedetect service",
 	"main": "src/index.js",
