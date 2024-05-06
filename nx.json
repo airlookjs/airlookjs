@@ -24,5 +24,13 @@
         "targetName": "e2e"
       }
     }
-  ]
+  ],
+  "targetDefaults": {
+    "build": {
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    }
+  }
 }
