@@ -235,7 +235,6 @@
 
 	<Button on:click={() => (modal = true)}>modal, z-index test</Button>
 
-
 	<div class="mb-4">
 		<Label for="duration">Duration</Label>
 		<Input
@@ -279,7 +278,8 @@
 	</div>
 </section>
 
-
 <Modal title="Terms of Service" bind:open={modal} autoclose>
-	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">Should render on top of timeline</p>
-  </Modal>
+	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+		Should render on top of timeline
+	</p>
+</Modal>
