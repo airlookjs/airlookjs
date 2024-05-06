@@ -3,9 +3,9 @@
 	"version": "4.1.6",
 	"author": "Johan Bichel Lindegaard <public@johan.cc>",
 	"license": "MIT",
-	"homepage": "https://github.com/airlookjs/svelte-sequence-editor#readme",
+	"homepage": "https://github.com/airlookjs/airlookjs/packages/svelte-sequence-editor#readme",
 	"bugs": {
-		"url": "https://github.com/airlookjs/svelte-sequence-editor/issues"
+		"url": "https://github.com/airlookjs/airlookjs/issues"
 	},
 	"keywords": [
 		"svelte",
@@ -21,7 +21,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/airlookjs/svelte-sequence-editor.git"
+		"url": "git+https://github.com/airlookjs/airlookjs.git"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -35,8 +35,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"semantic-release": "semantic-release"
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
