@@ -21,7 +21,7 @@ export interface GetLoudnessOutput {
 export async function getLoudness(file: string, sampleRate: number) {
 	console.log('Measuring loudness for: ' + file)
 
-	var cmd = path.resolve('loudness-scanner-build', 'loudness.exe'); // TODO: move to config
+	let cmd = path.resolve('loudness-scanner-build', 'loudness.exe'); // TODO: move to config
 
 	if (os.platform() === 'darwin') {
 		cmd = './loudness-scanner-osx/build/loudness'
@@ -46,14 +46,14 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr)
 				console.info(scanCmd, 'done')
-				var nums = stdout.toString().split('\n')?.[0]?.split(' ') || [];
-				var lufs = parseFloat(nums[0] ?? '');
+				const nums = stdout.toString().split('\n')?.[0]?.split(' ') || [];
+				const lufs = parseFloat(nums[0] ?? '');
 
-				var lraIndex = 2
+				let lraIndex = 2
 				if (nums[2] == ' ' || nums[2] == '' || isNaN(Number(nums[2]))) {
 					lraIndex = 3
 				}
-				var lra = parseFloat(nums[lraIndex] ?? '');
+				const lra = parseFloat(nums[lraIndex] ?? '');
 
 				if (isNaN(lufs)) {
 					console.error('unexpected value, error was: ' + stderr);
@@ -75,7 +75,7 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr);
 				console.info(integratedCmd, 'done')
-				var lines = stdout.toString().split('\n')
+				const lines = stdout.toString().split('\n')
 				lines.pop()
 				output.loudness.integratedValues = [];
         lines.forEach((line) => {
@@ -98,7 +98,7 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr)
 				console.info(momentaryCmd, 'done')
-				var lines = stdout.toString().split('\n')
+				const lines = stdout.toString().split('\n')
 				lines.pop()
 				output.loudness.momentaryValues = []
 				lines.forEach(function (line) {
@@ -114,7 +114,7 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr)
 				console.info(shorttermCmd, 'done')
-				var lines = stdout.toString().split('\n')
+				const lines = stdout.toString().split('\n')
 				lines.pop()
 				output.loudness.shorttermValues = []
 				lines.forEach(function (line) {

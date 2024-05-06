@@ -1,10 +1,5 @@
 import { getLoudness } from "../src/loudness";
-import child_process from 'child_process';
 import util from 'util';
-
-jest.mock('child_process');
-// @ts-ignore 
-child_process.exec.mockImplementation(() => {});
 
 describe("getLoudness", () => {
   describe('with working data', () => {
@@ -14,25 +9,25 @@ describe("getLoudness", () => {
     let lufsMock = "3.6"
     let lraMock = "-22.2"
     let scanCmdMockData: { stdout:string, stderr?: string } = { stdout: `${lufsMock} 0 ${lraMock}\n` };
-    let integratedCmdMockData = { stdout: "-21.0\n-23.7\n-2.7\n0\n" };
-    let momentaryCmdMockData = { stdout: "-48.5\n-35.7\n29.6\n-24.6\n-21.6\n" };
-    let shorttermCmdMockData = { stdout: "-57.2\n-44.5\n-38.4\n-33.3\n-28.2\n"} ;
-  
+    const integratedCmdMockData = { stdout: "-21.0\n-23.7\n-2.7\n0\n" };
+    const momentaryCmdMockData = { stdout: "-48.5\n-35.7\n29.6\n-24.6\n-21.6\n" };
+    const shorttermCmdMockData = { stdout: "-57.2\n-44.5\n-38.4\n-33.3\n-28.2\n"} ;
+    
     beforeEach(() => {
       jest.spyOn(util, 'promisify').mockImplementation(() => {
         return async (argument: string) => {
           switch (argument) {
-            case `./loudness-scanner-osx/build/loudness scan --lra \"${fileName}\"`:
-            case `./loudness-scanner/build/loudness scan --lra \"${fileName}\"`:
+            case `./loudness-scanner-osx/build/loudness scan --lra "${fileName}"`:
+            case `./loudness-scanner/build/loudness scan --lra "${fileName}"`:
               return scanCmdMockData;
-            case `./loudness-scanner-osx/build/loudness dump -i ${sampleRate} \"${fileName}\"`:
-            case `./loudness-scanner/build/loudness dump -i ${sampleRate} \"${fileName}\"`:
+            case `./loudness-scanner-osx/build/loudness dump -i ${sampleRate} "${fileName}"`:
+            case `./loudness-scanner/build/loudness dump -i ${sampleRate} "${fileName}"`:
               return integratedCmdMockData;
-            case `./loudness-scanner-osx/build/loudness dump -m ${sampleRate} \"${fileName}\"`:
-            case `./loudness-scanner/build/loudness dump -m ${sampleRate} \"${fileName}\"`:
+            case `./loudness-scanner-osx/build/loudness dump -m ${sampleRate} "${fileName}"`:
+            case `./loudness-scanner/build/loudness dump -m ${sampleRate} "${fileName}"`:
               return momentaryCmdMockData;
-            case `./loudness-scanner-osx/build/loudness dump -s ${sampleRate} \"${fileName}\"`:
-            case `./loudness-scanner/build/loudness dump -s ${sampleRate} \"${fileName}\"`:
+            case `./loudness-scanner-osx/build/loudness dump -s ${sampleRate} "${fileName}"`:
+            case `./loudness-scanner/build/loudness dump -s ${sampleRate} "${fileName}"`:
               return shorttermCmdMockData;
             default:
               // We should not end up in default
@@ -82,12 +77,9 @@ describe("getLoudness", () => {
 
 
   describe('the promises respond with error', () => {
-    let sampleRate = 0.02;
-    let fileName = "filename";
-    // let scanError = "testing error"
-    // let integratedError = "testing error"
-    // let momentaryError = "testing error"
-    let error = new Error("testing error");
+    const sampleRate = 0.02;
+    const fileName = "filename";
+    const error = new Error("testing error");
     
 
     beforeEach(() => {
