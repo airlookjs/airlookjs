@@ -6,14 +6,19 @@
     "outDir": "dist",
     "removeComments": true,
     "target": "ES6",
-    "types": [
-      "node"
-    ],
     "baseUrl": "./",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "paths": {},
     "sourceMap": true,
+    "types": [
+      "cors",
+      "express",
+      "jest",
+      "node",
+      "nodemon",
+      "uuid"
+    ],
     "sourceRoot": "/src",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
@@ -26,7 +31,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./packages/src/**/*.ts"
+    "./packages/**/src/**/*.ts",
+    "./packages/**/__tests__/**/*.ts"
   ],
   "exclude": [
     "node_modules/**/*"
