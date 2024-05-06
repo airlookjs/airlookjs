@@ -15,7 +15,7 @@ export interface GetLoudnessOutput {
     shorttermValues?: numberOrNullArray;
     warning?: string;
   }
-  error?: child_process.ExecException | string;
+  error?: child_process.ExecException | string;
 };
 
 export async function getLoudness(file: string, sampleRate: number) {
@@ -46,14 +46,14 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr)
 				console.info(scanCmd, 'done')
-				const nums = stdout.toString().split('\n')?.[0]?.split(' ') || [];
+				const nums = stdout.toString().split('\n')?.[0]?.split(' ') || [];
 				const lufs = parseFloat(nums[0] ?? '');
 
 				let lraIndex = 2
 				if (nums[2] == ' ' || nums[2] == '' || isNaN(Number(nums[2]))) {
 					lraIndex = 3
 				}
-				const lra = parseFloat(nums[lraIndex] ?? '');
+				const lra = parseFloat(nums[lraIndex] ?? '');
 
 				if (isNaN(lufs)) {
 					console.error('unexpected value, error was: ' + stderr);
