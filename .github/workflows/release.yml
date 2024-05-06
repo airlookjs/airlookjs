@@ -75,9 +75,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - run: pnpm install --frozen-lockfile
+      - uses: nrwl/nx-set-shas@v4
 
       - run: npx nx affected -t build --exclude='@airlookjs/mediainfo'
-      
+
       - name: Publish packages
         run: npx nx release publish --dry-run
         env:
