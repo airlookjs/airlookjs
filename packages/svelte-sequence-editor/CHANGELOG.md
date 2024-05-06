@@ -1,3 +1,15 @@
+## 4.1.7 (2024-05-06)
+
+
+### 🩹 Fixes
+
+- **@airlookjs/svelte-sequence-editor:** move project release to monorepo ([4153a70](https://github.com/airlookjs/airlookjs/commit/4153a70))
+
+
+### ❤️  Thank You
+
+- Johan Bichel @smukkejohan
+
 ## [4.1.6](https://github.com/airlookjs/svelte-sequence-editor/compare/v4.1.5...v4.1.6) (2024-03-21)
 
 
