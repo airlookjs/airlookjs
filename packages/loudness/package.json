@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/express": "4.17.21",
-    "@types/node": "20.12.7",
+    "@types/node": "20.12.8",
     "@types/nodemon": "1.19.6",
     "nodemon": "^3.1.0",
     "tsc-watch": "^6.2.0",
