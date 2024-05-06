@@ -76,11 +76,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Download dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
+      - run: npx nx affected -t build --exclude='@airlookjs/mediainfo'
+      
       - name: Publish packages
         run: npx nx release publish --dry-run
         env:
