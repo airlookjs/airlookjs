@@ -45,11 +45,6 @@ jobs:
       - name: Release packages
         run: npx nx release --skip-publish --dry-run
 
-      - name: Upload dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
 
   publish:
     name: Publish
