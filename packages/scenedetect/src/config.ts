@@ -3,29 +3,29 @@ import dotenv from 'dotenv';
 import getSharedConfig from 'shared-config';
 
 export interface ShareInfo {
-  name: string;
-  localizedName: string;
-  mount: string;
-  uncRoot: string;
-  cached: boolean;
-  systemRoot: string
-  matches: RegExp[];
-};
+	name: string;
+	localizedName: string;
+	mount: string;
+	uncRoot: string;
+	cached: boolean;
+	systemRoot: string;
+	matches: RegExp[];
+}
 
 export type ShareRecord = Record<string, ShareInfo>;
 
 export interface SharedConfig {
-  shares: ShareRecord;
-  environment: string;
-  printVersion: () => void;
+	shares: ShareRecord;
+	environment: string;
+	printVersion: () => void;
 }
 export interface SceneDetectConfig {
-  environment: string;
-  route: string;
-  shares: ShareInfo[];
-  version: string;
-  port: number;
-};
+	environment: string;
+	route: string;
+	shares: ShareInfo[];
+	version: string;
+	port: number;
+}
 
 dotenv.config();
 

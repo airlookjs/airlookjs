@@ -1,4 +1,3 @@
-
 import fs from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import got from 'got';
@@ -6,7 +5,7 @@ import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { getScenes } from './scenedetect.js';
-import { config } from './config.js'
+import { config } from './config.js';
 
 export const loudnessRequestHandler: RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.query.file);
@@ -14,9 +13,9 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 	if (typeof req.query.file !== 'string') {
 		throw new Error('query parameter file cannot be an array');
 	}
-  
+
 	const fileUrl: string = req.query.file;
-  
+
 	let error: string | null = null;
 
 	let foundMatchingMountedFile = false;
@@ -177,7 +176,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 					foundMatchingMountedFile = true;
 					res.json({
 						...data,
-						version: config.version,
+						version: config.version
 					});
 				}
 				fs.rmSync(outStream.path);
@@ -197,12 +196,12 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 		res.status(400);
 		res.json({ error: 'Missing file argument' });
 	}
-}
+};
 
 export const errorRequestHandler: ErrorRequestHandler = (err, _req, res) => {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
-  res.statusCode = 500;
-  res.json({ error: err.message });
-  //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
-}
+	// The error id is attached to `res.sentry` to be returned
+	// and optionally displayed to the user for support.
+	res.statusCode = 500;
+	res.json({ error: err.message });
+	//res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
+};
