@@ -22,5 +22,6 @@
     "nx": "18.3.4",
     "prettier": "^2.6.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "packageManager": "pnpm@9.0.5"
 }
