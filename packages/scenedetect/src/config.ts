@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-// @ts-ignore not defined in project yet
+// @ts-expect-error not defined in project yet
 import getSharedConfig from 'shared-config';
 
 export interface ShareInfo {
