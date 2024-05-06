@@ -10,6 +10,12 @@ importers:
       '@nx/js':
         specifier: 18.3.4
         version: 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5)
+      '@nx/playwright':
+        specifier: 18.3.4
+        version: 18.3.4(@playwright/test@1.43.1)(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5)
+      '@playwright/test':
+        specifier: ^1.36.0
+        version: 1.43.1
       '@swc-node/register':
         specifier: ~1.9.0
         version: 1.9.0(@swc/core@1.3.107)(@swc/types@0.1.6)(typescript@5.4.5)
@@ -2825,6 +2831,35 @@ packages:
       yargs-parser: 21.1.1
     dev: true
 
+  /@nx/eslint@18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4):
+    resolution:
+      {
+        integrity: sha512-PiAMeI87RD9pi/IvOUWwszNBvwaY/V8fqcUUKIi6uzrzCsaKTmelTlaeJbH/z7Ulzx3iFPx1w1tcagI0ZWDBaQ==,
+      }
+    peerDependencies:
+      js-yaml: 4.1.0
+    peerDependenciesMeta:
+      js-yaml:
+        optional: true
+    dependencies:
+      '@nx/devkit': 18.3.4(nx@18.3.4)
+      '@nx/js': 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5)
+      '@nx/linter': 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)
+      eslint: 8.57.0
+      tslib: 2.6.2
+      typescript: 5.4.5
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - nx
+      - supports-color
+      - verdaccio
+    dev: true
+
   /@nx/js@18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5):
     resolution:
       {
@@ -2876,6 +2911,26 @@ packages:
       - nx
       - supports-color
       - typescript
+    dev: true
+
+  /@nx/linter@18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4):
+    resolution:
+      {
+        integrity: sha512-hvgsd1JMjRykHheIJOwxDAYLcy6b9wLtBZGV4pdg1Q4himocgG9Rhi/V7ha+hPtV8oq+iIRuNnLPY+UcdK2ovQ==,
+      }
+    dependencies:
+      '@nx/eslint': 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - js-yaml
+      - nx
+      - supports-color
+      - verdaccio
     dev: true
 
   /@nx/nx-darwin-arm64@18.3.4:
@@ -2997,6 +3052,38 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@nx/playwright@18.3.4(@playwright/test@1.43.1)(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5):
+    resolution:
+      {
+        integrity: sha512-M6IjSwUkzOKRvaMYfHJVrItBVJ22ojB3oCovzo0J7qx2o0za62o+lo3cbwfmtEqMlgvl0EX8cptlvDTQJFJopQ==,
+      }
+    peerDependencies:
+      '@playwright/test': ^1.36.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+    dependencies:
+      '@nx/devkit': 18.3.4(nx@18.3.4)
+      '@nx/eslint': 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)
+      '@nx/js': 18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@18.3.4)(typescript@5.4.5)
+      '@phenomnomnominal/tsquery': 5.0.1(typescript@5.4.5)
+      '@playwright/test': 1.43.1
+      minimatch: 9.0.3
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - js-yaml
+      - nx
+      - supports-color
+      - typescript
+      - verdaccio
+    dev: true
 
   /@nx/workspace@18.3.4(@swc-node/register@1.9.0)(@swc/core@1.3.107):
     resolution:

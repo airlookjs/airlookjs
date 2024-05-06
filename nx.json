@@ -4,7 +4,9 @@
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/svelte-sequence-editor"],
+    "projects": [
+      "packages/svelte-sequence-editor"
+    ],
     "version": {
       "conventionalCommits": true
     },
@@ -13,5 +15,13 @@
         "createRelease": "github"
       }
     }
-  }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
+    }
+  ]
 }
