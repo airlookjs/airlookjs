@@ -4,12 +4,16 @@
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/*"],
+    "projects": ["packages/svelte-sequence-editor"],
     "version": {
       "conventionalCommits": true
     },
     "changelog": {
-      "projectChangelogs": true
+      "projectChangelogs": {
+        "createRelease": "github"
+      }
     }
   }
 }
+
+
