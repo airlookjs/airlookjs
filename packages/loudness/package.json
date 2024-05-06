@@ -8,10 +8,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "tsc && node dist/index.js",
+    "start": "tsc && node dist/app.js",
+    "dev": "tsc-watch --onSuccess \"nodemon dist/app.js\"",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "dev": "tsc-watch --onSuccess \"nodemon dist/index.js\""
+    "test:watch": "jest --watch"
   },
   "engine": "node > 18",
   "dependencies": {

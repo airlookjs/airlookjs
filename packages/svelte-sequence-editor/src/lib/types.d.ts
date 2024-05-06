@@ -46,13 +46,14 @@ export type TSequenceBlockOptions = ISequenceCommonOptions & {
 	outTime?: number; // Initial outTime as absolute milliseconds
 	validations?: TValidationOptions;
 	layers?: Array<TSequenceLayerOptions>;
+	markers?: Array<{ time: number; title?: string }>;
 };
 
 export interface ISequenceCommon {
 	initialize(): void;
 	scale(scaleFactor: number): void;
 	update(): void;
-	validate(): void; // maybe return errors ?
+	validate(): void;
 	getSequence(): Sequence;
 	getByKey(absoluteKey: string): ISequenceChild | null;
 
@@ -81,13 +82,3 @@ export type TSelectedHandle = Writable<null | {
 	cursor: string;
 	handle: BlockHandleType;
 }>;
-
-export interface SequenceContext {
-	time: Writable<number>;
-	width: Writable<number>;
-	duration: Writable<number>;
-	selectedHandle: TSelectedHandle;
-	scrubOverride: Writable<boolean>;
-	sequence: Writable<Sequence>;
-	setTime: (value: number) => void;
-}

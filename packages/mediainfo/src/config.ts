@@ -1,5 +1,5 @@
 // parse bools from env safely
-const parseBoolEnv = (env, defaultValue) => {
+/*const parseBoolEnv = (env, defaultValue) => {
 	if (env === undefined) {
 		return defaultValue
 	}
@@ -10,7 +10,7 @@ const parseBoolEnv = (env, defaultValue) => {
 		return false
 	}
 	return defaultValue
-}
+}*/
 
 // parse ints from env safely
 const parseIntEnv = (env, defaultValue) => {

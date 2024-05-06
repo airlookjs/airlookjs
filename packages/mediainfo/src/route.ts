@@ -8,7 +8,6 @@ import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
 export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.params.path)
 
-	let error = null
 	let foundMatchingMountedFile = false
 	const pathParam = req.params.path
 

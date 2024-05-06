@@ -10,7 +10,7 @@ on:
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
     cancel-in-progress: true
-    
+
 permissions:
   actions: read
   contents: read
@@ -18,6 +18,9 @@ permissions:
 jobs:
   main:
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+      
     steps:
       - uses: actions/checkout@v4
         with:
