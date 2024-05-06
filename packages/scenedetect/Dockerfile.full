@@ -1,0 +1,44 @@
+FROM node:20.10.0-bullseye as pnpm
+
+RUN npm install -g pnpm
+
+FROM pnpm as libraries
+
+RUN sed -i "s/main/main contrib non-free/g" /etc/apt/sources.list
+RUN apt-get update
+
+RUN apt-get install -y libavformat-dev
+RUN apt-get install -y libavcodec-dev
+RUN apt-get install -y libavutil-dev
+
+RUN apt-get install -y ffmpeg
+RUN apt-get install -y python3 python3-pip
+RUN pip3 install scenedetect[opencv-headless]
+
+WORKDIR /app
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+
+WORKDIR /app
+
+COPY package.json ./
+
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store\
+ # ↑ By caching the content-addressable store we stop downloading the same packages again and again
+ pnpm install --no-frozen-lockfile --unsafe-perm\
+ # ↑ Docker runs pnpm as root and then pnpm won't run package scripts unless we pass this arg
+ | grep -v "cross-device link not permitted\|Falling back to copying packages from store"
+ # ↑ Unfortunately using Docker's 'cache' mount type causes Docker to place the pnpm content-addressable store
+ # on a different virtual drive, which prohibits pnpm from symlinking its content to its virtual store
+ # (in node_modules/.pnpm), and that causes pnpm to fall back on copying the files.
+ # And that's fine!, except pnpm emits many warnings of this, so here we filter those out.
+
+COPY . .
+
+RUN pnpm run build
+
+ENV PORT 3000
+EXPOSE 3000
+
+CMD [ "pnpm", "run", "start" ]
