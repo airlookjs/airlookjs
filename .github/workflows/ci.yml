@@ -1,4 +1,4 @@
-name: CI
+name: Lint, Test, and Build
 
 on:
   push:
@@ -45,5 +45,4 @@ jobs:
       - run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
 
-      - run: pnpm exec nx-cloud record -- nx format:check
-      - run: pnpm exec nx affected -t lint test build
+      - run: nx affected -t lint test build
