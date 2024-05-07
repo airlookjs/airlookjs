@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "lib": ["ESNext"],
+      "outDir": "dist",
+      "removeComments": true,
+      "target": "ES6",
+      "baseUrl": "./",
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "paths": {},
+      "sourceMap": true,
+      "types": ["cors", "express", "jest", "node", "nodemon", "uuid"],
+      "sourceRoot": "./src",
+      "alwaysStrict": true,
+      "allowUnreachableCode": false,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "noImplicitReturns": true,
+      "noUncheckedIndexedAccess": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["./packages/**/src/**/*.ts", "./packages/**/__tests__/**/*.ts"],
+    "exclude": ["node_modules/**/*"]
+  }
+  

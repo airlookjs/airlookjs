@@ -8,10 +8,10 @@ import { errorRequestHandler, loudnessRequestHandler } from './route.js';
 
 const server = express();
 
-const collectDefaultMetrics = prometheus.collectDefaultMetrics;
+// TODO: prometheus
+//const collectDefaultMetrics = prometheus.collectDefaultMetrics;
 // Probe every 10th second.
-// @ts-ignore
-collectDefaultMetrics({ timeout: 10000 });
+// collectDefaultMetrics({ timeout: 10000 });
 
 const HOSTNAME = os.hostname;
 

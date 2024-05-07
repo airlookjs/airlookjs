@@ -10,8 +10,7 @@
 		"start": "node build/index.js",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"build": "rm -r build && cp -r src build || cp -r src build",
-		"format": "prettier --plugin-search-dir . --write .",
-		"version": "helm-version ../../charts/scenedetect '' && git add ../../charts/scenedetect/Chart.yaml"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"engine": "node >=18.0.0",
 	"dependencies": {

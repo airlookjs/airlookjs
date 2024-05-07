@@ -5,6 +5,8 @@ import path from 'path'
 import fs from 'fs'
 import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
 
+import { config } from './config.js'
+
 export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.params.path)
 
@@ -20,6 +22,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 
 	if (pathParam) {
 		// check if file is matched by a share and if so, run the mediainfo analysis
+		if(config.shares) {
 		for (const share of config.shares) {
 			console.info('Checking share', share.name, 'for matches')
 			for (const match of share.matches) {
@@ -111,6 +114,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 			}
 			if (foundMatchingMountedFile) return
 		}
+		}
 
 		if (!foundMatchingMountedFile && pathParam.indexOf('http') === 0) {
 			// Media file is not mounted, attempt using URL
@@ -141,7 +145,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 		}
 
 		// if we get here, no match was found for the file in any of the shares
-		if (!foundMatchingMountedFile && error === null) {
+		if (!foundMatchingMountedFile) {
 			console.log('File was not found: ' + pathParam)
 			next(new Error('File was not found: ' + pathParam))
 		}

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["es2020"],
+    "typeRoots": ["node_modules/@types"],
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "pretty": true,
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "dist",
+    "allowJs": true,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "baseUrl": "src"
+  },
+  "include": ["./src/*.ts"],
+  "exclude": ["node_modules"]
+}

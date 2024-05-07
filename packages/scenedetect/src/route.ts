@@ -1,5 +1,5 @@
-import fs from 'node:fs';
-import { pipeline } from 'node:stream/promises';
+import fs from 'fs';
+import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';

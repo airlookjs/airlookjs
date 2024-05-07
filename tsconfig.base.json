@@ -10,7 +10,7 @@
     "paths": {},
     "sourceMap": true,
     "types": ["cors", "express", "jest", "node", "nodemon", "uuid"],
-    "sourceRoot": "/src",
+    "sourceRoot": "./src",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "noImplicitAny": true,

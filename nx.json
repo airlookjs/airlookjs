@@ -2,12 +2,9 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
-  
   "release": {
     "projectsRelationship": "independent",
-    "projects": [
-      "packages/svelte-sequence-editor"
-    ],
+    "projects": ["packages/svelte-sequence-editor"],
     "version": {
       "conventionalCommits": true
     },
@@ -18,6 +15,12 @@
     }
   },
   "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
     {
       "plugin": "@nx/playwright/plugin",
       "options": {
