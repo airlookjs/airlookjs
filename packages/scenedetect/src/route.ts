@@ -6,9 +6,9 @@ import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { getScenes } from './scenedetect.js';
-import { config } from './config.js'
+import { config } from './config.js';
 
-export const loudnessRequestHandler: RequestHandler = async (req, res, next) => {
+export const scenedetectRequestHandler: RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.query.file);
 	// the query parameter might be other data types than string, if so throw error
 	if (typeof req.query.file !== 'string') {
@@ -197,12 +197,12 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 		res.status(400);
 		res.json({ error: 'Missing file argument' });
 	}
-}
+};
 
 export const errorRequestHandler: ErrorRequestHandler = (err, _req, res) => {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
-  res.statusCode = 500;
-  res.json({ error: err.message });
-  //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
-}
+	// The error id is attached to `res.sentry` to be returned
+	// and optionally displayed to the user for support.
+	res.statusCode = 500;
+	res.json({ error: err.message });
+	//res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
+};
