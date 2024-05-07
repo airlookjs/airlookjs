@@ -5,34 +5,33 @@ import fs from 'fs';
 import { parse as csvLibParse, Options, Parser } from 'csv-parse';
 
 interface scenedetectInfo {
-  // scenes is generated from mapping the csv parsing 
-  // which uses an internal type for the return value of the map
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scenes?: any;
+	// scenes is generated from mapping the csv parsing
+	// which uses an internal type for the return value of the map
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	scenes?: any;
 }
 
 interface getScenesOutput {
-  scenedetect: scenedetectInfo;
-  error?: string;
+	scenedetect: scenedetectInfo;
+	error?: string;
 }
 
 interface Scene {
-  index: number;
-  image?: string;
-  start: {
-      frame: number;
-      timecode: string;
-      seconds: number;
-      image?: string;
-  };
-  end: {
-      frame: number;
-      timecode: string;
-      seconds: number;
-      image?: string;
-  };
+	index: number;
+	image?: string;
+	start: {
+		frame: number;
+		timecode: string;
+		seconds: number;
+		image?: string;
+	};
+	end: {
+		frame: number;
+		timecode: string;
+		seconds: number;
+		image?: string;
+	};
 }
-
 
 export async function getScenes(file: string, cachePath?: string) {
 	console.log('Detecting scenes for: ' + file);

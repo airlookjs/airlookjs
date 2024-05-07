@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "outDir": "dist",
     "removeComments": true,
     "target": "ES6",
@@ -11,15 +9,8 @@
     "moduleResolution": "node",
     "paths": {},
     "sourceMap": true,
-    "types": [
-      "cors",
-      "express",
-      "jest",
-      "node",
-      "nodemon",
-      "uuid"
-    ],
-    "sourceRoot": "/src",
+    "types": ["cors", "express", "jest", "node", "nodemon", "uuid"],
+    "sourceRoot": "./src",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "noImplicitAny": true,
@@ -30,11 +21,6 @@
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "./packages/**/src/**/*.ts",
-    "./packages/**/__tests__/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules/**/*"
-  ]
+  "include": ["./packages/**/src/**/*.ts", "./packages/**/__tests__/**/*.ts"],
+  "exclude": ["node_modules/**/*"]
 }

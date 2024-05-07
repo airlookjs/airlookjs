@@ -16,7 +16,7 @@
 	//let currentWidth: null | number = null;
 
 	const time = writable(currentTime ?? -1);
-	const width = writable( 30000);
+	const width = writable(30000);
 
 	const offsetWidth = writable(0);
 
@@ -49,9 +49,8 @@
 	let sequenceEl: HTMLElement | null;
 
 	const handlePointerMove = (e: PointerEvent) => {
-
 		if (!$selectedHandle && !$scrubOverride) {
-			const x = e.x - (sequenceEl ? sequenceEl?.getBoundingClientRect().left : 0);  //(sequenceEl?.offsetLeft ?? 0);
+			const x = e.x - (sequenceEl ? sequenceEl?.getBoundingClientRect().left : 0); //(sequenceEl?.offsetLeft ?? 0);
 			time.set(Math.min(Math.max((x / $width) * $duration, 0), $duration));
 		}
 	};

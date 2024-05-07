@@ -1,6 +1,5 @@
-
-import fs from 'node:fs';
-import { pipeline } from 'node:stream/promises';
+import fs from 'fs';
+import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
@@ -14,9 +13,9 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 	if (typeof req.query.file !== 'string') {
 		throw new Error('query parameter file cannot be an array');
 	}
-  
+
 	const fileUrl: string = req.query.file;
-  
+
 	let error: string | null = null;
 
 	let foundMatchingMountedFile = false;
@@ -177,7 +176,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 					foundMatchingMountedFile = true;
 					res.json({
 						...data,
-						version: config.version,
+						version: config.version
 					});
 				}
 				fs.rmSync(outStream.path);

@@ -41,16 +41,15 @@ export const config : {
     route: string,
     defaultOutputFormatName: string,
     shares: {
-        [name: string]: {
+			name: string,
             mount: string,
-            cached: boolean
-        }
-    }
-
+            cached: boolean,
+			matches: RegExp[]
+        }[]
 } = {
 	version: process.env.npm_package_version || 'dev',
 	port: parseIntEnv(process.env.PORT, 3000),
 	route: process.env.ROUTE_PREFIX || '/api/mediainfo',
 	defaultOutputFormatName: process.env.DEFAULT_OUTPUT_FORMAT || 'EBUCore_JSON',
-	//shares: 
+	shares: []
 }

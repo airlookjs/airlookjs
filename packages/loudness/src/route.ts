@@ -21,7 +21,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
   const querySampleRate = req.query.sampleRate;
 
   // the query parameter might be other data types than string, if so throw error
-  if (!!querySampleRate) {
+  if (querySampleRate) {
     if (typeof querySampleRate !== 'string') {
       throw new Error("query parameter sampleRate cannot be an array");
     }
@@ -170,7 +170,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
   }
 }
 
-export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errorRequestHandler: ErrorRequestHandler = (err, _req, res) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
   res.statusCode = 500;
