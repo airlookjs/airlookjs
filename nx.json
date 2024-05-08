@@ -4,7 +4,10 @@
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/svelte-sequence-editor"],
+    "projects": ["packages/svelte-sequence-editor", 
+    "packages/loudness", 
+    "packages/mediainfo",
+    "packages/scenedetect"],
     "version": {
       "conventionalCommits": true
     },
@@ -34,6 +37,9 @@
     },
     "test": {
       "cache": true
-    }
+    },
+    "lint": {
+      "cache": true
+    },
   }
 }
