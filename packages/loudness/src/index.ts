@@ -13,8 +13,6 @@ const server = express();
 // Probe every 10th second.
 // collectDefaultMetrics({ timeout: 10000 });
 
-const HOSTNAME = os.hostname;
-
 server.use(cors());
 
 // eslint-disable-next-line no-unused-vars
@@ -33,7 +31,6 @@ const checks =
             }
         }
     });
-
 server.use('/status', getExpressHealthRoute(checks));
 */
 
@@ -41,9 +38,10 @@ server.get('/', function (_req, res) {
   res.send('Loudness scanner is running');
 });
 
-server.get('/metrics', function (_req, res) {
+// TODO: prometheus
+/*server.get('/metrics', function (_req, res) {
   res.send(prometheus.register.metrics());
-});
+});*/
 
 // Fallthrough error handler
 server.use(errorRequestHandler);
