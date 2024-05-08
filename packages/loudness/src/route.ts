@@ -170,7 +170,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
   }
 }
 
-export const errorRequestHandler: ErrorRequestHandler = (err, _req, res) => {
+export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
   res.statusCode = 500;
