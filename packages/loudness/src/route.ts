@@ -1,6 +1,7 @@
 
-import fs from 'node:fs';
-import { pipeline } from 'node:stream/promises';
+import fs from 'fs';
+import createError from 'http-errors'
+import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
@@ -13,7 +14,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
   console.log('Processing request', req.url, '->', req.query.file)
   // the query parameter might be other data types than string, if so throw error
   if (typeof req.query.file !== 'string') {
-    throw new Error("query parameter file cannot be an array");
+    return next(createError(400, 'Invalid query parameter file must be a string'));
   }
   
   const fileUrl: string = req.query.file;
@@ -22,11 +23,8 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 
   // the query parameter might be other data types than string, if so throw error
   if (querySampleRate) {
-    if (typeof querySampleRate !== 'string') {
-      throw new Error("query parameter sampleRate cannot be an array");
-    }
-    if (isNaN(Number(querySampleRate))) {
-      throw new Error("query parameter sampleRate must be a number");
+    if (typeof querySampleRate !== 'string' || isNaN(Number(querySampleRate))) {
+      return next(createError(400, 'Invalid query parameter sampleRate'));
     }
   }
 
