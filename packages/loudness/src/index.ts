@@ -49,5 +49,5 @@ server.get('/metrics', function (_req, res) {
 server.use(errorRequestHandler);
 
 server.listen(config.port, function () {
-  console.log(`Loudness scanner listening on ${HOSTNAME}:${config.port}`)
+  console.log(`Loudness scanner listening on http://127.0.0.1:${config.port}`)
 });
