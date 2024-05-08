@@ -1,15 +1,17 @@
 {
     "compilerOptions": {
-      "lib": ["ESNext"],
+      "lib": ["es2020"],
       "outDir": "dist",
       "removeComments": true,
-      "target": "ES6",
-      "baseUrl": "./",
+      "target": "esnext",
+      "baseUrl": "src",
+      "module": "esnext",
+      "pretty": true,
       "esModuleInterop": true,
       "moduleResolution": "node",
-      "paths": {},
       "sourceMap": true,
       "types": ["cors", "express", "jest", "node", "nodemon", "uuid"],
+      
       "sourceRoot": "./src",
       "alwaysStrict": true,
       "allowUnreachableCode": false,
@@ -21,7 +23,7 @@
       "noUnusedParameters": true,
       "forceConsistentCasingInFileNames": true
     },
-    "include": ["./packages/**/src/**/*.ts", "./packages/**/__tests__/**/*.ts"],
-    "exclude": ["node_modules/**/*"]
+    "include": ["./src/**/*.ts", "./__tests__/**/*.ts"],
+    "exclude": ["node_modules"]
   }
   
