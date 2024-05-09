@@ -10,10 +10,10 @@ if [ "$(uname)" == "Darwin" ]; then
   brew install gstreamer  
   brew install taglib   
   brew install mpg123  
-  brew install librsvg  
+  #brew install librsvg  
   brew install qt@5  
   brew install libsndfile  
-  brew install gtk 
+  #brew install gtk 
 
   export Qt5_DIR="/opt/homebrew/opt/qt@5/lib/cmake/Qt5"
   export PATH="/opt/homebrew/opt/ffmpeg@4/bin:$PATH"
@@ -21,14 +21,12 @@ if [ "$(uname)" == "Darwin" ]; then
   #:/opt/homebrew/opt/librsvg/lib/pkgconfig"
   export CXX=g++
   export CC=gcc
-  export CFLAGS="pkg-config --cflags --libs librsvg-2.0"
+  #export CFLAGS="pkg-config --cflags --libs librsvg-2.0"
   #export LDFLAGS"-lobjc"
   #export LDFLAGS="pkg-config --libs librsvg-2.0 -L/opt/homebrew/opt/ffmpeg@4/lib"
-  #export CPPFLAGS="-I/opt/homebrew/opt/ffmpeg@4/include"
 fi
-
 
 mkdir build
 cd build
-cmake ..
+cmake .. -DDISABLE_RSVG2:BOOL=yes -DDISABLE_GTK2:BOOL=yes
 make
