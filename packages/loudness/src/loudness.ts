@@ -1,5 +1,4 @@
 import child_process from 'child_process'
-import path from 'path'
 import { promisify } from 'util'
 import os from 'os'
 
@@ -18,16 +17,13 @@ export interface GetLoudnessOutput {
   error?: child_process.ExecException | string;
 };
 
+// TODO: define with env var
+const cmd = './loudness-scanner/build/loudness'
+
 export async function getLoudness(file: string, sampleRate: number) {
 	console.log('Measuring loudness for: ' + file)
 
-	let cmd = path.resolve('loudness-scanner-build', 'loudness.exe'); // TODO: move to config
-
-	if (os.platform() === 'darwin') {
-		cmd = './loudness-scanner-osx/build/loudness'
-	} else if (os.platform() === 'linux') {
-		cmd = './loudness-scanner/build/loudness'
-	}
+	
 	const output: GetLoudnessOutput = {
 		loudness: {
 			sampleRate: sampleRate // in seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
