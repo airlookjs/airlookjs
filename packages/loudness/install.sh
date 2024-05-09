@@ -1,8 +1,7 @@
 #!/bin/sh
-git clone https://github.com/airlookjs/loudness-scanner
+rm -rf loudness-scanner
+git clone --recurse-submodules -j8 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
-#git submodule init
-#git submodule update
 
 if [ "$(uname)" == "Darwin" ]; then
   # only on mac os
@@ -18,9 +17,12 @@ if [ "$(uname)" == "Darwin" ]; then
 
   export Qt5_DIR="/opt/homebrew/opt/qt@5/lib/cmake/Qt5"
   export PATH="/opt/homebrew/opt/ffmpeg@4/bin:$PATH"
-  export PKG_CONFIG_PATH="/opt/homebrew/opt/ffmpeg@4/lib/pkgconfig:/opt/homebrew/opt/librsvg/lib/pkgconfig"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/ffmpeg@4/lib/pkgconfig"
+  #:/opt/homebrew/opt/librsvg/lib/pkgconfig"
   export CXX=g++
   export CC=gcc
+  export CFLAGS="pkg-config --cflags --libs librsvg-2.0"
+  #export LDFLAGS"-lobjc"
   #export LDFLAGS="pkg-config --libs librsvg-2.0 -L/opt/homebrew/opt/ffmpeg@4/lib"
   #export CPPFLAGS="-I/opt/homebrew/opt/ffmpeg@4/include"
 fi
