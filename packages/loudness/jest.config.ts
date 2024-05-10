@@ -12,7 +12,7 @@ const jestConfig: JestConfigWithTsJest = {
     '^.+\\.[tj]sx?$': [
       'ts-jest',
       {
-        //useESM: true,
+        useESM: true,
       },
     ],
   },

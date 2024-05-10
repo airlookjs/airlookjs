@@ -18,7 +18,6 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
   }
   
   const fileUrl: string = req.query.file;
-  
   const querySampleRate = req.query.sampleRate;
 
   // the query parameter might be other data types than string, if so throw error
@@ -28,7 +27,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     }
   }
 
-  const sampleRate = Number(querySampleRate) || 0.02;
+  const sampleRate = Number(querySampleRate) || 0.02; 
 
   let foundMatchingMountedFile = false
 
