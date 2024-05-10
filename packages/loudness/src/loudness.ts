@@ -1,6 +1,7 @@
 import child_process from 'child_process'
 import { promisify } from 'util'
 import os from 'os'
+import { LOUDNESS_CMD } from './config.js';
 
 export type numberOrNullArray = (number | null)[];
 
@@ -17,9 +18,6 @@ export interface GetLoudnessOutput {
   error?: child_process.ExecException | string;
 };
 
-// TODO: define with env var
-const cmd = './loudness-scanner/build/loudness'
-
 export async function getLoudness(file: string, sampleRate: number) {
 	console.log('Measuring loudness for: ' + file)
 
@@ -30,10 +28,10 @@ export async function getLoudness(file: string, sampleRate: number) {
 		}
 	}
 
-	const integratedCmd = `${cmd} dump -i ${sampleRate} "${file}"`
-	const momentaryCmd = `${cmd} dump -m ${sampleRate} "${file}"`
-	const shorttermCmd = `${cmd} dump -s ${sampleRate} "${file}"`
-	const scanCmd = `${cmd} scan --lra "${file}"`
+	const integratedCmd = `${LOUDNESS_CMD} dump -i ${sampleRate} "${file}"`
+	const momentaryCmd = `${LOUDNESS_CMD} dump -m ${sampleRate} "${file}"`
+	const shorttermCmd = `${LOUDNESS_CMD} dump -s ${sampleRate} "${file}"`
+	const scanCmd = `${LOUDNESS_CMD} scan --lra "${file}"`
 
 	const exec = promisify(child_process.exec)
 

@@ -1,5 +1,5 @@
-import { getLoudness } from "../src/loudness";
-import { LOUDNESS_CMD } from "../src/config";
+import { getLoudness } from "../src/loudness.js";
+import { LOUDNESS_CMD } from "../src/config.js";
 import util from 'util';
 
 describe("getLoudness", () => {
