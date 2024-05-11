@@ -30,6 +30,7 @@ module.exports = tseslint.config(
 	...tseslint.configs.recommendedTypeChecked,
   	...tseslint.configs.stylisticTypeChecked,
 	...eslintPluginSvelte.configs['flat/recommended'],  
+	//TODO fix parserOptions.project for svelte 
 
 	{
 		languageOptions: {

@@ -7,9 +7,12 @@ import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { ExecException } from 'child_process';
-import { getLoudness } from './loudness.js';
+import { type LoudnessData, getLoudness } from './loudness.js';
 import { config } from './config.js'
 
+interface LoudnessDataFile {
+  loudness: LoudnessData;
+}
 // in express v5 the RequestHandler may be async and we can remove this eslint-disable
 // wrapping the awaits in a try catch block is necessary to avoid express hanging on errors for now
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -73,17 +76,19 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
                 } else {
                   console.info('Serving cached result from file', jsonFilePath)
                   const fileData = await fs.promises.readFile(jsonFilePath)
-                  const jsonData = JSON.parse(fileData.toString())
-                  jsonData.cached = true
-                  jsonData.version = config.version
+                  const jsonData = {
+                    ...(JSON.parse(fileData.toString()) as LoudnessDataFile),
+                    cached: true,
+                    version: config.version
+                  }
                   res.json(jsonData);
                   sentCachedResult = true
                 }
-              } catch (err) {
-                if (err.code === 'ENOENT') {
+              } catch (e) {
+                if (e.code === 'ENOENT') {
                   console.info('Cached loudness file not found: ' + jsonFilePath)
                 } else {
-                  next(err);
+                  next(e);
                 }
               }
             }
@@ -130,7 +135,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     if (foundMatchingMountedFile) return
   }
 
-  if (!foundMatchingMountedFile && fileUrl.indexOf('http') === 0) {
+  if (!foundMatchingMountedFile && fileUrl.startsWith('http')) {
     const gotStream = got.stream.get(fileUrl);
     const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
     const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);

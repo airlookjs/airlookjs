@@ -1,29 +1,11 @@
 {
-    "compilerOptions": {
-      "lib": ["es2020"],
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
       "outDir": "dist",
-      "removeComments": true,
-      "target": "ESNext",
       "baseUrl": "src",
-      "module": "NodeNext",
-      "pretty": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "moduleResolution": "NodeNext",
-      "sourceMap": true,
       "types": ["cors", "express", "jest", "node", "nodemon", "uuid"],
-      "alwaysStrict": true,
-      "allowJs": true,
-      "allowUnreachableCode": false,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "noImplicitReturns": true,
-      "noUncheckedIndexedAccess": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "forceConsistentCasingInFileNames": true
     },
     "include": ["./src/**/*.ts", "tests/**/*.ts"],
     "exclude": ["node_modules"]
-  }
+}
   

@@ -5,16 +5,17 @@ import { LOUDNESS_CMD } from './config.js';
 
 export type numberOrNullArray = (number | null)[];
 
+export interface LoudnessData {
+		sampleRate: number;
+		lra?: number;
+		lufs?: number;
+		integratedValues?: numberOrNullArray;
+		momentaryValues?: numberOrNullArray;
+		shorttermValues?: numberOrNullArray;
+		warning?: string;
+}
 export interface GetLoudnessOutput {
-  loudness: {
-    sampleRate: number;
-    lra?: number;
-    lufs?: number;
-    integratedValues?: numberOrNullArray;
-    momentaryValues?: numberOrNullArray;
-    shorttermValues?: numberOrNullArray;
-    warning?: string;
-  }
+  loudness: LoudnessData
   error?: child_process.ExecException | string;
 };
 

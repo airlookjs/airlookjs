@@ -62,15 +62,15 @@ const sharedConfig: SharedConfig = getSharedConfig({
 			cached: parseBoolEnv(process.env.SHARE_AIRLOOK_CACHED, true)
 		}
 	},
-	environment: process.env.NODE_ENV || 'development'
+	environment: process.env.NODE_ENV ?? 'development'
 });
 
 sharedConfig.printVersion();
 
 export const config: SceneDetectConfig = {
-	environment: process.env.NODE_ENV || 'development',
-	version: process.env.npm_package_version || 'dev',
+	environment: process.env.NODE_ENV ?? 'development',
+	version: process.env.npm_package_version ?? 'dev',
 	port: parseIntEnv(process.env.PORT, 3000),
-	route: process.env.ROUTE || '/api/scenedetect',
+	route: process.env.ROUTE ?? '/api/scenedetect',
 	shares: Object.values(sharedConfig.shares)
 };

@@ -6,16 +6,24 @@
       "declaration": true,
       "declarationMap": true,
       "esModuleInterop": true,
-      "lib": ["ES2021"],
+      "checkJs": true,
+      "lib": ["ESNext"],
       "module": "NodeNext",
       "moduleResolution": "NodeNext",
       "noImplicitReturns": true,
       "paths": {},
       "pretty": true,
       "resolveJsonModule": true,
+      "noImplicitAny": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noUncheckedIndexedAccess": true,
+      "strictNullChecks": true,
       "skipLibCheck": true,
       "sourceMap": true,
       "strict": true,
-      "target": "ES2021"
+      "alwaysStrict": true,
+      "forceConsistentCasingInFileNames": true,
+      "target": "ESNext"
     }
   }
