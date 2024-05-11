@@ -1,4 +1,10 @@
 {
     "name": "mediainfo",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json"
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "targets": {
+		"lint": {
+		  "executor": "@nx/eslint:lint",
+		  "outputs": ["{options.outputFile}"]
+		}
+	  }
 }

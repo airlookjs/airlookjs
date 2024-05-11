@@ -1,3 +1,5 @@
 {
-    "circleci.persistedProjectSelection": []
+    "eslint.experimental.useFlatConfig": true,
+    "eslint.format.enable": true,
+    "eslint.runtime": ""
 }

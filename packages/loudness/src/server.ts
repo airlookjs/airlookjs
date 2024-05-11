@@ -10,7 +10,6 @@ export const server = express();
 // Probe every 10th second.
 // collectDefaultMetrics({ timeout: 10000 });
 server.use(cors());
-// eslint-disable-next-line no-unused-vars
 server.get(`${config.route}`,loudnessRequestHandler);
 
 /*

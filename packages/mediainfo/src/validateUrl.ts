@@ -9,7 +9,7 @@ export const stringIsAValidUrl = (s: string, protocols: string[]) => {
                 ? protocols.map((x) => `${x.toLowerCase()}:`).includes(parsed.protocol)
                 : false
             : true
-    } catch (err) {
+    } catch (_err) {
         return false
     }
 }

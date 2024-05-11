@@ -10,6 +10,6 @@ const out = await exec(`${LOUDNESS_CMD} --version`)
 //if (stderr) console.error('stderr', stderr)
 console.log(`$ ${LOUDNESS_CMD} --version\n${out.stdout}`);
 
-server.listen(config.port, async function () {
+server.listen(config.port, function () {
   console.log(`listening on http://127.0.0.1:${config.port}`);
 });

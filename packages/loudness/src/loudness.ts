@@ -40,7 +40,7 @@ export async function getLoudness(file: string, sampleRate: number) {
 			.then(({ stdout, stderr }) => {
 				if (stderr) console.error('stderr', stderr)
 				console.info(scanCmd, 'done')
-				const nums = stdout.toString().split('\n')?.[0]?.split(' ') || [];
+				const nums = stdout.toString().split('\n')?.[0]?.split(' ') ?? [];
 				const lufs = parseFloat(nums[0] ?? '');
 
 				let lraIndex = 2

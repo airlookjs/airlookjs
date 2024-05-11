@@ -2,7 +2,6 @@ import { server } from '../src/server.js';
 import request from "supertest";
 
 // TODO: share matches and cached
-
 // mock configuration
 jest.mock('../src/config.js', () => ({
     config: {
@@ -11,7 +10,9 @@ jest.mock('../src/config.js', () => ({
         shares: [
             {
                 name: 'test',
-                mount: '/test'
+                mount: '/test',
+                matches: 'test',
+                cached: false,
             }
         ]
     }

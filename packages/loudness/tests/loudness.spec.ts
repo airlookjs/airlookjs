@@ -16,7 +16,7 @@ describe("getLoudness", () => {
     
     beforeEach(() => {
       jest.spyOn(util, 'promisify').mockImplementation(() => {
-        return async (argument: string) => {
+        return (argument: string) => {
           switch (argument) {
             case `${LOUDNESS_CMD} scan --lra "${fileName}"`:
               return scanCmdMockData;
@@ -79,7 +79,7 @@ describe("getLoudness", () => {
     
     beforeEach(() => {
       jest.spyOn(util, 'promisify').mockImplementation(() => {
-        return async (argument: string) => {
+        return (argument: string) => {
           switch (argument) {
             case `${LOUDNESS_CMD} scan --lra "${fileName}"`:
             case `${LOUDNESS_CMD} dump -i ${sampleRate} "${fileName}"`:

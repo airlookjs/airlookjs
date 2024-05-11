@@ -23,7 +23,7 @@
       "noUnusedParameters": true,
       "forceConsistentCasingInFileNames": true
     },
-    "include": ["./src/**/*.ts", "__tests__/**/*.ts"],
+    "include": ["./src/**/*.ts", "tests/**/*.ts"],
     "exclude": ["node_modules"]
   }
   

@@ -4,10 +4,12 @@
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/svelte-sequence-editor", 
-    "packages/loudness", 
-    "packages/mediainfo",
-    "packages/scenedetect"],
+    "projects": [
+      "packages/svelte-sequence-editor",
+      "packages/loudness",
+      "packages/mediainfo",
+      "packages/scenedetect"
+    ],
     "version": {
       "conventionalCommits": true
     },
@@ -44,6 +46,10 @@
       "dependsOn": ["^build"]
     },
     "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/eslint.config.js"
+      ],
       "cache": true
     }
   }

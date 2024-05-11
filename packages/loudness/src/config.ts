@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
+
+// load loudness.config.ts or loudness.config.js if present - otherwise use defaults or env - .ts needs to be compiled to .js
+//if(fs.existsSync('../loudness.config.ts')) {
+//	  import configfile from '../loudness.config.ts';
+
+
 //import getSharedConfig from 'shared-config';
 export interface ShareInfo {
   name: string;
@@ -45,11 +51,11 @@ const parseIntEnv = (env: string | undefined, defaultValue: number) => {
 }
 
 export const config: LoudnessConfig = {
-	environment: process.env.NODE_ENV || 'development',
-	version: process.env.npm_package_version || 'dev',
+	environment: process.env.NODE_ENV ?? 'development',
+	version: process.env.npm_package_version ?? 'dev',
 	port: parseIntEnv(process.env.PORT, 3000),
-	route: process.env.ROUTE || '/api/loudness',
+	route: process.env.ROUTE ?? '/api/loudness',
 	shares: []
 };
 
-export const LOUDNESS_CMD = process.env.LOUDNESS_CMD || './bin/loudness';
+export const LOUDNESS_CMD = process.env.LOUDNESS_CMD ?? './bin/loudness';

@@ -10,7 +10,11 @@ import { ExecException } from 'child_process';
 import { getLoudness } from './loudness.js';
 import { config } from './config.js'
 
+// in express v5 the RequestHandler may be async and we can remove this eslint-disable
+// wrapping the awaits in a try catch block is necessary to avoid express hanging on errors for now
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const loudnessRequestHandler: RequestHandler = async (req, res, next) => {
+  try {
   console.log('Processing request', req.url, '->', req.query.file)
   // the query parameter might be other data types than string, if so throw error
   if (typeof req.query.file !== 'string') {
@@ -40,7 +44,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     for (const match of share.matches) {
       console.info('Checking match', match, 'for', fileUrl)
       const matchResult = fileUrl.match(match)
-      if (matchResult && matchResult[1]) {
+      if (matchResult?.[1]) {
         console.info('-> match found', matchResult[1])
         const mountedFilePath = path.join(share.mount, matchResult[1])
         if (fs.existsSync(mountedFilePath)) {
@@ -165,6 +169,10 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     console.log('File was not found: ' + fileUrl);
     next(new Error('File was not found: ' + fileUrl));
   }
+} catch (err) {
+  next(err)
+}
+
 }
 
 export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) => {
