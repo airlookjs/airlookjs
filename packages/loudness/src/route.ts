@@ -126,8 +126,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
                 })
 
               } catch (err) {
-                console.error(`Error computing loudness: ${err}`)
-                error = err as Error
+                console.error(`Error computing loudness: ${(err as Error).message}`)
                 next(err)
               }
             }
@@ -142,7 +141,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     }
 
     if (!foundMatchingMountedFile && fileUrl.startsWith('http')) {
-      
+
       const gotStream = got.stream.get(fileUrl);
       const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
       const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
@@ -188,6 +187,6 @@ export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) 
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
   res.statusCode = 500;
-  res.json({ error: err.message });
+  res.json({ error: (err as Error).message });
   //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
 }
