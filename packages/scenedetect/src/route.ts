@@ -152,7 +152,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 			if (foundMatchingMountedFile) return;
 		}
 
-		if (!foundMatchingMountedFile && fileUrl.indexOf('http') === 0) {
+		if (!foundMatchingMountedFile && fileUrl.startsWith('http')) {
 			const gotStream = got.stream.get(fileUrl);
 			const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
 			const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
