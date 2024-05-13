@@ -1,6 +1,5 @@
 import child_process from 'child_process'
 import { promisify } from 'util'
-import os from 'os'
 import { LOUDNESS_CMD } from './config.js';
 
 export type numberOrNullArray = (number | null)[];
@@ -19,109 +18,92 @@ export interface GetLoudnessOutput {
   error?: child_process.ExecException | string;
 };
 
-export async function getLoudness(file: string, sampleRate: number) {
-	console.log('Measuring loudness for: ' + file)
+const exec = promisify(child_process.exec)
 
+const loudnessScan = async (file: string) => {
+	const result = await loudnessExec(`scan --lra "${file}"`)
+
+	const nums = result.toString().split('\n')?.[0]?.split(' ') ?? [];
+	const lufs = parseFloat(nums[0] ?? '');
+
+	let lraIndex = 2
+	if (nums[2] == ' ' || nums[2] == '' || isNaN(Number(nums[2]))) {
+		lraIndex = 3
+	}
+	const lra = parseFloat(nums[lraIndex] ?? '');
+
+	if (isNaN(lufs)) {
+		// this used to print stderr
+		console.error('unexpected value'); 
+		throw new Error('unexpected value');
+	}
+
+	return {
+		lra,
+		lufs
+	}
+
+}
+
+const DUMP_OPTIONS = {
+	integrated: '-i',
+	momentary: '-m',
+	shortterm: '-s'
+} as const;
+
+const loudnessDump = async (type: keyof typeof DUMP_OPTIONS, sampleRate: number, file: string) => {
+	const result = await loudnessExec(`dump ${DUMP_OPTIONS[type]} ${sampleRate} "${file}"`)
+
+	const lines = result.toString().split('\n')
+	lines.pop()
+		//output.loudness.shorttermValues = []
+
+	return {
+		[`${type}Values`]: lines.map((line) => {
+			return parseFloat(line)
+		})
+	}
+}
+
+const loudnessExec = async (args: string) => {
+	const cmd = `${LOUDNESS_CMD} ${args}`
+	const { stdout, stderr } = await exec(cmd)
+
+	if (stderr) {
+		//TODO test is there  any content in stderr that we should be able to survive - scan had a check that insinuates this ...  
+
+		// TODO: common error for Could not open input file
+
+		console.error('stderr', stderr)
+		throw new Error(stderr)
+	}
+
+	console.info(cmd, 'done')
+	return stdout
+}
+
+
+export async function getLoudness(file: string, sampleRate: number): Promise<GetLoudnessOutput> {
+	console.log('Measuring loudness for: ' + file)
+	// sampleRatein seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
 	
-	const output: GetLoudnessOutput = {
+	const [scan, integrated, momentary, shortterm] = await Promise.all([
+		loudnessScan(file),
+		loudnessDump('integrated', sampleRate, file),
+		loudnessDump('momentary', sampleRate, file),
+		loudnessDump('shortterm', sampleRate, file),
+	]).catch((error) => {
+		throw error
+	})
+
+	return {
 		loudness: {
-			sampleRate: sampleRate // in seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
+			sampleRate,
+			...scan,
+			...integrated,
+			...momentary,
+			...shortterm
 		}
 	}
 
-	const integratedCmd = `${LOUDNESS_CMD} dump -i ${sampleRate} "${file}"`
-	const momentaryCmd = `${LOUDNESS_CMD} dump -m ${sampleRate} "${file}"`
-	const shorttermCmd = `${LOUDNESS_CMD} dump -s ${sampleRate} "${file}"`
-	const scanCmd = `${LOUDNESS_CMD} scan --lra "${file}"`
-
-	const exec = promisify(child_process.exec)
-
-	const promises = [
-		exec(scanCmd)
-			.then(({ stdout, stderr }) => {
-				if (stderr) console.error('stderr', stderr)
-				console.info(scanCmd, 'done')
-				const nums = stdout.toString().split('\n')?.[0]?.split(' ') ?? [];
-				const lufs = parseFloat(nums[0] ?? '');
-
-				let lraIndex = 2
-				if (nums[2] == ' ' || nums[2] == '' || isNaN(Number(nums[2]))) {
-					lraIndex = 3
-				}
-				const lra = parseFloat(nums[lraIndex] ?? '');
-
-				if (isNaN(lufs)) {
-					console.error('unexpected value, error was: ' + stderr);
-					output.error = 'unexpected value, error was: ' + stderr;
-					return output;
-				}
-
-				output.loudness.lra = lra;
-				output.loudness.lufs = lufs;
-
-        return output;
-			})
-			.catch((error) => {
-				console.error('exec error: ' + error);
-				output.error = error;
-			}),
-
-		exec(integratedCmd)
-			.then(({ stdout, stderr }) => {
-				if (stderr) console.error('stderr', stderr);
-				console.info(integratedCmd, 'done')
-				const lines = stdout.toString().split('\n')
-				lines.pop()
-				output.loudness.integratedValues = [];
-        lines.forEach((line) => {
-          if (os.platform() !== 'darwin' && os.platform() !== 'linux') {
-            if (line == '-1.$\r') {
-              output.loudness.integratedValues!.push(null);
-              // return early to avoid pushing twice
-              return;
-            } 
-          } 
-          output.loudness.integratedValues!.push(parseFloat(line));
-        });
-			})
-			.catch((error) => {
-				console.error('exec error: ' + error)
-				output.error = error
-			}),
-
-		exec(momentaryCmd)
-			.then(({ stdout, stderr }) => {
-				if (stderr) console.error('stderr', stderr)
-				console.info(momentaryCmd, 'done')
-				const lines = stdout.toString().split('\n')
-				lines.pop()
-				output.loudness.momentaryValues = []
-				lines.forEach(function (line) {
-					output.loudness.momentaryValues!.push(parseFloat(line))
-				})
-			})
-			.catch((error) => {
-				console.error('exec error: ' + error)
-				output.error = error
-			}),
-
-		exec(shorttermCmd)
-			.then(({ stdout, stderr }) => {
-				if (stderr) console.error('stderr', stderr)
-				console.info(shorttermCmd, 'done')
-				const lines = stdout.toString().split('\n')
-				lines.pop()
-				output.loudness.shorttermValues = []
-				lines.forEach(function (line) {
-					output.loudness.shorttermValues!.push(parseFloat(line))
-				})
-			})
-			.catch((error) => {
-				console.error('exec error: ' + error)
-				output.error = error
-			})
-	]
-
-	await Promise.all(promises)
-	return output
 }

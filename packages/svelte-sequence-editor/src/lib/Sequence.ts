@@ -23,15 +23,15 @@ export class Sequence implements ISequenceCommon {
 		});
 	}
 
-	public addLayer(layer: TSequenceLayerOptions) {
+	public addLayer(layer: TSequenceLayerOptions) : void {
 		this.layers.push(new Layer(layer, this));
 	}
 
-	public getDuration() {
+	public getDuration() : number {
 		return this.duration;
 	}
 
-	public errorHandler(error: { type: string; message: string }) {
+	public errorHandler(error: { type: string; message: string }) : void {
 		if (this.options.errorHandler) {
 			this.options.errorHandler(error);
 		} else {
@@ -39,7 +39,7 @@ export class Sequence implements ISequenceCommon {
 		}
 	}
 
-	public setDuration(duration: number, { scaleOnIncrease = false } = {}) {
+	public setDuration(duration: number, { scaleOnIncrease = false } = {}) : number {
 		const scaleFactor = duration / this.duration;
 		//const previousDuration = this.duration;
 		//const durationDiff = duration - this.duration;
@@ -73,13 +73,13 @@ export class Sequence implements ISequenceCommon {
 		return duration;
 	}
 
-	public scale(scaleFactor: number) {
+	public scale(scaleFactor: number) : void {
 		this.layers.forEach((layer) => {
 			layer.scale(scaleFactor);
 		});
 	}
 
-	public getMinDuration() {
+	public getMinDuration() : number {
 		const ret = [0];
 		const layerMinDurations = this.layers?.map((layer) => layer.getMinDuration());
 		/*if (typeof this.validations?.duration?.min == 'number') {
@@ -88,23 +88,23 @@ export class Sequence implements ISequenceCommon {
 		return Math.max(...ret, ...layerMinDurations);
 	}
 
-	public update() {
+	public update() : void {
 		this.layers.forEach((layer) => {
 			layer.update();
 		});
 	}
 
-	public initialize() {
+	public initialize() : void {
 		this.layers.forEach((layer) => {
 			layer.initialize();
 		});
 	}
 
-	public getSequence() {
+	public getSequence() : Sequence {
 		return this;
 	}
 
-	public validate() {
+	public validate() : {type: string, message: string}[][][] {
 		return this.layers.map((layer) => {
 			return layer.validate();
 		});

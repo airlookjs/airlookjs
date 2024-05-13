@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { Express } from "express";
+
 import cors from 'cors';
 //import prometheus from 'prom-client';
 import { config } from './config.js';
 import { errorRequestHandler, loudnessRequestHandler } from './route.js';
 
-export const server = express();
+export const server : Express = express();
 // TODO: prometheus
 //const collectDefaultMetrics = prometheus.collectDefaultMetrics;
 // Probe every 10th second.

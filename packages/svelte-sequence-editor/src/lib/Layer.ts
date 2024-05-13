@@ -9,9 +9,7 @@ export class Layer implements ISequenceChild {
 	key: string;
 	//duration?: number;
 	title?: string;
-	data?: {
-		[key: string]: unknown;
-	};
+	data?: Record<string, unknown>;
 
 	errors: { type: string; message: string }[] = [];
 
@@ -34,7 +32,7 @@ export class Layer implements ISequenceChild {
 			}) || [];
 	}
 
-	public addBlock(blockOptions: TSequenceBlockOptions, insertAtIndex?: number) {
+	public addBlock(blockOptions: TSequenceBlockOptions, insertAtIndex?: number) : Block {
 		const block = new Block(blockOptions, insertAtIndex ?? this.blocks.length, this);
 
 		if (insertAtIndex !== undefined) {
@@ -53,7 +51,7 @@ export class Layer implements ISequenceChild {
 		return block;
 	}
 
-	public removeBlock(key: string) {
+	public removeBlock(key: string) : Layer {
 		//console.log('removeBlock', key);
 
 		let found = false;
@@ -82,19 +80,19 @@ export class Layer implements ISequenceChild {
 		return `${this.parent.getAbsoluteKey()}.${this.key}`;
 	}
 
-	public update() {
+	public update() : void {
 		this.blocks.map((block) => {
 			block.update();
 		});
 	}
 
-	public scale(scaleFactor: number) {
+	public scale(scaleFactor: number) : void {
 		this.blocks.map((block) => {
 			block.scale(scaleFactor);
 		});
 	}
 
-	public initialize() {
+	public initialize() : void {
 		this.blocks.map((block) => {
 			block.initialize();
 		});
@@ -132,11 +130,11 @@ export class Layer implements ISequenceChild {
 		return this.parent.outTime;
 	}
 
-	public getDuration() {
+	public getDuration() : number {
 		return this.getOutTime() - this.getInTime();
 	}
 
-	public getMinDuration() {
+	public getMinDuration() : number {
 		return this.blocks.reduce((acc, b) => {
 			return acc + b.getMinDuration();
 		}, 0);

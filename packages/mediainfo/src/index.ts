@@ -26,6 +26,6 @@ server.use((err: Error, _req: Request, res: Response) => {
 	res.statusCode = 500
 	res.json({ error: err.message })
 })
-server.listen(config.port,  async() => {
+server.listen(config.port, () => {
 	console.log(`MediaInfo ${config.version} server listening on ${HOSTNAME}:${config.port}`)
 })

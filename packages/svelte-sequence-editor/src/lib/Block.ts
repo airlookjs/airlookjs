@@ -2,6 +2,7 @@ import type { TValidationOptions, TSequenceBlockOptions } from './types';
 import { Layer } from './Layer';
 import type { ISequenceChild } from './types';
 import { getUniqueKey } from './utils';
+import type { Sequence } from './Sequence';
 
 // TODO: get rid of string references to inTime and outTime use enum or similar instead
 enum tHandles {
@@ -34,9 +35,7 @@ export class Block implements ISequenceChild {
 	parent: Layer;
 	key: string;
 	title?: string;
-	data?: {
-		[key: string]: unknown;
-	};
+	data?: Record<string, unknown>;
 	markers: { time: number; title?: string }[] = [];
 	errors: { type: string; message: string }[] = [];
 
@@ -64,7 +63,7 @@ export class Block implements ISequenceChild {
 
 		this.data = options.data;
 
-		this.title = options.title || `${options.key}`;
+		this.title = options.title ?? `${options.key}`;
 
 		this.validations = {
 			...DEFAULT_VALIDATION_OPTIONS,
@@ -84,10 +83,10 @@ export class Block implements ISequenceChild {
 		this.layers =
 			options.layers?.map((layer) => {
 				return new Layer(layer, this);
-			}) || [];
+			}) ?? [];
 	}
 
-	public initialize() {
+	public initialize(): void {
 		if (this.initialValues.inTime != null) {
 			this._inTime = this.initialValues.inTime;
 		}
@@ -118,7 +117,7 @@ export class Block implements ISequenceChild {
 		this.set();
 	}
 
-	public update() {
+	public update () : void {
 		this.set();
 		this.layers.forEach((layer) => {
 			layer.update();
@@ -129,7 +128,7 @@ export class Block implements ISequenceChild {
 	 * Used to scale blocks when the parent duration changes
 	 * @param factor
 	 */
-	public scale(scaleFactor: number) {
+	public scale(scaleFactor: number) : void {
 		this.layers.forEach((layer) => {
 			layer.scale(scaleFactor);
 		});
@@ -137,7 +136,7 @@ export class Block implements ISequenceChild {
 		this.setOutTime(this.outTime * scaleFactor);
 	}
 
-	public get inTime() {
+	public get inTime() : number {
 		return this._inTime as number;
 	}
 
@@ -149,19 +148,19 @@ export class Block implements ISequenceChild {
 		this.setInTime(value - this.parent.getAbsoluteInTime());
 	}
 
-	public get absoluteInTime() {
+	public get absoluteInTime() : number {
 		return this.parent.getAbsoluteInTime() + this.inTime;
 	}
 
-	public get outTime() {
-		return this._outTime as number;
+	public get outTime() : number {
+		return this._outTime;
 	}
 
 	public set outTime(value: number) {
 		this.setOutTime(value);
 	}
 
-	public get absoluteOutTime() {
+	public get absoluteOutTime(): number {
 		return this.parent.getAbsoluteInTime() + this.outTime;
 	}
 
@@ -200,7 +199,7 @@ export class Block implements ISequenceChild {
 		return Math.max(...ret, ...layerMinDurations);
 	}
 
-	public set() {
+	public set(): void {
 		this.setInTime(this._inTime as number);
 		this.setOutTime(this._outTime as number);
 	}
@@ -215,11 +214,11 @@ export class Block implements ISequenceChild {
 		return res.apply();
 	}
 
-	public getAbsoluteKey() {
+	public getAbsoluteKey() : string {
 		return `${this.parent.getAbsoluteKey()}.${this.key}`;
 	}
 
-	public roundTime(time: number) {
+	public roundTime(time: number): number {
 		const base = this.getSequence().options.roundingBase();
 		return Math.round(time / base) * base;
 	}
@@ -328,7 +327,7 @@ export class Block implements ISequenceChild {
 		const dur = this.outTime - this.inTime;
 		const tDur = (setT - opC) * opMult;
 
-		const expanding = (fwd && prop == 'outTime') || (!fwd && prop == 'inTime');
+		const expanding = (fwd && prop == tHandles.outTime) || (!fwd && prop == tHandles.inTime);
 
 		if (maintainDuration) {
 			//console.debug(debugPrefix, 'set opposing to maintain duration');
@@ -481,7 +480,7 @@ export class Block implements ISequenceChild {
 		return res.apply();
 	}
 
-	public validate() {
+	public validate() : { type: string; message: string }[]{
 		const errors: { type: string; message: string }[] = [];
 
 		if (this.inTime > this.outTime) {
@@ -508,22 +507,22 @@ export class Block implements ISequenceChild {
 		return errors;
 	}
 
-	public getPreviousBlock() {
+	public getPreviousBlock() : Block | null {
 		if (this.index < 1) return null;
 		return this.parent.blocks[this.index - 1];
 	}
 
-	public getNextBlock() {
+	public getNextBlock() : Block | null{
 		if (this.index >= this.parent.blocks.length - 1) return null;
 		return this.parent.blocks[this.index + 1];
 	}
 
 	// Access root from all layers and blocks
-	public getSequence() {
+	public getSequence() : Sequence {
 		return this.parent.getSequence();
 	}
 
-	public getLayer() {
+	public getLayer() : Layer {
 		return this.parent;
 	}
 

@@ -48,9 +48,15 @@
     "lint": {
       "inputs": [
         "default",
-        "{workspaceRoot}/eslint.config.js"
+        "{workspaceRoot}/eslint.config.js",
+        "{workspaceRoot}/eslint.config.mjs"
       ],
-      "cache": true
+      "cache": true,
+      "options": {
+        "eslintConfig": "{workspaceRoot}/eslint.config.js"
+      },
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     }
   }
 }

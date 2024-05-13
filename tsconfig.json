@@ -1,13 +1,19 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "types": ["@types/node"],
+    //"types": ["node"],
     "noEmit": true,
     "allowJs": true,
-    "paths": {}
+    "paths": {},
   },
-  "extends": "./tsconfig.base.json",
   "include": [
-    "eslint.config.js",
     "eslint.config.mjs",
+    "eslint.config.js",
+    "packages/*/svelte.config.js",
+    "packages/*/tailwind.config.cjs",
+    "packages/*/jest.config.ts",
+    "packages/*/playwright.config.ts",
+    "packages/*/postcss.config.cjs",
+    
   ]
 }

@@ -1,7 +1,8 @@
 #!/bin/sh
 mkdir -p lib
 cd lib 
-rm -rf loudness-scanner
+#rm -rf loudness-scanner
+# TODO check if already installed
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
 

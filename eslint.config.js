@@ -1,28 +1,24 @@
-// TODO: use esm and add type module to package.json when nx supports it upstream https://github.com/nrwl/nx/issues/22576
-const nxPlugin = require('@nx/eslint-plugin');
+// Issue with nx handling this file as a module when named .js, we use ESLINT_USE_FLAT_CONFIG https://github.com/nrwl/nx/issues/22576
+import nxPlugin from '@nx/eslint-plugin';
 //import baseConfig from './eslint.base.config.js';
-const eslint = require('@eslint/js');
-//const globals = require('globals');
-const jsoncParser = require('jsonc-eslint-parser');
-const tseslint = require('typescript-eslint');
-const eslintPluginSvelte = require('eslint-plugin-svelte');
+import eslint from '@eslint/js';
+import globals from 'globals';
+import jsoncParser from 'jsonc-eslint-parser';
+import tseslint from 'typescript-eslint';
+import eslintPluginSvelte from 'eslint-plugin-svelte';
 
 //import ts from '@typescript-eslint/eslint-plugin';
-
-module.exports = tseslint.config(
+export default tseslint.config(
 	{ plugins: { '@nx': nxPlugin } },
 	{
-		// config with just ignores is the replacement for `.eslintignore`
 		ignores: [
-		  //'**/jest.config.js',
 		  '**/node_modules/**',
 		  '**/dist/**',
 		  '**/fixtures/**',
 		  '**/coverage/**',
 		  '**/build/**',
 		  '**/bin/**',
-		  '**/lib/**',
-		  '**/.svelte-kit/**',
+		  '**/.svelte-kit',
 		],
 	},
 
@@ -30,46 +26,91 @@ module.exports = tseslint.config(
 	...tseslint.configs.recommendedTypeChecked,
   	...tseslint.configs.stylisticTypeChecked,
 	...eslintPluginSvelte.configs['flat/recommended'],  
-	//TODO fix parserOptions.project for svelte 
-
+	
 	{
 		languageOptions: {
-			/*globals: {
-				...globals.es2020,
+			ecmaVersion: 2022,
+			globals: {
+				//...globals.es2020,
 				...globals.node,
-				...globals.browser
-			},*/
+				//...globals.browser
+			},
 			parserOptions: {
-				allowAutomaticSingleRunInference: true,
+				//allowAutomaticSingleRunInference: true,
 				//sourceType: 'module',
-				tsconfigRootDir: __dirname,
-				project: true
+				tsconfigRootDir: import.meta.dirname,
+				//project: true,
+				project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+				extraFileExtensions: ['.svelte'],
 			}
-		  
 		},
-		rules: {
-		  /*'@typescript-eslint/explicit-module-boundary-types': ['error'],*/
-		  "@typescript-eslint/no-unused-vars": [
-            "error",
-            {
-            args: "all",
-            argsIgnorePattern: "^_",
-            caughtErrors: "all",
-            caughtErrorsIgnorePattern: "^_",
-            destructuredArrayIgnorePattern: "^_",
-            varsIgnorePattern: "^_",
-            ignoreRestSiblings: true
-            }
-        ]
+
+		settings: {
+			svelte: {
+				compileOptions: {
+					postcss: {
+						configFilePath: './packages/*/postcss.config.cjs'
+					}
+				}
+			}
+		}
+
+	},
+
+	{
+		files: ['**/*.svelte'],
+		languageOptions: {
+			//parser: svelteParser,
+			parserOptions: {
+				parser: tseslint.parser,
+			},
 		},
 	},
-/*	{
+
+	{
+		files: ['**/*.ts'],
+		rules: {
+			'@typescript-eslint/explicit-module-boundary-types': ['error'],
+			"@typescript-eslint/no-unused-vars": [
+			  "error",
+			  {
+			  args: "all",
+			  argsIgnorePattern: "^_",
+			  caughtErrors: "all",
+			  caughtErrorsIgnorePattern: "^_",
+			  destructuredArrayIgnorePattern: "^_",
+			  varsIgnorePattern: "^_",
+			  ignoreRestSiblings: true
+			  }
+		  ]
+		  },
+	},
+	{
+		files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+		rules: {
+		  '@nx/enforce-module-boundaries': [
+			'error',
+			{
+			  enforceBuildableLibDependency: true,
+			  allow: [],
+			  depConstraints: [
+				{
+				  sourceTag: '*',
+				  onlyDependOnLibsWithTags: ['*'],
+				},
+			  ],
+			},
+		  ],
+		},
+	},
+	{
 		files: ['*.json'],
 		languageOptions: {
 		  parser: jsoncParser,
 		},
 		rules: {},
 	  },
+	  /*
 	  {
 		files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
 		rules: {

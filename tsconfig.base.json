@@ -1,15 +1,20 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
       "allowSyntheticDefaultImports": true,
       "allowUnreachableCode": false,
+      "experimentalDecorators": true,
       "allowUnusedLabels": false,
       "declaration": true,
       "declarationMap": true,
       "esModuleInterop": true,
       "checkJs": true,
-      "lib": ["ESNext"],
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
+      "lib": ["es2023"],
+      //"types": ["node"],
+
+      "module": "node16",
+      "moduleResolution": "node16",
+      "target": "es2022",
       "noImplicitReturns": true,
       "paths": {},
       "pretty": true,
@@ -18,12 +23,10 @@
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "noUncheckedIndexedAccess": true,
-      "strictNullChecks": true,
       "skipLibCheck": true,
       "sourceMap": true,
       "strict": true,
-      "alwaysStrict": true,
-      "forceConsistentCasingInFileNames": true,
-      "target": "ESNext"
-    }
+      "forceConsistentCasingInFileNames": true
+    },
+    "exclude": ["node_modules"]
   }

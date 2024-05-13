@@ -27,7 +27,7 @@
     "express": "^4.19.2",
     "got": "^14.2.1",
     "http-errors": "^2.0.0",
-    "prom-client": "^15.1.0",
+    "prom-client": "^15.1.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "nodemon": "^3.1.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.2",
-    "tsx": "^4.9.3",
+    "tsx": "^4.10.1",
     "typescript": "^5.4.5"
   }
 }

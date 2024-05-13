@@ -33,7 +33,7 @@ interface Scene {
 	};
 }
 
-export async function getScenes(file: string, cachePath?: string) {
+export async function getScenes(file: string, cachePath?: string) : Promise<getScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
 	const cmd = '/usr/local/bin/scenedetect';
