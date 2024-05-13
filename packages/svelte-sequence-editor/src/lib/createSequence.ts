@@ -21,7 +21,7 @@ const DEFAULT_OPTIONS: Required<TSequenceOptions> = {
 	}
 };
 
-export const deepFlat = (data: TSequenceChild[]) => {
+export const deepFlat = (data: TSequenceChild[]) : TSequenceChild[] => {
 	return data.reduce<TSequenceChild[]>((acc, item) => {
 		acc.push(item);
 		const children = item instanceof Layer ? item.blocks : item.layers;

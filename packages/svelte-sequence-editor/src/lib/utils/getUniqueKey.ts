@@ -1,4 +1,4 @@
-export const getUniqueKey = (title: string, startIndex = 1, existingNames: string[]) => {
+export const getUniqueKey = (title: string, startIndex = 1, existingNames: string[]) : string => {
 	// dissallow dots in name, replace with dash
 	let name = title.toLowerCase().replace(/[.]/g, '-');
 

@@ -199,8 +199,8 @@
 		$selectedHandle?.block.getAbsoluteKey() == block.getAbsoluteKey()
 			? $selectedHandle?.handle
 			: null;
-	$: offsetLeft = blockEl?.offsetLeft || 0;
-	$: title = block.title || block.key;
+	$: offsetLeft = blockEl?.offsetLeft ?? 0;
+	$: title = block.title ?? block.key;
 
 	//$: console.log($snapTimes);
 	// TODO: replace all div with svelte:element to allow for svg rendering

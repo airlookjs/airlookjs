@@ -24,7 +24,7 @@ type MediaInfo = object/*{
     }[]
 }*/
 
-export async function getMediainfo(file: string, outputFormatKey: OutputFormatKeys) {
+export async function getMediainfo(file: string, outputFormatKey: OutputFormatKeys) : Promise<MediaInfo | string>{
 
     const [value, format] = OutputFormats[outputFormatKey]
 	console.log('Getting MediaInfo for: ' + file)

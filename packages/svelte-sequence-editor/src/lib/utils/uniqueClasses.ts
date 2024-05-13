@@ -1,4 +1,4 @@
-export const uniqueClasses = (classNames = '') => {
+export const uniqueClasses = (classNames = '') : string => {
 	const classes = classNames
 		.split(' ')
 		.map((c) => c.trim())

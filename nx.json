@@ -4,7 +4,12 @@
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/svelte-sequence-editor"],
+    "projects": [
+      "packages/svelte-sequence-editor",
+      "packages/loudness",
+      "packages/mediainfo",
+      "packages/scenedetect"
+    ],
     "version": {
       "conventionalCommits": true
     },
@@ -33,7 +38,25 @@
       "cache": true
     },
     "test": {
-      "cache": true
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "e2e": {
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/eslint.config.js",
+        "{workspaceRoot}/eslint.config.mjs"
+      ],
+      "cache": true,
+      "options": {
+        "eslintConfig": "{workspaceRoot}/eslint.config.js"
+      },
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     }
   }
 }

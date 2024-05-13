@@ -195,7 +195,7 @@
 		return (1 / framerate) * millisInSecond;
 	};
 
-	type formatTimeOptions = {
+	interface formatTimeOptions {
 		framerate?: number;
 		format?: string;
 	};

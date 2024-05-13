@@ -8,7 +8,8 @@
 	"type": "module",
 	"scripts": {
 		"start": "node build/index.js",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"lint-legacy": "prettier --plugin-search-dir . --check . && eslint .",
+		"lint": "nx lint",
 		"build": "rm -r build && cp -r src build || cp -r src build",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
