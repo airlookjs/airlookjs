@@ -7,7 +7,6 @@ import jsoncParser from 'jsonc-eslint-parser';
 import tseslint from 'typescript-eslint';
 import eslintPluginSvelte from 'eslint-plugin-svelte';
 
-//import ts from '@typescript-eslint/eslint-plugin';
 export default tseslint.config(
 	{ plugins: { '@nx': nxPlugin } },
 	{
@@ -25,7 +24,8 @@ export default tseslint.config(
 	eslint.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
   	...tseslint.configs.stylisticTypeChecked,
-	...eslintPluginSvelte.configs['flat/recommended'],  
+	// @ts-ignore
+	...eslintPluginSvelte.configs['flat/recommended'],
 	
 	{
 		languageOptions: {
@@ -44,7 +44,6 @@ export default tseslint.config(
 				extraFileExtensions: ['.svelte'],
 			}
 		},
-
 		settings: {
 			svelte: {
 				compileOptions: {
@@ -54,7 +53,6 @@ export default tseslint.config(
 				}
 			}
 		}
-
 	},
 
 	{

@@ -14,6 +14,9 @@ importers:
       '@nx/eslint-plugin':
         specifier: 19.0.2
         version: 19.0.2(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(@typescript-eslint/parser@7.8.0)(eslint@9.2.0)(nx@19.0.2)(typescript@5.4.5)
+      '@nx/jest':
+        specifier: 19.0.2
+        version: 19.0.2(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@19.0.2)(typescript@5.4.5)
       '@nx/js':
         specifier: 19.0.2
         version: 19.0.2(@swc-node/register@1.9.0)(@swc/core@1.3.107)(@types/node@20.12.7)(nx@19.0.2)(typescript@5.4.5)
@@ -47,9 +50,6 @@ importers:
       '@swc/helpers':
         specifier: ~0.5.2
         version: 0.5.11
-      '@tsconfig/node20':
-        specifier: ^20.1.4
-        version: 20.1.4
       '@types/cors':
         specifier: ^2.8.5
         version: 2.8.17
@@ -83,6 +83,9 @@ importers:
       globals:
         specifier: ^15.2.0
         version: 15.2.0
+      jest:
+        specifier: ^29.4.1
+        version: 29.7.0(@types/node@20.12.7)
       nx:
         specifier: 19.0.2
         version: 19.0.2(@swc-node/register@1.9.0)(@swc/core@1.3.107)
@@ -3835,10 +3838,6 @@ packages:
 
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
-    dev: true
-
-  /@tsconfig/node20@20.1.4:
-    resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
     dev: true
 
   /@types/babel__core@7.20.5:

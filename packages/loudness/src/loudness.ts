@@ -2,8 +2,7 @@ import child_process from 'child_process'
 import { promisify } from 'util'
 import { LOUDNESS_CMD } from './config.js';
 
-export type numberOrNullArray = (number | null)[];
-
+type numberOrNullArray = (number | null)[];
 export interface LoudnessData {
 		sampleRate: number;
 		lra?: number;
@@ -13,16 +12,14 @@ export interface LoudnessData {
 		shorttermValues?: numberOrNullArray;
 		warning?: string;
 }
-export interface GetLoudnessOutput {
+export interface LoudnessOutput {
   loudness: LoudnessData
-  error?: child_process.ExecException | string;
 };
 
 const exec = promisify(child_process.exec)
 
 const loudnessScan = async (file: string) => {
 	const result = await loudnessExec(`scan --lra "${file}"`)
-
 	const nums = result.toString().split('\n')?.[0]?.split(' ') ?? [];
 	const lufs = parseFloat(nums[0] ?? '');
 
@@ -42,7 +39,6 @@ const loudnessScan = async (file: string) => {
 		lra,
 		lufs
 	}
-
 }
 
 const DUMP_OPTIONS = {
@@ -67,23 +63,21 @@ const loudnessDump = async (type: keyof typeof DUMP_OPTIONS, sampleRate: number,
 
 const loudnessExec = async (args: string) => {
 	const cmd = `${LOUDNESS_CMD} ${args}`
+	console.info('Running', cmd)
 	const { stdout, stderr } = await exec(cmd)
 
 	if (stderr) {
-		//TODO test is there  any content in stderr that we should be able to survive - scan had a check that insinuates this ...  
-
-		// TODO: common error for Could not open input file
+		// progress is reported to stderr
 
 		console.error('stderr', stderr)
-		throw new Error(stderr)
+		//throw new Error(stderr)
 	}
 
 	console.info(cmd, 'done')
 	return stdout
 }
 
-
-export async function getLoudness(file: string, sampleRate: number): Promise<GetLoudnessOutput> {
+export async function getLoudness(file: string, sampleRate: number): Promise<LoudnessOutput> {
 	console.log('Measuring loudness for: ' + file)
 	// sampleRatein seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
 	

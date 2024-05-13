@@ -6,7 +6,6 @@ import got from 'got';
 import path from 'path';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
-import { ExecException } from 'child_process';
 import { type LoudnessData, getLoudness } from './loudness.js';
 import { config } from './config.js'
 
@@ -14,18 +13,14 @@ interface LoudnessDataFile {
   loudness: LoudnessData;
 }
 
-
-
-
 // in express v5 the RequestHandler may be async and we can remove this eslint-disable
 // wrapping the awaits in a try catch block is necessary to avoid express hanging on errors for now
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-export const loudnessRequestHandler: RequestHandler = async (req, res, next) => {
-  try {
+export const loudnessRequestHandler: RequestHandler = (req, res, next) => {
+  
     console.log('Processing request', req.url, '->', req.query.file)
     // the query parameter might be other data types than string, if so throw error
     if (typeof req.query.file !== 'string') {
-      return next(createError(400, 'Invalid query parameter file must be a string'));
+      return next(createError.BadRequest('Invalid query parameter file must be a string'));
     }
     
     const fileUrl: string = req.query.file;
@@ -34,12 +29,11 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
     // the query parameter might be other data types than string, if so throw error
     if (querySampleRate) {
       if (typeof querySampleRate !== 'string' || isNaN(Number(querySampleRate))) {
-        return next(createError(400, 'Invalid query parameter sampleRate'));
+        return next(createError.BadRequest('Invalid query parameter sampleRate'));
       }
     }
 
     const sampleRate = Number(querySampleRate) || 0.02; 
-
     let foundMatchingMountedFile = false
 
     // check if file is matched by a share and if so, run the loudness analysis
@@ -52,6 +46,8 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
         if (matchResult?.[1]) {
           console.info('-> match found', matchResult[1])
           const mountedFilePath = path.join(share.mount, matchResult[1])
+          console.info('Mounted file path', mountedFilePath)
+          console.log(import.meta.dirname)
           if (fs.existsSync(mountedFilePath)) {
             console.log('Analysing file', mountedFilePath)
             foundMatchingMountedFile = true
@@ -70,14 +66,14 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
               if (fs.existsSync(jsonFilePath)) {
                 try {
                   // check if json file is newer than the file itself
-                  const mountedFileStats = await fs.promises.stat(mountedFilePath)
-                  const jsonFileStats = await fs.promises.stat(jsonFilePath)
+                  const mountedFileStats = fs.statSync(mountedFilePath)
+                  const jsonFileStats = fs.statSync(jsonFilePath)
 
                   if (jsonFileStats.mtimeMs < mountedFileStats.mtimeMs) {
                     console.info("Cached loudness file is older than file, ignoring");
                   } else {
                     console.info('Serving cached result from file', jsonFilePath)
-                    const fileData = await fs.promises.readFile(jsonFilePath)
+                    const fileData = fs.readFileSync(jsonFilePath)
                     const jsonData = {
                       ...(JSON.parse(fileData.toString()) as LoudnessDataFile),
                       cached: true,
@@ -90,15 +86,14 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
                   if( (e as NodeJS.ErrnoException).code === 'ENOENT') {
                     console.info('Cached loudness file not found: ' + jsonFilePath)
                   } else {
-                    next(e);
+                    return next(e);
                   }
                 }
               }
             }
 
             if (!sentCachedResult) {
-              try {
-                const data = await getLoudness(mountedFilePath, sampleRate)
+                getLoudness(mountedFilePath, sampleRate).then((data) => {
 
                 if (share.cached) {
                   // create cache folder if it doesn't exist
@@ -112,7 +107,7 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
                   }
                   // save the result to file
                   try {
-                    await fs.promises.writeFile(jsonFilePath, JSON.stringify(data))
+                    fs.writeFileSync(jsonFilePath, JSON.stringify(data))
                   } catch (err) {
                     console.error("Error writing loudness file", err)
                   }
@@ -122,12 +117,10 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
                   ...data,
                   version: config.version
                 })
-
-              } catch (err) {
+              }).catch((err) => {
                 console.error(`Error computing loudness: ${(err as Error).message}`)
                 next(err)
-              }
-            }
+              })
           } else {
             console.info('File not found: ' + mountedFilePath)
           }
@@ -143,31 +136,35 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
       const gotStream = got.stream.get(fileUrl);
       const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
       const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
+
       console.info(
         'File is not mounted, attempt download from',
         fileUrl,
         'to /tmp/' + tmpFileBasename
       );
 
-      try {
-        await pipeline(gotStream, outStream)
-        // check file is valid before passing to loudness
-        console.info('Downloaded file', outStream.path)
-        // it's safe to pass file.path as string as the file.path will be the same type as the createWriteStream was called with.
-        const data = await getLoudness(path.normalize(outStream.path as string), sampleRate)
+      
+        pipeline(gotStream, outStream).then(() => {
+          console.info('Downloaded file', outStream.path)
 
-        console.info('Sending result')
-        foundMatchingMountedFile = true
-        res.json({
-          ...data,
-          version: config.version
-        });
+          getLoudness(path.normalize(outStream.path as string), sampleRate).then((data) => {
+            res.json({
+              ...data,
+              version: config.version
+            })
+          }).catch((err) => {
+            console.error(`Error computing loudness: ${(err as Error).message}`)
+            next(err)
+          })
+
+        }).catch((err) => {
+          console.error('Error downloading file', err)
+          return next(err)
+        })
+
         
-        fs.rmSync(outStream.path);
-      } catch (error) {
-        console.error(error);
-        return next(error);
-      }
+        fs.rmSync(outStream.path); //TODO: move to a handler that is always called after request is done
+      
     }
 
     // if we get here, no match was found for the file in any of the shares
@@ -175,16 +172,20 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
       console.log('File was not found: ' + fileUrl);
       next(new Error('File was not found: ' + fileUrl));
     }*/
-  } catch (err) {
-    next(err)
-  }
 
 }
+}
 
-export const errorRequestHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errorRequestHandler: ErrorRequestHandler = (error, _req, res, next) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
-  res.statusCode = 500;
-  res.json({ error: (err as Error).message });
+  if (res.headersSent) {
+		return next(error);
+	}
+  console.error((error as Error).stack);
+
+  res.status(error.statusCode).json({ error: (error as Error).message });
   //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
+
+  next();
 }
