@@ -2,10 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "allowJs": true,
-    "noEmit": false,
-    "importHelpers": true,
   },
   "include": ["./src/*.ts"],
-  "exclude": ["node_modules"]
 }

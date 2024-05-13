@@ -1,6 +1,7 @@
 // Issue with nx handling this file as a module when named .js, we use ESLINT_USE_FLAT_CONFIG https://github.com/nrwl/nx/issues/22576
 import nxPlugin from '@nx/eslint-plugin';
 //import baseConfig from './eslint.base.config.js';
+// @ts-expect-error TODO: get types for '@eslint/js'
 import eslint from '@eslint/js';
 import globals from 'globals';
 import jsoncParser from 'jsonc-eslint-parser';
@@ -21,10 +22,11 @@ export default tseslint.config(
 		],
 	},
 
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 	eslint.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
   	...tseslint.configs.stylisticTypeChecked,
-	// @ts-ignore
+	// @ts-expect-error we probably need to modify our tsconfig for this file, this works and follows documentation, maybe types are out of sync between deps
 	...eslintPluginSvelte.configs['flat/recommended'],
 	
 	{
@@ -107,70 +109,5 @@ export default tseslint.config(
 		  parser: jsoncParser,
 		},
 		rules: {},
-	  },
-	  /*
-	  {
-		files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
-		rules: {
-		  '@nx/enforce-module-boundaries': [
-			'error',
-			{
-			  enforceBuildableLibDependency: true,
-			  allow: [],
-			  depConstraints: [
-				{
-				  sourceTag: '*',
-				  onlyDependOnLibsWithTags: ['*'],
-				},
-			  ],
-			},
-		  ],
-		},
-	  },*/
-
-	/*parser: '@typescript-eslint/parser',
-	extends: [
-		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended',
-		'plugin:svelte/recommended',
-		'prettier'
-	],
-	plugins: ['@typescript-eslint'],
-	ignorePatterns: ['*.cjs', 'dist/*'],
-	overrides: [
-		{
-			files: ['*.svelte'],
-			parser: 'svelte-eslint-parser',
-			// Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
-			parserOptions: {
-				parser: '@typescript-eslint/parser'
-			}
-		}
-	],
-	settings: {
-		'svelte3/typescript': () => require('typescript')
-	},
-	parserOptions: {
-		sourceType: 'module',
-		ecmaVersion: 2020
-	},
-	env: {
-		browser: true,
-		es2017: true,
-		node: true
-	},
-	rules: {
-        "@typescript-eslint/no-unused-vars": [
-            "error",
-            {
-            args: "all",
-            argsIgnorePattern: "^_",
-            caughtErrors: "all",
-            caughtErrorsIgnorePattern: "^_",
-            destructuredArrayIgnorePattern: "^_",
-            varsIgnorePattern: "^_",
-            ignoreRestSiblings: true
-            }
-        ]
-    }*/
+	  }
 );

@@ -40,6 +40,8 @@ export const createSequence = ({
 	initialData: TSequenceLayerOptions[];
 	duration?: number; // | Writable<number>
 	options?: TSequenceOptions;
+// TODO: return type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 }) => {
 	options = {
 		...DEFAULT_OPTIONS,

@@ -47,7 +47,6 @@ export const loudnessRequestHandler: RequestHandler = (req, res, next) => {
           console.info('-> match found', matchResult[1])
           const mountedFilePath = path.join(share.mount, matchResult[1])
           console.info('Mounted file path', mountedFilePath)
-          console.log(import.meta.dirname)
           if (fs.existsSync(mountedFilePath)) {
             console.log('Analysing file', mountedFilePath)
             foundMatchingMountedFile = true

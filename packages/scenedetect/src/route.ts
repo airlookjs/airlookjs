@@ -27,7 +27,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 			for (const match of share.matches) {
 				console.info('Checking match', match, 'for', fileUrl);
 				const matchResult = fileUrl.match(match);
-				if (matchResult && matchResult[1]) {
+				if (matchResult?.[1]) {
 					console.info('-> match found', matchResult[1]);
 					const mountedFilePath = path.join(share.mount, matchResult[1]);
 					if (fs.existsSync(mountedFilePath)) {

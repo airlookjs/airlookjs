@@ -5,19 +5,19 @@ import { Block } from './Block';
 
 type BlockHandleType = 'inTime' | 'outTime' | 'block'; // TODO: enum
 
-export type TValidationOption = {
+export interface TValidationOption {
 	min?: number | { ref: string };
 	max?: number | { ref: string };
 	fixed?: number | { ref: string };
 };
 
-export type TValidationOptions = {
+export interface TValidationOptions {
 	duration?: TValidationOption;
 	inTime?: TValidationOption;
 	outTime?: TValidationOption;
 };
 
-export type TSequenceOptions = {
+export interface TSequenceOptions {
 	validations?: TValidationOptions;
 	roundingBase: () => number;
 	errorHandler?: (error: { type: string; message: string }) => void;
@@ -26,14 +26,11 @@ export type TSequenceOptions = {
 export interface ISequenceCommonOptions {
 	key: string;
 	title?: string;
-	data?: {
-		// any additional data
-		[key: string]: unknown;
-	};
+	data?: Record<string, unknown>;
 }
 
 export type TSequenceLayerOptions = ISequenceCommonOptions & {
-	blocks: Array<TSequenceBlockOptions>;
+	blocks: TSequenceBlockOptions[];
 	sortIndex?: number;
 };
 
@@ -45,8 +42,8 @@ export type TSequenceBlockOptions = ISequenceCommonOptions & {
 	inTime?: number; // Initial inTime absolute as absolute milliseconds
 	outTime?: number; // Initial outTime as absolute milliseconds
 	validations?: TValidationOptions;
-	layers?: Array<TSequenceLayerOptions>;
-	markers?: Array<{ time: number; title?: string }>;
+	layers?: TSequenceLayerOptions[];
+	markers?: { time: number; title?: string }[];
 };
 
 export interface ISequenceCommon {
@@ -61,9 +58,7 @@ export interface ISequenceCommon {
 	layers?: Layer[];
 	blocks?: Block[];
 
-	data?: {
-		[key: string]: unknown;
-	};
+	data?: Record<string, unknown>;
 
 	getMaxDuration?(): number;
 }
