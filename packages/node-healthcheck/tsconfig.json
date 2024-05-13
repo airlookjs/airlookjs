@@ -1,0 +1,7 @@
+{
+	"extends": "../../tsconfig.base",
+  "compilerOptions": {
+		"types": ["cors", "express", "mocha", "node", "nodemon", "uuid", "supertest"],
+	},
+	"include": ["./src/**/*.ts"],
+}
