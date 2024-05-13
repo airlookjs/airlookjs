@@ -30,7 +30,7 @@ export interface SceneDetectConfig {
 dotenv.config();
 
 // parse bools from env safely
-const parseBoolEnv = (env, defaultValue) => {
+const parseBoolEnv = (env: string | undefined, defaultValue: boolean) => {
 	if (env === undefined) {
 		return defaultValue;
 	}
@@ -44,7 +44,7 @@ const parseBoolEnv = (env, defaultValue) => {
 };
 
 // parse ints from env safely
-const parseIntEnv = (env, defaultValue) => {
+const parseIntEnv = (env: string | undefined, defaultValue: number) => {
 	if (env === undefined) {
 		return defaultValue;
 	}
