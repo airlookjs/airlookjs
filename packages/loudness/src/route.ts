@@ -42,8 +42,6 @@ export const loudnessRequestHandler: RequestHandler = async (req, res, next) => 
 
     let foundMatchingMountedFile = false
 
-    let error: ExecException | string | null = null
-
     // check if file is matched by a share and if so, run the loudness analysis
     // the for ... const .. of syntax works for async
     for (const share of config.shares) {
