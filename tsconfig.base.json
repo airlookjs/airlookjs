@@ -19,7 +19,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
   "include": ["./packages/**/src/**/*.ts", "./packages/**/__tests__/**/*.ts"],
   "exclude": ["node_modules/**/*"]
