@@ -1,8 +1,13 @@
 {
-  "name": "shared",
+  "name": "@airlookjs/shared",
   "type": "module",
-  "files": ["index.js"],
+  "private": true,
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "rm -rf dist && tsc"
   }
 }

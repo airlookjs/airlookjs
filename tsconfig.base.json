@@ -17,9 +17,6 @@
     "moduleResolution": "node16",
     "target": "es2022",
     "noImplicitReturns": true,
-    "paths": {
-      "@airlookjs/shared": ["libs/shared/src/index.ts"]
-    },
     "rootDir": ".",
     "baseUrl": ".",
     "outDir": "./dist",

@@ -16,7 +16,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "http-errors": "^2.0.0"
+    "http-errors": "^2.0.0",
+    "@airlookjs/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
