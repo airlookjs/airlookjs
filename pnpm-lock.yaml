@@ -15,6 +15,12 @@ importers:
       '@eslint/js':
         specifier: ^9.2.0
         version: 9.2.0
+      '@nx-tools/container-metadata':
+        specifier: ^6.0.0
+        version: 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@nx-tools/nx-container':
+        specifier: ^6.0.0
+        version: 6.0.0(@nx/devkit@19.0.2)(dotenv@16.4.5)(tslib@2.6.2)
       '@nx/eslint-plugin':
         specifier: 19.0.2
         version: 19.0.2(@swc-node/register@1.9.1)(@swc/core@1.3.107)(@types/node@20.12.7)(@typescript-eslint/parser@7.9.0)(eslint@9.2.0)(nx@19.0.2)(typescript@5.4.5)
@@ -379,6 +385,32 @@ importers:
         version: 5.2.10(@types/node@20.12.7)
 
 packages:
+
+  /@actions/exec@1.1.1:
+    resolution: {integrity: sha512-+sCcHHbVdk93a0XT19ECtO/gIXoxvdsgQLzb2fE2/5sIZmWQuluYyjPQtrtTHdU1YzTZ7bAPN4sITq2xi1679w==}
+    dependencies:
+      '@actions/io': 1.1.3
+    dev: true
+
+  /@actions/github@6.0.0:
+    resolution: {integrity: sha512-alScpSVnYmjNEXboZjarjukQEzgCRmjMv6Xj47fsdnqGS73bjJNDpiiXmp8jr0UZLdUB6d9jW63IcmddUP+l0g==}
+    dependencies:
+      '@actions/http-client': 2.2.1
+      '@octokit/core': 5.2.0
+      '@octokit/plugin-paginate-rest': 9.2.1(@octokit/core@5.2.0)
+      '@octokit/plugin-rest-endpoint-methods': 10.4.1(@octokit/core@5.2.0)
+    dev: true
+
+  /@actions/http-client@2.2.1:
+    resolution: {integrity: sha512-KhC/cZsq7f8I4LfZSJKgCvEwfkE8o1538VoBeoGzokVLLnbFDEAdFD3UhoMklxo2un9NJVBdANOresx7vTHlHw==}
+    dependencies:
+      tunnel: 0.0.6
+      undici: 5.28.4
+    dev: true
+
+  /@actions/io@1.1.3:
+    resolution: {integrity: sha512-wi9JjgKLYS7U/z8PPbco+PvTb/nRWjeoFlJ1Qer83k/3C5PHQi28hiVdeE2kHXmIL99mQFawx8qt/JPjZilJ8Q==}
+    dev: true
 
   /@airlookjs/node-healthcheck@1.4.2:
     resolution: {integrity: sha512-U6/fMy+4m/wJyqzG313ilmCv2usrQA05FbJgeloewr4l8pkkclSQCf1VXJLXtlJcRKbwhZ4gCe0jXPHBjDreFg==}
@@ -1632,6 +1664,14 @@ packages:
     resolution: {integrity: sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==}
     dev: true
 
+  /@babel/runtime-corejs3@7.24.5:
+    resolution: {integrity: sha512-GWO0mgzNMLWaSYM4z4NVIuY0Cd1fl8cPnuetuddu5w/qGuvt5Y7oUi/kvvQGK9xgOkFJDQX2heIvTRn/OQ1XTg==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      core-js-pure: 3.37.1
+      regenerator-runtime: 0.14.1
+    dev: true
+
   /@babel/runtime@7.24.5:
     resolution: {integrity: sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==}
     engines: {node: '>=6.9.0'}
@@ -2172,6 +2212,11 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     dev: true
 
+  /@fastify/busboy@2.1.1:
+    resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
+    engines: {node: '>=14'}
+    dev: true
+
   /@floating-ui/core@1.6.1:
     resolution: {integrity: sha512-42UH54oPZHPdRHdw6BgoBD6cg/eVTmVrFcgeRDM3jbO7uxSoipVcmcIGFcA5jmOHO5apcyvBhkSKES3fQJnu7A==}
     dependencies:
@@ -2671,6 +2716,71 @@ packages:
       - debug
     dev: true
 
+  /@nx-tools/ci-context@6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2):
+    resolution: {integrity: sha512-XpRXz/wBEG8bknHzj7S1OxK5dHELVJ8kfBAi1be/wGtHtmsfi8sB6p1UvCFLIznx8G8h5ksjcy46J2IywS1scw==}
+    peerDependencies:
+      tslib: ^2.5.0
+    dependencies:
+      '@actions/github': 6.0.0
+      '@nx-tools/core': 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@octokit/openapi-types': 22.2.0
+      ci-info: 4.0.0
+      properties-file: 3.5.4
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@nx/devkit'
+    dev: true
+
+  /@nx-tools/container-metadata@6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2):
+    resolution: {integrity: sha512-fXO1r2CS/0ZlcLixKjQyi0L9TpAN5AlaZzkiCGYAx+BkwmFBzgReZbFwqUFCbx04rEheJhmGwfS4QZRtU7cZBQ==}
+    peerDependencies:
+      '@nx/devkit': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      tslib: ^2.5.0
+    dependencies:
+      '@nx-tools/ci-context': 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@nx-tools/core': 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@nx/devkit': 19.0.2(nx@19.0.2)
+      '@renovate/pep440': 1.0.0
+      csv-parse: 5.5.5
+      handlebars: 4.7.8
+      moment-timezone: 0.5.45
+      semver: 7.6.2
+      tslib: 2.6.2
+    dev: true
+
+  /@nx-tools/core@6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2):
+    resolution: {integrity: sha512-rvjIkPaf8nCRsaHX/S/8CQth0o/frVBoiCEyN7+f3nB0BinSHcoSsOASCphKlELT+Yojz39NZ2IIeSfXzl0nxA==}
+    peerDependencies:
+      '@nx/devkit': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      tslib: ^2.5.0
+    dependencies:
+      '@actions/exec': 1.1.1
+      '@actions/io': 1.1.3
+      '@nx/devkit': 19.0.2(nx@19.0.2)
+      chalk: 4.1.2
+      ci-info: 4.0.0
+      csv-parse: 5.5.5
+      tslib: 2.6.2
+    dev: true
+
+  /@nx-tools/nx-container@6.0.0(@nx/devkit@19.0.2)(dotenv@16.4.5)(tslib@2.6.2):
+    resolution: {integrity: sha512-4Ef2rmHqnzUFYxb4QfRJZDjZMls98CKV/vyhaZDM3Eib3mn7BxScccQnFQeQlN5dPp1TOrXnyLADLuBOGbEzjg==}
+    peerDependencies:
+      '@nx/devkit': ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      dotenv: '>=16.0.0'
+      tslib: ^2.5.0
+    dependencies:
+      '@nx-tools/container-metadata': 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@nx-tools/core': 6.0.0(@nx/devkit@19.0.2)(tslib@2.6.2)
+      '@nx/devkit': 19.0.2(nx@19.0.2)
+      csv-parse: 5.5.5
+      dotenv: 16.4.5
+      handlebars: 4.7.8
+      semver: 7.6.2
+      tmp: 0.2.3
+      tslib: 2.6.2
+    dev: true
+
   /@nx/devkit@19.0.2(nx@19.0.2):
     resolution: {integrity: sha512-qHBWQ3ZJ4vO8AVdSlz/u/GXDrDxVsBjC1/pY1ImycnUP4NfOtmBlYdhd5aB9XvWcujSmOap0ZJGr1iapYKoWxQ==}
     peerDependencies:
@@ -3113,6 +3223,16 @@ packages:
       '@octokit/types': 12.6.0
     dev: true
 
+  /@octokit/plugin-rest-endpoint-methods@10.4.1(@octokit/core@5.2.0):
+    resolution: {integrity: sha512-xV1b+ceKV9KytQe3zCVqjg+8GTGfDYwaT1ATU5isiUyVtlVAO3HNdzpS4sr4GBx4hxQ46s7ITtZrAsxG22+rVg==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@octokit/core': '5'
+    dependencies:
+      '@octokit/core': 5.2.0
+      '@octokit/types': 12.6.0
+    dev: true
+
   /@octokit/plugin-retry@6.0.1(@octokit/core@5.2.0):
     resolution: {integrity: sha512-SKs+Tz9oj0g4p28qkZwl/topGcb0k0qPNX/i7vBKmDsjoeqnVfFUquqrE/O9oJY7+oLzdCtkiWSXLpLjvl6uog==}
     engines: {node: '>= 18'}
@@ -3260,6 +3380,12 @@ packages:
 
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+    dev: true
+
+  /@renovate/pep440@1.0.0:
+    resolution: {integrity: sha512-k3pZVxGEGpU7rpH507/9vxfFjuxX7qx4MSj9Fk+6zBsf/uZmAy8x97dNtZacbge7gP9TazbW1d7SEb5vsOmKlw==}
+    dependencies:
+      xregexp: 4.4.1
     dev: true
 
   /@rollup/rollup-android-arm-eabi@4.17.2:
@@ -3495,7 +3621,7 @@ packages:
       read-pkg: 9.0.1
       registry-auth-token: 5.0.2
       semantic-release: 22.0.12(typescript@5.4.5)
-      semver: 7.6.0
+      semver: 7.6.2
       tempy: 3.1.0
     dev: true
 
@@ -4970,6 +5096,11 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /ci-info@4.0.0:
+    resolution: {integrity: sha512-TdHqgGf9odd8SXNuxtUBVx8Nv+qZOejE6qyqiy5NtbYYQOeFa6zmHkxlPzmaLxWWHsU6nJmB7AETdVPi+2NBUg==}
+    engines: {node: '>=8'}
+    dev: true
+
   /cjs-module-lexer@1.3.1:
     resolution: {integrity: sha512-a3KdPAANPbNE4ZUv9h6LckSl9zLsYOP4MBmhIPkRaeyybt+r4UghLvq+xw/YwUcC1gqylCkL4rdVs3Lwupjm4Q==}
     dev: true
@@ -5152,7 +5283,7 @@ packages:
       handlebars: 4.7.8
       json-stringify-safe: 5.0.1
       meow: 12.1.1
-      semver: 7.6.0
+      semver: 7.6.2
       split2: 4.2.0
     dev: true
 
@@ -5197,6 +5328,11 @@ packages:
     resolution: {integrity: sha512-9TNiImhKvQqSUkOvk/mMRZzOANTiEVC7WaBNhHcKM7x+/5E1l5NvsysR19zuDQScE8k+kfQXWRN3AtS/eOSHpg==}
     dependencies:
       browserslist: 4.23.0
+    dev: true
+
+  /core-js-pure@3.37.1:
+    resolution: {integrity: sha512-J/r5JTHSmzTxbiYYrzXg9w1VpqrYt+gexenBE9pugeyhwPZTAEJddyiReJWsLO6uNQ8xJZFbod6XC7KKwatCiA==}
+    requiresBuild: true
     dev: true
 
   /core-util-is@1.0.3:
@@ -5297,7 +5433,6 @@ packages:
 
   /csv-parse@5.5.5:
     resolution: {integrity: sha512-erCk7tyU3yLWAhk6wvKxnyPtftuy/6Ak622gOO7BCJ05+TYffnPCJF905wmOQm+BpkX54OdAl8pveJwUdpnCXQ==}
-    dev: false
 
   /data-view-buffer@1.0.1:
     resolution: {integrity: sha512-0lht7OugA5x3iJLOWFhWK/5ehONdprk0ISXqVFn/NFrDu+cuc8iADFrGQz5BnRK7LLU3JmkbXSxaqX+/mXYtUA==}
@@ -5543,7 +5678,6 @@ packages:
   /dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
-    dev: false
 
   /duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
@@ -8144,6 +8278,16 @@ packages:
       ufo: 1.5.3
     dev: true
 
+  /moment-timezone@0.5.45:
+    resolution: {integrity: sha512-HIWmqA86KcmCAhnMAN0wuDOARV/525R2+lOLotuGFzn4HO+FH+/645z2wx0Dt3iDv6/p61SIvKnDstISainhLQ==}
+    dependencies:
+      moment: 2.30.1
+    dev: true
+
+  /moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+    dev: true
+
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -8263,7 +8407,7 @@ packages:
     dependencies:
       hosted-git-info: 7.0.1
       is-core-module: 2.13.1
-      semver: 7.6.0
+      semver: 7.6.2
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -9017,6 +9161,10 @@ packages:
       sisteransi: 1.0.5
     dev: true
 
+  /properties-file@3.5.4:
+    resolution: {integrity: sha512-OGQPWZ4j9ENDKBl+wUHqNtzayGF5sLlVcmjcqEMUUHeCbUSggDndii+kjcBDPj3GQvqYB9sUEc4siX36wx4glw==}
+    dev: true
+
   /proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
     dev: true
@@ -9432,7 +9580,7 @@ packages:
     resolution: {integrity: sha512-0Ju4+6A8iOnpL/Thra7dZsSlOHYAHIeMxfhWQRI1/VLcT3WDBZKKtQt/QkBOsiIN9ZpuvHE6cGZ0x4glCMmfiA==}
     engines: {node: '>=12'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
     dev: true
 
   /semver-regex@4.0.5:
@@ -9566,7 +9714,7 @@ packages:
     resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
     dev: true
 
   /sirv@2.0.4:
@@ -10438,6 +10586,11 @@ packages:
       fsevents: 2.3.3
     dev: true
 
+  /tunnel@0.0.6:
+    resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
+    engines: {node: '>=0.6.11 <=0.7.0 || >=0.7.3'}
+    dev: true
+
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -10589,6 +10742,13 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
+
+  /undici@5.28.4:
+    resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
+    engines: {node: '>=14.0'}
+    dependencies:
+      '@fastify/busboy': 2.1.1
     dev: true
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
@@ -10994,6 +11154,12 @@ packages:
       '@oozcitak/util': 8.3.8
       js-yaml: 3.14.1
     dev: false
+
+  /xregexp@4.4.1:
+    resolution: {integrity: sha512-2u9HwfadaJaY9zHtRRnH6BY6CQVNQKkYm3oLtC9gJXXzfsbACg5X5e4EZZGVAH+YIfa+QA9lsFQTTe3HURF3ag==}
+    dependencies:
+      '@babel/runtime-corejs3': 7.24.5
+    dev: true
 
   /xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
