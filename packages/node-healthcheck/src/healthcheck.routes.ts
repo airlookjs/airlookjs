@@ -1,5 +1,5 @@
 // healthcheck.routes.js: return a 2xx response when your server is healthy, else send a 5xx response
-import express from 'express';
+import express, { Router, RequestHandler } from 'express';
 import os from 'os';
 import { create } from 'xmlbuilder2';
 
@@ -16,6 +16,16 @@ export enum Status {
 export const STATUS_FOR_CODE = {
 	[Status.Error]: 503
 };
+
+export interface StatusResponse {
+	applicationname: string;
+	applicationversion: string;
+	applicationstatus: Status;
+	servername: string;
+	uptime: number;
+	timestamp: string;
+	check: CheckResponse[];
+}
 
 type CheckFn = ((check?: CheckFnArg) => void | string | Promise<void | string>);
 
@@ -48,7 +58,7 @@ export interface CheckResponse {
 	responseinms: number;
 }
 
-export function make_checks(checksArray: Check[]) {
+export function make_checks(checksArray: Check[]): Promise<CheckResponse>[] {
 	return checksArray.map(function(check) {
 		return make_check(check);
 	});
@@ -56,7 +66,7 @@ export function make_checks(checksArray: Check[]) {
 
 async function make_check(check: Check): Promise<CheckResponse> {
 	const checkFnArg: CheckFnArg = {
-		warnOnError: check.warnOnError || false
+		warnOnError: check.warnOnError ?? false
 	};
 
 	const timeout_ms = (typeof check.timeout === 'undefined') ? DEFAULT_TIMEOUT : check.timeout;
@@ -64,7 +74,7 @@ async function make_check(check: Check): Promise<CheckResponse> {
 
 	const startTime = process.hrtime(); // start timer
 
-	const checkFnPromise: Promise<ReturnType<CheckFn>>	= new Promise((resolve, reject) => {
+	const checkFnPromise	= new Promise<ReturnType<CheckFn>>((resolve, reject) => {
 		try {
 			const res = check.checkFn(checkFnArg);
 			resolve(res);
@@ -81,15 +91,21 @@ async function make_check(check: Check): Promise<CheckResponse> {
 	try {
 		const resp = await timeout(checkFnPromise, timeout_ms, timeoutError);
 
-		status = checkFnArg.status || Status.Ok;
-		message= checkFnArg.message || `${message_prefix} ${resp || 'OK'}`;
+		status = checkFnArg.status ?? Status.Ok;
+		message= checkFnArg.message ?? `${message_prefix} ${typeof resp === "string"  ? resp : 'OK'}`;
 	} catch (error) {
 		status = checkFnArg.warnOnError ? Status.Warning : Status.Error;
 
 		if (error === timeoutError) {
 			message = `${message_prefix} ERROR was: Check did not complete before timeout of ${timeout_ms}ms`; 
 		} else {
-			message = `${message_prefix} ERROR was: ${error.message}`; 
+			let errorMessage = "exception type not Error or string, not possible to typecast to string"
+			if (typeof error === "string") {
+				errorMessage = error;
+			} else if (error instanceof Error) {
+				errorMessage  = error.message;
+			}
+			message = `${message_prefix} ERROR was: ${errorMessage}`; 
 		}
 	}
 
@@ -116,12 +132,12 @@ const getAppStatus = (checks:CheckResponse[]) => {
 	return Status.Ok;
 };
 
-export async function getStatus(healthchecks: Check[]) {
+export async function getStatus(healthchecks: Check[]): Promise<StatusResponse> {
 	const checks = await Promise.all(make_checks(healthchecks));
 
 	return {
-		applicationname: process.env.npm_package_name,
-		applicationversion: process.env.npm_package_version,
+		applicationname: process.env.npm_package_name  ?? "undefined name check package.json",
+		applicationversion: process.env.npm_package_version ?? "undefined bersion check package.json",
 		applicationstatus: getAppStatus(checks),
 		servername: os.hostname(), 
 		uptime: process.uptime(),
@@ -130,15 +146,15 @@ export async function getStatus(healthchecks: Check[]) {
 	};
 }
 
-export function getStatusXml(status: Awaited<ReturnType<typeof getStatus>>) {
+export function getStatusXml(status: Awaited<ReturnType<typeof getStatus>>): string {
 	const doc = create({status: status});
 	return doc.end({ prettyPrint: true });
 }
 
-export const getExpressHealthRoute = function(healthchecks: Check[]) {
+export const getExpressHealthRoute = function(healthchecks: Check[]): Router {
 	const router = express.Router({});
 
-	router.get('/', async (_req, res) => {
+	router.get('/', (async (_req, res) => {
 		const status = await getStatus(healthchecks);
 
 		if(status.applicationstatus === Status.Error) {
@@ -156,7 +172,7 @@ export const getExpressHealthRoute = function(healthchecks: Check[]) {
 			json: jsonResponse,
 			default: jsonResponse
 		});
-	});
+	}) as RequestHandler);
 
 	return router;
 };
