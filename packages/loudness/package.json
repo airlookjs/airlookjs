@@ -15,7 +15,7 @@
     "build": "tsc",
     "postinstall": "./install.sh",
     "dev": "tsx watch src/index.ts",
-    "test": "jest",
+    "test": "vitest",
     "test:watch": "jest --watch",
     "lint": "nx lint"
   },

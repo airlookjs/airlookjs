@@ -1,3 +1,5 @@
+import { type ShareInfo } from '@airlookjs/shared';
+
 // parse bools from env safely
 /*const parseBoolEnv = (env, defaultValue) => {
 	if (env === undefined) {
@@ -40,12 +42,7 @@ export const config : {
     port: number,
     route: string,
     defaultOutputFormatName: string,
-    shares: {
-			name: string,
-            mount: string,
-            cached: boolean,
-			matches: RegExp[]
-        }[]
+    shares: ShareInfo[]
 } = {
 	version: process.env.npm_package_version ?? 'dev',
 	port: parseIntEnv(process.env.PORT, 3000),

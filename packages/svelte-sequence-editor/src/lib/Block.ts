@@ -18,7 +18,7 @@ const DEFAULT_VALIDATION_OPTIONS: Required<TValidationOptions> = {
 	}
 };
 
-type ISetTimeOptions = {
+interface ISetTimeOptions {
 	maintainDuration?: boolean;
 	snap?: boolean;
 	snapTimes?: number[];
@@ -39,6 +39,7 @@ export class Block implements ISequenceChild {
 	markers: { time: number; title?: string }[] = [];
 	errors: { type: string; message: string }[] = [];
 
+	// TODO: rewrite initializer to allow theese to have a number type always, remove ! assertions afterwards
 	private _inTime?: number;
 	private _outTime?: number;
 
@@ -137,7 +138,7 @@ export class Block implements ISequenceChild {
 	}
 
 	public get inTime() : number {
-		return this._inTime as number;
+		return this._inTime!;
 	}
 
 	public set inTime(value: number) {
@@ -200,8 +201,8 @@ export class Block implements ISequenceChild {
 	}
 
 	public set(): void {
-		this.setInTime(this._inTime as number);
-		this.setOutTime(this._outTime as number);
+		this.setInTime(this._inTime!);
+		this.setOutTime(this._outTime!);
 	}
 
 	public setInTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) {

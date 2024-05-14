@@ -144,6 +144,8 @@ export class Layer implements ISequenceChild {
 		return this.parent.getSequence();
 	}
 
+	// TODO: return type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public validate() {
 		return this.blocks.map((block) => {
 			return block.validate();

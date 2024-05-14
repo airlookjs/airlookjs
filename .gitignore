@@ -27,3 +27,4 @@ Thumbs.db
 .nx/cache
 nx-cloud.env
 .svelte-kit
+*/vite.config.ts.timestamp-*.mjs

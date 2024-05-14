@@ -33,6 +33,10 @@ interface Scene {
 	};
 }
 
+// TODO: method for parsing row to add type safety
+/*const parseRow = (index, startFrame, startTimecode, endSeconds, endFrame, endTimecode, endSeconds) => {*/
+
+
 export async function getScenes(file: string, cachePath?: string) : Promise<getScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
@@ -70,6 +74,7 @@ export async function getScenes(file: string, cachePath?: string) : Promise<getS
 			})
 			.then((csvData) => {
 				output.scenedetect.scenes = csvData.map((row) => {
+
 					const scene: Scene = {
 						index: parseInt(row[0]),
 						start: {

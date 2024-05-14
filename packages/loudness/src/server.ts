@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { type Express } from "express";
 
 import cors from 'cors';
 //import prometheus from 'prom-client';
@@ -12,7 +12,6 @@ export const server : Express = express();
 // collectDefaultMetrics({ timeout: 10000 });
 server.use(cors());
 server.get(`${config.route}`,loudnessRequestHandler);
-
 /*
 const checks = 
     config.shares.map(share => {
@@ -28,7 +27,6 @@ const checks =
     });
 server.use('/status', getExpressHealthRoute(checks));
 */
-
 server.get('/', function (_req, res) {
   res.send('Loudness scanner is running');
 });

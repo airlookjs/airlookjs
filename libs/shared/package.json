@@ -1,0 +1,5 @@
+{
+  "name": "shared",
+  "type": "module",
+  "files": ["index.js"]
+}

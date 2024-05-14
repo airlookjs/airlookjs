@@ -1,32 +1,39 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-    "compilerOptions": {
-      "allowSyntheticDefaultImports": true,
-      "allowUnreachableCode": false,
-      "experimentalDecorators": true,
-      "allowUnusedLabels": false,
-      "declaration": true,
-      "declarationMap": true,
-      "esModuleInterop": true,
-      "checkJs": true,
-      "lib": ["es2023"],
-      //"types": ["node"],
-
-      "module": "node16",
-      "moduleResolution": "node16",
-      "target": "es2022",
-      "noImplicitReturns": true,
-      "paths": {},
-      "pretty": true,
-      "resolveJsonModule": true,
-      "noImplicitAny": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noUncheckedIndexedAccess": true,
-      "skipLibCheck": true,
-      "sourceMap": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "allowUnusedLabels": false,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "checkJs": true,
+    "lib": ["es2023"],
+    "module": "node16",
+    "moduleResolution": "node16",
+    "target": "es2022",
+    "noImplicitReturns": true,
+    "paths": {
+      "@airlookjs/shared": ["libs/shared/src/index.ts"]
     },
-    "exclude": ["node_modules"]
-  }
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "pretty": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

@@ -6,8 +6,13 @@ cd lib
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
 
-if [ "$(uname)" == "Darwin" ]; then
-  # only on mac os
+if [ "$(uname)" = "" ]; then
+  # install system dependencies on linux with apk
+  
+fi
+
+if [ "$(uname)" = "Darwin" ]; then
+  # install system dependencies on mac os with brew
   brew install ffmpeg@4
   brew install glib  
   brew install gstreamer  
