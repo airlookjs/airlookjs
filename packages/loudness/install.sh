@@ -6,10 +6,9 @@ cd lib
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
 
-if [ "$(uname)" = "" ]; then
-  # install system dependencies on linux with apk
-  
-fi
+#if [ "$(uname)" = "" ]; then
+# install system dependencies on linux with apk here ? 
+#fi
 
 if [ "$(uname)" = "Darwin" ]; then
   # install system dependencies on mac os with brew

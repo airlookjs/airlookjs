@@ -95,9 +95,22 @@ export default tseslint.config(
 			  allow: [],
 			  depConstraints: [
 				{
-				  sourceTag: '*',
-				  onlyDependOnLibsWithTags: ['*'],
+					sourceTag: "scope:shared",
+					onlyDependOnLibsWithTags: ["scope:shared"]
 				},
+				{
+					sourceTag: "type:app",
+					onlyDependOnLibsWithTags: ["type:util", "type:ui"]
+				},
+				{
+					sourceTag: "type:ui",
+					onlyDependOnLibsWithTags: ["type:ui", "type:util"]
+				},
+				{
+					sourceTag: "type:util",
+					onlyDependOnLibsWithTags: ["type:util"]
+				  }
+
 			  ],
 			},
 		  ],

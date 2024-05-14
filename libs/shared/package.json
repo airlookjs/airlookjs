@@ -1,5 +1,8 @@
 {
   "name": "shared",
   "type": "module",
-  "files": ["index.js"]
+  "files": ["index.js"],
+  "scripts": {
+    "build": "tsc"
+  }
 }

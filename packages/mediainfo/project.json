@@ -1,7 +1,8 @@
 {
     "name": "mediainfo",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "targets": {
+    "tags": ["type:app"],
+	"targets": {
 		"lint": {
 		  "executor": "@nx/eslint:lint",
 		  "outputs": ["{options.outputFile}"]
