@@ -3,19 +3,9 @@ dotenv.config();
 
 // load loudness.config.ts or loudness.config.js if present - otherwise use defaults or env - .ts needs to be compiled to .js
 //if(fs.existsSync('../loudness.config.ts')) {
-//	  import configfile from '../loudness.config.ts';
+//import configfile from '../loudness.config.ts';
+import { type ShareInfo } from '@airlookjs/shared';
 
-
-//import getSharedConfig from 'shared-config';
-export interface ShareInfo {
-  name: string;
-  localizedName: string;
-  mount: string;
-  uncRoot: string;
-  cached: boolean;
-  systemRoot: string
-  matches: RegExp[];
-};
 export interface LoudnessConfig {
   environment: string;
   route: string;

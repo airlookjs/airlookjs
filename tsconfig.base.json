@@ -4,7 +4,10 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
     "allowUnusedLabels": false,
+    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -14,7 +17,12 @@
     "moduleResolution": "node16",
     "target": "es2022",
     "noImplicitReturns": true,
-    "paths": {},
+    "paths": {
+      "@airlookjs/shared": ["libs/shared/src/index.ts"]
+    },
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "./dist",
     "pretty": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
@@ -24,7 +32,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -171,7 +171,6 @@ export const loudnessRequestHandler: RequestHandler = (req, res, next) => {
       console.log('File was not found: ' + fileUrl);
       next(new Error('File was not found: ' + fileUrl));
     }*/
-
 }
 }
 

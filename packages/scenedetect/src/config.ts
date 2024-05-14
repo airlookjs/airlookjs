@@ -1,3 +1,4 @@
+import { ShareInfo } from '@airlookjs/shared';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -5,7 +6,7 @@ dotenv.config();
 export interface SceneDetectConfig {
 	environment: string;
 	route: string;
-	shares: any //ShareInfo[]
+	shares: ShareInfo[];
 	version: string;
 	port: number;
 }

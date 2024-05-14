@@ -42,7 +42,7 @@ export default tseslint.config(
 				//sourceType: 'module',
 				tsconfigRootDir: import.meta.dirname,
 				//project: true,
-				project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+				project: ['./tsconfig.json', './packages/*/tsconfig.json', './libs/*/tsconfig.json'],
 				extraFileExtensions: ['.svelte'],
 			}
 		},
