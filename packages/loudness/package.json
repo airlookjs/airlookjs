@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "repository": "https://github.com/airlookjs/airlookjs.git",
   "author": "Johan Bichel Lindegaard <public@johan.cc>",
-  "license": "MIT",
+  "license": "ISC",
   "type": "module",
   "bin":{
     "loudness": "bin/loudness"

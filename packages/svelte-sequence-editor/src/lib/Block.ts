@@ -25,6 +25,20 @@ interface ISetTimeOptions {
 	snapThreshold?: number;
 };
 
+interface SetTimeResult {
+	c: number;
+    moved: number;
+    v0: number;
+    v1: number;
+    blocked: boolean;
+	//apply: () => void;
+};
+
+interface PendingSetTimeResult extends SetTimeResult {
+	apply: () => SetTimeResult;
+};
+
+
 const DEFAULT_SET_TIME_OPTIONS = {
 	snapThreshold: 150
 };
@@ -154,7 +168,7 @@ export class Block implements ISequenceChild {
 	}
 
 	public get outTime() : number {
-		return this._outTime;
+		return this._outTime!;
 	}
 
 	public set outTime(value: number) {
@@ -205,12 +219,12 @@ export class Block implements ISequenceChild {
 		this.setOutTime(this._outTime!);
 	}
 
-	public setInTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) {
+	public setInTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) : SetTimeResult {
 		const res = this.setTimeCommon(value, tHandles.inTime, options);
 		return res.apply();
 	}
 
-	public setOutTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) {
+	public setOutTime(value: number, options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS) : SetTimeResult {
 		const res = this.setTimeCommon(value, tHandles.outTime, options);
 		return res.apply();
 	}
@@ -230,7 +244,7 @@ export class Block implements ISequenceChild {
 		prop: tHandles,
 		options: ISetTimeOptions = DEFAULT_SET_TIME_OPTIONS,
 		depth = 0
-	) {
+	) : PendingSetTimeResult {
 		depth++;
 
 		const {
@@ -271,7 +285,7 @@ export class Block implements ISequenceChild {
 
 			return {
 				c: c,
-				moved: c != _t,
+				moved: _t - c,
 				v0: value,
 				v1: _t,
 				blocked: value != _t,
@@ -467,10 +481,11 @@ export class Block implements ISequenceChild {
 		return set(setT);
 	}
 
+	// TODO: its confusing that this returns undefined if no move is made, should still return the state, check code usage before changing
 	public move(
 		delta: number,
 		options: Omit<ISetTimeOptions, 'maintainDuration'> = DEFAULT_SET_TIME_OPTIONS
-	) {
+	) : SetTimeResult | undefined {
 		if (delta == 0) return;
 
 		const res = this.setTimeCommon(
