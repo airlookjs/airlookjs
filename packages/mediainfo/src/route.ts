@@ -63,7 +63,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 										sentCachedResult = true
 									}
 								} catch (err) {
-									if (err.code === 'ENOENT') {
+									if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
 										console.info('Cached mediainfo file not found: ' + jsonFilePath)
 									} else {
 										next(err)
