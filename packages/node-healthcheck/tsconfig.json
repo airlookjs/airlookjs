@@ -2,9 +2,6 @@
 	"extends": "../../tsconfig.base",
   "compilerOptions": {
 		"outDir": "dist",
-    "importHelpers": true,
-		"types": ["cors", "express", "mocha", "node", "nodemon", "uuid", "supertest", "express-serve-static-core"],
 	},
-  "include": ["./src/*.ts"],
-  "exclude": ["node_modules"]
+	"include": ["./src/**/*.ts", "./tests/**/*.ts"]
 }
