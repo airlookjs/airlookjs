@@ -1,13 +1,20 @@
 #!/bin/sh
 mkdir -p lib
 cd lib 
-#rm -rf loudness-scanner
-# TODO check if already installed
+
+if result=$(../bin/loudness --version 2>&1); then
+    stdout=$result
+    echo "loudness already installed:"
+    echo "${result}"
+    exit 0
+fi
+
+rm -rf loudness-scanner
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
 
 #if [ "$(uname)" = "" ]; then
-# install system dependencies on linux with apk here ? 
+# TODO install system dependencies on linux, or use docker for tests, see dockerfile for dependencies
 #fi
 
 if [ "$(uname)" = "Darwin" ]; then
