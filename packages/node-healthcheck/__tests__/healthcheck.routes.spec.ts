@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import { create } from 'xmlbuilder2';
-import { expect, describe, it } from "vitest";
+import { expect, describe, it, beforeEach } from "vitest";
 
 import {
 	Check,
@@ -422,10 +422,6 @@ describe('healthcheck.routes', function () {
 				);
 				expect(responseBody.check.status).toBe(Status.Warning);
 			});
-		});
-
-		describe('with checks that will fail',  () => {
-
 		});
 	});
 });
