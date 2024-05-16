@@ -12,10 +12,10 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "nx build",
     "postinstall": "./install.sh",
     "dev": "tsx watch src/index.ts",
-    "test": "vitest",
+    "test": "nx test",
     "test:watch": "jest --watch",
     "lint": "nx lint"
   },

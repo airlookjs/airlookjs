@@ -2,7 +2,7 @@
 	"name": "svelte-sequence-editor",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"tags": ["type:ui"],
-
+	"projectType": "library",
 	"targets": {
 		"lint": {
 		  "executor": "@nx/eslint:lint",

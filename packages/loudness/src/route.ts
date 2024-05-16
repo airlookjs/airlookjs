@@ -1,6 +1,6 @@
 
 import fs from 'fs';
-import createError from 'http-errors'
+import createError, { HttpError } from 'http-errors'
 import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
@@ -174,6 +174,7 @@ export const loudnessRequestHandler: RequestHandler = (req, res, next) => {
 }
 }
 
+// TODO: write typesafe common error handler for all express apps
 export const errorRequestHandler: ErrorRequestHandler = (error, _req, res, next) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
@@ -182,7 +183,7 @@ export const errorRequestHandler: ErrorRequestHandler = (error, _req, res, next)
 	}
   console.error((error as Error).stack);
 
-  res.status(error.statusCode).json({ error: (error as Error).message });
+  res.status((error as HttpError).statusCode).json({ error: (error as Error).message });
   //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
 
   next();

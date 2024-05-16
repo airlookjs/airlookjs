@@ -7,6 +7,7 @@ import globals from 'globals';
 import jsoncParser from 'jsonc-eslint-parser';
 import tseslint from 'typescript-eslint';
 import eslintPluginSvelte from 'eslint-plugin-svelte';
+import svelteParser from 'svelte-eslint-parser';
 
 export default tseslint.config(
 	{ plugins: { '@nx': nxPlugin } },
@@ -18,7 +19,7 @@ export default tseslint.config(
 		  '**/coverage/**',
 		  '**/build/**',
 		  '**/bin/**',
-		  '**/.svelte-kit',
+		  "**/.svelte-kit/**/*",
 		],
 	},
 
@@ -28,8 +29,9 @@ export default tseslint.config(
   	...tseslint.configs.stylisticTypeChecked,
 	// @ts-expect-error we probably need to modify our tsconfig for this file, this works and follows documentation, maybe types are out of sync between deps
 	...eslintPluginSvelte.configs['flat/recommended'],
-	
+
 	{
+		ignores: ["packages/svelte-sequence-editor/**"],
 		languageOptions: {
 			ecmaVersion: 2022,
 			globals: {
@@ -37,35 +39,60 @@ export default tseslint.config(
 				...globals.node,
 				//...globals.browser
 			},
+			parser: tseslint.parser,
 			parserOptions: {
 				//allowAutomaticSingleRunInference: true,
 				//sourceType: 'module',
 				tsconfigRootDir: import.meta.dirname,
 				//project: true,
-				project: ['./tsconfig.json', './packages/*/tsconfig.json', './libs/*/tsconfig.json'],
-				extraFileExtensions: ['.svelte'],
+				project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+				EXPERIMENTAL_useProjectService: true, //Enable project references, that is otherwise not supported and will cause us to have either poor performing tsconfig files including too many things or maintain seperate tsconfigs for eslint. This is experimental but so far seems to work well. See https://github.com/typescript-eslint/typescript-eslint/pull/6754
+				
 			}
 		},
+	},
+
+	{
 		settings: {
 			svelte: {
 				compileOptions: {
 					postcss: {
 						configFilePath: './packages/*/postcss.config.cjs'
 					}
+					
 				}
 			}
 		}
 	},
 
 	{
-		files: ['**/*.svelte'],
+		files: ["packages/svelte-sequence-editor/**"],
+
 		languageOptions: {
-			//parser: svelteParser,
+			globals: {
+				//...globals.es2020,
+				...globals.node,
+				//...globals.browser
+			},
+			parserOptions: {
+				EXPERIMENTAL_useProjectService: false,
+				tsconfigRootDir: import.meta.dirname,
+				project: ['./tsconfig.json', './packages/svelte-sequence-editor/tsconfig.json'],
+				extraFileExtensions: ['.svelte']
+			}
+		},
+	},
+	{
+		files: ['packages/svelte-sequence-editor/**/*.svelte'],
+		languageOptions: {
+			parser: svelteParser,
 			parserOptions: {
 				parser: tseslint.parser,
+				//project: './packages/*/tsconfig.json',
 			},
 		},
 	},
+
 
 	{
 		files: ['**/*.ts'],
@@ -85,6 +112,9 @@ export default tseslint.config(
 		  ]
 		  },
 	},
+
+
+
 	{
 		files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
 		rules: {
@@ -116,11 +146,15 @@ export default tseslint.config(
 		  ],
 		},
 	},
+
+
 	{
 		files: ['*.json'],
 		languageOptions: {
 		  parser: jsoncParser,
 		},
 		rules: {},
-	  }
+	},
+		
+
 );

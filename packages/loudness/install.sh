@@ -1,13 +1,12 @@
 #!/bin/sh
-mkdir -p lib
-cd lib 
-
-if result=$(../bin/loudness --version 2>&1); then
-    stdout=$result
+if result=$(./bin/loudness --version 2>&1); then
     echo "loudness already installed:"
     echo "${result}"
     exit 0
 fi
+
+mkdir -p lib
+cd lib 
 
 rm -rf loudness-scanner
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
