@@ -1,6 +1,6 @@
-import createError from 'http-errors'
+import createError, { HttpError } from 'http-errors'
 import {stringIsAValidUrl} from './validateUrl.js'
-import { type RequestHandler } from 'express'
+import { type RequestHandler, type ErrorRequestHandler } from 'express'
 import path from 'path'
 import fs from 'fs'
 import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
@@ -8,26 +8,32 @@ import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
 import { config } from './config.js'
 
 export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
-	console.log('Processing request', req.url, '->', req.params.path)
+	console.log('Processing request', req.url, '->', req.query.file)
 
+	if (typeof req.query.file !== 'string') {
+		return next(createError.BadRequest('Invalid query parameter file must be a string'));
+	}
+	
+	const fileUrl: string = req.query.file;
 	let foundMatchingMountedFile = false
-	const pathParam = req.params.path
 
-    const outputFormatParam = req.query.outputFormat ?? config.defaultOutputFormatName
-    if(typeof outputFormatParam !== 'string' || !(outputFormatParam in OutputFormats)){
-        return next(createError(400, `Invalid outputFormat: ${outputFormatParam}`))
-    }
-    const outputFormat = outputFormatParam as OutputFormatKeys
+	const outputFormatParam = req.query.outputFormat ?? config.defaultOutputFormatName
+
+	if(typeof outputFormatParam !== 'string' || !(outputFormatParam in OutputFormats)){
+			return next(createError(400, `Invalid outputFormat: ${outputFormatParam}`))
+	}
+	const outputFormat = outputFormatParam as OutputFormatKeys
+
 	console.info('Using outputFormat', outputFormat)
 
-	if (pathParam) {
+	if (fileUrl) {
 		// check if file is matched by a share and if so, run the mediainfo analysis
 		if(config.shares) {
 		for (const share of config.shares) {
 			console.info('Checking share', share.name, 'for matches')
 			for (const match of share.matches) {
-				console.info('Checking match', match, 'for', pathParam)
-				const matchResult = pathParam.match(match)
+				console.info('Checking match', match, 'for', fileUrl)
+				const matchResult = fileUrl.match(match)
 				if (matchResult?.[1]) {
 					console.info('-> match found', matchResult[1])
 					const mountedFilePath = path.join(share.mount, matchResult[1])
@@ -57,10 +63,11 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 										console.info('Serving cached result from file', jsonFilePath)
 										const fileData = await fs.promises.readFile(jsonFilePath)
 										const jsonData = JSON.parse(fileData.toString())
-										jsonData.cached = true
-										// TODO: check version matches jsonData.version = config.version
-										res.json(jsonData)
-										sentCachedResult = true
+										if(jsonData.version === config.version) {
+											jsonData.cached = true
+											res.json(jsonData)
+											sentCachedResult = true
+										}
 									}
 								} catch (err) {
 									if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -73,10 +80,15 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 						}
 
 						if (!sentCachedResult) {
-							const data = await getMediainfo(mountedFilePath, outputFormat).catch((err) => {
+							const mediainfo = await getMediainfo(mountedFilePath, outputFormat).catch((err) => {
                                 console.error('Error computing mediainfo: ' + err)
                                 return next(err)
                             })
+							const data = {
+								version: config.version,
+								mediainfo
+							}
+													
 
 							if (share.cached && outputFormat == config.defaultOutputFormatName) {
                                 // create cache folder if it doesn't exist
@@ -90,18 +102,18 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
                                 }
                                 // save the result to file
                                 try {
-                                    await fs.promises.writeFile(jsonFilePath, JSON.stringify(data))
+                                    await fs.promises.writeFile(jsonFilePath, JSON.stringify(data));
                                 } catch (err) {
                                     console.error('Error writing mediainfo file', err)
                                 }
 							}
 							if (OutputFormats[outputFormat][1] == 'JSON') {
-								res.json({mediainfo: data, version: config.version})
+								res.json(data)
 							} else if (OutputFormats[outputFormat][1] == 'XML') {
                                 res.set('Content-Type', 'text/xml')
-                                res.send(data)
+                                res.send(mediainfo)
 							} else {
-								res.send(data)
+								res.send(mediainfo)
 							}
 							
 						}
@@ -116,12 +128,12 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 		}
 		}
 
-		if (!foundMatchingMountedFile && pathParam.startsWith('http')) {
+		if (!foundMatchingMountedFile && fileUrl.startsWith('http')) {
 			// Media file is not mounted, attempt using URL
 
 			try {
-				if (stringIsAValidUrl(pathParam, ['http', 'https'])) {
-					const data = await getMediainfo(pathParam, outputFormat).catch((err) => {
+				if (stringIsAValidUrl(fileUrl, ['http', 'https'])) {
+					const data = await getMediainfo(fileUrl, outputFormat).catch((err) => {
                         console.error('Error computing mediainfo: ' + err)
                         return next(err)
                     })
@@ -146,12 +158,27 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 
 		// if we get here, no match was found for the file in any of the shares
 		if (!foundMatchingMountedFile) {
-			console.log('File was not found: ' + pathParam)
-			next(new Error('File was not found: ' + pathParam))
+			console.log('File was not found: ' + fileUrl)
+			next(new Error('File was not found: ' + fileUrl))
 		}
 	} else {
 		console.log('Missing file argument')
 		res.status(400)
 		res.json({ error: 'Missing file argument' })
 	}
+}
+
+// TODO: write typesafe common error handler for all express apps
+export const errorRequestHandler: ErrorRequestHandler = (error, _req, res, next) => {
+  // The error id is attached to `res.sentry` to be returned
+  // and optionally displayed to the user for support.
+  if (res.headersSent) {
+		return next(error);
+	}
+  console.error((error as Error).stack);
+
+  res.status((error as HttpError).statusCode).json({ error: (error as Error).message });
+  //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
+
+  next();
 }
