@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import createError from 'http-errors'
 import {stringIsAValidUrl} from './validateUrl.js'
 import { type RequestHandler } from 'express'
@@ -7,14 +9,18 @@ import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
 
 import { config } from './config.js'
 
+// FIXME: rewrite as not a promise or use a plugin, errors are not handled correctly when using async/await for a request handler in express
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.params.path)
 
 	let foundMatchingMountedFile = false
 	const pathParam = req.params.path
 
-    const outputFormatParam = req.query.outputFormat ?? config.defaultOutputFormatName
+    const outputFormatParam = req.query.outputFormat ?? config.defaultOutputFormatName;
+	
     if(typeof outputFormatParam !== 'string' || !(outputFormatParam in OutputFormats)){
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
         return next(createError(400, `Invalid outputFormat: ${outputFormatParam}`))
     }
     const outputFormat = outputFormatParam as OutputFormatKeys
