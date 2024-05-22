@@ -9,7 +9,6 @@
     "eslint.config.js",
     "*/*/svelte.config.js",
     "*/*/tailwind.config.cjs",
-    "*/*/jest.config.ts",
     "*/*/playwright.config.ts",
     "*/*/postcss.config.cjs",
     "*/*/vite.config.ts",
