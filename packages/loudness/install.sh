@@ -18,6 +18,7 @@ cd loudness-scanner
 
 if [ "$(uname)" = "Darwin" ]; then
   # install system dependencies on mac os with brew
+  brew install cmake
   brew install ffmpeg@4
   brew install glib  
   brew install gstreamer  
