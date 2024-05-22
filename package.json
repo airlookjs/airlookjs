@@ -12,8 +12,8 @@
   "keywords": [],
   "devDependencies": {
     "@eslint/js": "^9.3.0",
-    "@nx-tools/container-metadata": "^6.0.0",
-    "@nx-tools/nx-container": "^6.0.0",
+    "@nx-tools/container-metadata": "^6.0.1",
+    "@nx-tools/nx-container": "^6.0.1",
     "@nx/eslint-plugin": "19.0.2",
     "@nx/jest": "19.0.2",
     "@nx/js": "19.0.2",
