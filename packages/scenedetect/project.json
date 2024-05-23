@@ -8,6 +8,16 @@
 		"lint": {
 		  "executor": "@nx/eslint:lint",
 		  "outputs": ["{options.outputFile}"]
-		}
+		},
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+			  "outputPath": "dist/scenedetect",
+			  "main": "packages/scenedetect/src/index.ts",
+			  "tsConfig": "packages/scenedetect/tsconfig.lib.json",
+			  "assets": []
+			}
+		  }
 	  }
 }

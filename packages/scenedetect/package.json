@@ -6,12 +6,11 @@
 	"private": true,
 	"author": "Ole Kristensen <k-denfrie-ok@tv2.dk>",
 	"type": "module",
+	"license": "ISC",
 	"scripts": {
-		"start": "node build/index.js",
-		"lint-legacy": "prettier --plugin-search-dir . --check . && eslint .",
+		"dev": "tsx watch src/index.ts",
 		"lint": "nx lint",
-		"build": "rm -r build && cp -r src build || cp -r src build",
-		"format": "prettier --plugin-search-dir . --write ."
+		"build": "nx build"
 	},
 	"engine": "node >=18.0.0",
 	"dependencies": {

@@ -13,10 +13,15 @@
           "executor": "@nx/js:tsc",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/libs",
-            "main": "./src/index.ts",
-            "tsConfig": "./tsconfig.json",
-            "assets": []
+            "outputPath": "dist/loudness",
+            "main": "packages/loudness/src/index.ts",
+            "tsConfig": "packages/loudness/tsconfig.lib.json",
+            "assets": ["packages/loudness/bin/*", "packages/loudness/*.md"]
+          }
+        },
+        "docker": {
+          "executor": "@nx-tools/nx-container:build",
+          "options": {
           }
         },
         "test": {
