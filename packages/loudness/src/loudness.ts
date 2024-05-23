@@ -16,10 +16,10 @@ export interface LoudnessOutput {
   loudness: LoudnessData
 };
 
-const exec = promisify(child_process.exec)
+const exec = promisify(child_process.execFile)
 
 const loudnessScan = async (file: string) => {
-	const result = await loudnessExec(`scan --lra "${file}"`)
+	const result = await loudnessExec(['scan', '--lra', file])
 	const nums = result.toString().split('\n')?.[0]?.split(' ') ?? [];
 	const lufs = parseFloat(nums[0] ?? '');
 
@@ -48,7 +48,7 @@ const DUMP_OPTIONS = {
 } as const;
 
 const loudnessDump = async (type: keyof typeof DUMP_OPTIONS, sampleRate: number, file: string) => {
-	const result = await loudnessExec(`dump ${DUMP_OPTIONS[type]} ${sampleRate} "${file}"`)
+	const result = await loudnessExec(['dump', DUMP_OPTIONS[type], sampleRate.toString(), file])
 
 	const lines = result.toString().split('\n')
 	lines.pop()
@@ -61,10 +61,9 @@ const loudnessDump = async (type: keyof typeof DUMP_OPTIONS, sampleRate: number,
 	}
 }
 
-const loudnessExec = async (args: string) => {
-	const cmd = `${LOUDNESS_CMD} ${args}`
-	console.info('Running', cmd)
-	const { stdout, stderr } = await exec(cmd)
+const loudnessExec = async (args: string[]) => {
+	console.info('Running', LOUDNESS_CMD, 'with args', args)
+	const { stdout, stderr } = await exec(LOUDNESS_CMD, args)
 
 	if (stderr) {
 		// progress is reported to stderr
