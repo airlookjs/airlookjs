@@ -7,7 +7,6 @@
     "emitDecoratorMetadata": true,
     "importHelpers": true,
     "allowUnusedLabels": false,
-    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -18,8 +17,8 @@
     "target": "es2022",
     "noImplicitReturns": true,
     "rootDir": ".",
-    "baseUrl": ".",
-    "outDir": "./dist",
+    "baseUrl": "./",
+    "typeRoots": ["node_modules/@types"],
     "pretty": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
@@ -27,10 +26,15 @@
     "noUnusedParameters": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "removeComments": true
+    "removeComments": true,
+    "paths": {
+      "@airlookjs/util": ["./libs/util/src/index.ts"]
+    }
   },
-  "exclude": ["node_modules", "dist"]
+  "include": [],
+  "exclude": ["node_modules", "tmp"]
 }

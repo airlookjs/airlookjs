@@ -29,3 +29,4 @@ nx-cloud.env
 .svelte-kit
 */vite.config.ts.timestamp-*.mjs
 private-notes.txt
+**/.last-run.json

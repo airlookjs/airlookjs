@@ -1,19 +1,17 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    //"types": ["node"],
     "noEmit": true,
     "allowJs": true,
-    "paths": {},
   },
   "include": [
     "eslint.config.mjs",
     "eslint.config.js",
-    "packages/*/svelte.config.js",
-    "packages/*/tailwind.config.cjs",
-    "packages/*/jest.config.ts",
-    "packages/*/playwright.config.ts",
-    "packages/*/postcss.config.cjs",
-    
+    "*/*/svelte.config.js",
+    "*/*/tailwind.config.cjs",
+    "*/*/playwright.config.ts",
+    "*/*/postcss.config.cjs",
+    "*/*/vite.config.ts",
+    "*/*/vitest.config.ts",
   ]
 }

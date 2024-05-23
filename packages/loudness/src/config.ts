@@ -5,6 +5,7 @@ dotenv.config();
 //if(fs.existsSync('../loudness.config.ts')) {
 //import configfile from '../loudness.config.ts';
 import { parseIntEnv, type ShareInfo } from '@airlookjs/shared';
+import path from "node:path";
 
 export interface LoudnessConfig {
   environment: string;
@@ -22,4 +23,4 @@ export const config: LoudnessConfig = {
 	shares: []
 };
 
-export const LOUDNESS_CMD = './bin/loudness';
+export const LOUDNESS_CMD = path.resolve(import.meta.dirname, '../bin/loudness');

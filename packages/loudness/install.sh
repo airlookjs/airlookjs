@@ -1,17 +1,22 @@
 #!/bin/sh
-mkdir -p lib
-cd lib 
-#rm -rf loudness-scanner
-# TODO check if already installed
-git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
-cd loudness-scanner
+if result=$(./bin/loudness --version 2>&1); then
+    echo "loudness already installed:"
+    echo "${result}"
+    exit 0
+fi
 
-#if [ "$(uname)" = "" ]; then
-# install system dependencies on linux with apk here ? 
-#fi
 
-if [ "$(uname)" = "Darwin" ]; then
+#YUM=$(which yum)
+APT=$(which apt-get)
+APK=$(which apk)
+
+if [ ! -z $APT ]; then
+  sudo apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev 
+elif [ ! -z $APK ]; then
+  sudo apk add --no-cache git cmake make g++ ffmpeg-libavformat ffmpeg-libavcodec ffmpeg-libavutil libebur128-dev libsndfile
+elif [ "$(uname)" = "Darwin" ]; then
   # install system dependencies on mac os with brew
+  brew install cmake
   brew install ffmpeg@4
   brew install glib  
   brew install gstreamer  
@@ -26,7 +31,18 @@ if [ "$(uname)" = "Darwin" ]; then
   export PKG_CONFIG_PATH="/opt/homebrew/opt/ffmpeg@4/lib/pkgconfig"
   export CXX=g++
   export CC=gcc
+else
+  echo "Could not detect package installer."
+  exit 1;
 fi
+
+
+mkdir -p lib
+cd lib 
+
+rm -rf loudness-scanner
+git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
+cd loudness-scanner
 
 mkdir build
 cd build
