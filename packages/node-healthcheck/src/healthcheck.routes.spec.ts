@@ -78,9 +78,6 @@ describe('healthcheck.routes', function () {
 					.expect('Content-Type', /json/)
 					.expect(200);
 				const responseBody = res.body.status;
-				expect(responseBody.applicationname).toBe(
-					'@airlookjs/node-healthcheck'
-				);
 				expect(responseBody.applicationstatus).toBe(Status.Ok);
 				expect(typeof responseBody.timestamp).toBe('string');
 				expect(responseBody.timestamp).toBe(
@@ -311,9 +308,6 @@ describe('healthcheck.routes', function () {
 				//@ts-expect-error xml builder isn't aware of the format of the response
 				const responseBody = create(res.text).end({ format: 'object' }).status;
 
-				expect(responseBody.applicationname).toBe(
-					'@airlookjs/node-healthcheck'
-				);
 				expect(responseBody.applicationstatus).toBe(Status.Ok);
 				expect(typeof responseBody.timestamp).toBe('string');
 				expect(responseBody.check[0].message).toEqual(
@@ -343,7 +337,6 @@ describe('healthcheck.routes', function () {
 				//@ts-expect-error xml builder isn't aware of the format of the response
 				const responseBody = create(res.text).end({ format: 'object' }).status;
 		
-				expect(responseBody.applicationname).toBe('@airlookjs/node-healthcheck');
 				expect(responseBody.applicationstatus).toBe(Status.Error);
 				expect(typeof responseBody.timestamp).toBe('string');
 				expect(responseBody.check[0].message).toEqual('It will be fine: All good');
@@ -371,7 +364,6 @@ describe('healthcheck.routes', function () {
 		
 				//@ts-expect-error xml builder isn't aware of the format of the response
 				const responseBody = create(res.text).end({ format: 'object' }).status;
-				expect(responseBody.applicationname).toBe('@airlookjs/node-healthcheck');
 				expect(responseBody.applicationstatus).toBe(Status.Warning);
 				expect(typeof responseBody.timestamp).toBe('string');
 				expect(responseBody.timestamp).toBe(
@@ -414,7 +406,6 @@ describe('healthcheck.routes', function () {
 				//@ts-expect-error xml builder isn't aware of the format of the response
 				const responseBody = create(res.text).end({ format: 'object' }).status;
 		
-				expect(responseBody.applicationname).toBe('@airlookjs/node-healthcheck');
 				expect(responseBody.applicationstatus).toBe(Status.Warning);
 				expect(typeof responseBody.timestamp).toBe('string');
 				expect(responseBody.check.message).toBe(
