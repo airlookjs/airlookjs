@@ -1,4 +1,9 @@
-import express from 'express';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-empty-function */
+
+import express, { type Express } from 'express';
 import request from 'supertest';
 import { create } from 'xmlbuilder2';
 import { expect, describe, it, beforeEach } from "vitest";
@@ -12,7 +17,7 @@ import {
 } from '../src/healthcheck.routes';
 
 describe('healthcheck.routes', function () {
-	let app;
+	let app: Express;
 	let res;
 	let checks;
 
@@ -198,7 +203,7 @@ describe('healthcheck.routes', function () {
 						name: 'rejects after timeout',
 						timeout: 100,
 						checkFn: async function () {
-							return await new Promise((resolve, reject) => {
+							return await new Promise((_resolve, reject) => {
 								setTimeout(function () {
 									reject('nested reject');
 								}, 200);
@@ -408,11 +413,6 @@ describe('healthcheck.routes', function () {
 		
 				//@ts-expect-error xml builder isn't aware of the format of the response
 				const responseBody = create(res.text).end({ format: 'object' }).status;
-		
-				// status.should.be.an.Object();
-				// status.check.should.be.an.Object();
-				// status.timestamp.should.be.a.String();
-				// status.applicationstatus.should.equal(Status.Warning);
 		
 				expect(responseBody.applicationname).toBe('@airlookjs/node-healthcheck');
 				expect(responseBody.applicationstatus).toBe(Status.Warning);

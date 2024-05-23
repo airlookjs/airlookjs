@@ -3,20 +3,14 @@
   "version": "1.4.2",
   "main": "dist/healthcheck.routes.js",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/airlookjs/node-healthcheck.git"
-  },
-  "files": [
-    "dist/"
-  ],
+  "repository": "https://github.com/airlookjs/airlookjs.git",
   "scripts": {
-    "build": "tsc",
-    "test": "vitest"
+    "build": "nx build",
+    "test": "nx test",
+    "test:watch": "nx test --watch",
+    "lint": "nx lint"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "engine": "node >= 20",
   "dependencies": {
     "express": "4.18.2",
     "xmlbuilder2": "3.1.1"
@@ -40,5 +34,5 @@
     "supertest": "6.3.4",
     "typescript": "^5.4.5"
   },
-  "packageManager": "pnpm@8.10.2"
+  "packageManager": "pnpm@9.1.2"
 }
