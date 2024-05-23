@@ -35,10 +35,12 @@ describe('mediainfo', () => {
 				...defaultConfig,
 				shares: [
 					{
-							name: 'test',
-							mount: `${import.meta.dirname}/../tests`,// '../tests',
-							matches: [RegExp('tests/(.*)')],
-							cached: false,
+						name: 'test',
+						mount: `${import.meta.dirname}/../tests`,// '../tests',
+						matches: [RegExp('tests/(.*)')],
+						cached: false,
+						uncRoot: '',
+						systemRoot: '',
 					}
 				]
 			});
@@ -58,8 +60,8 @@ describe('mediainfo', () => {
 						"version": '1.0',
 					  "mediainfo": {
 							"ebucore:ebuCoreMain": {
-								"@dateLastModified": expect.stringMatching(dateMatch),
-								"@timeLastModified": expect.stringMatching(timeMatch),
+								"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
+								"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
 								"@version": "1.8",
 								"@writingLibraryName": "MediaInfoLib",
 								"@writingLibraryVersion": "24.04",
@@ -166,7 +168,7 @@ describe('mediainfo', () => {
 												],
 												"ebucore:locator": [
 													{
-														"#value": expect.stringMatching(new RegExp('airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav')),
+														"#value": expect.stringMatching(new RegExp('airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav')) as unknown,
 													},
 												],
 												"ebucore:technicalAttributeInteger": [
@@ -207,6 +209,8 @@ describe('mediainfo', () => {
 						mount: `${import.meta.dirname}/../tests`,// '../tests',
 						matches: [RegExp('tests/(.*)')],
 						cached: true,
+						uncRoot: '',
+						systemRoot: '',
 					}
 				]
 			});
@@ -222,8 +226,8 @@ describe('mediainfo', () => {
 						version: '1.0',
 						mediainfo: {
 							"ebucore:ebuCoreMain": {
-								"@dateLastModified": expect.stringMatching(dateMatch),
-								"@timeLastModified": expect.stringMatching(timeMatch),
+								"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
+								"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
 								"@version": "1.8",
 								"@writingLibraryName": "MediaInfoLib",
 								"@writingLibraryVersion": "24.04",
@@ -330,7 +334,7 @@ describe('mediainfo', () => {
 												],
 												"ebucore:locator": [
 													{
-														"#value": expect.stringMatching(new RegExp('airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav')),
+														"#value": expect.stringMatching(new RegExp('airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav')) as unknown,
 													},
 												],
 												"ebucore:technicalAttributeInteger": [
@@ -362,6 +366,8 @@ describe('mediainfo', () => {
 						mount: ``,
 						matches: [],
 						cached: false,
+						uncRoot: '',
+						systemRoot: '',
 					}
 				]
 			});
@@ -374,7 +380,7 @@ describe('mediainfo', () => {
 				res.json({error:{code:404}})
 			});
 
-			app.listen('9090', () => {});
+			app.listen('9090');
 		});
 
 		it('should return 200 OK', async () => {
@@ -386,8 +392,8 @@ describe('mediainfo', () => {
 					"version": '1.0',
 				  "mediainfo": {
 				    "ebucore:ebuCoreMain": {
-							"@dateLastModified": expect.stringMatching(dateMatch),
-							"@timeLastModified": expect.stringMatching(timeMatch),
+							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
+							"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
 							"@version": "1.8",
 							"@writingLibraryName": "MediaInfoLib",
 							"@writingLibraryVersion": "24.04",
