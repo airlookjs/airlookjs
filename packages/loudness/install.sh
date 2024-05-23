@@ -16,7 +16,15 @@ cd loudness-scanner
 # TODO install system dependencies on linux, or use docker for tests, see dockerfile for dependencies
 #fi
 
-if [ "$(uname)" = "Darwin" ]; then
+#YUM=$(which yum)
+APT=$(which apt)
+APK=$(which apk)
+
+if [[ ! -z $APT ]]; then
+    apt install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev 
+elif [[ ! -z $APK ]]; then
+    apk add --no-cache git cmake make g++ ffmpeg-libavformat ffmpeg-libavcodec ffmpeg-libavutil libebur128-dev libsndfile
+elif [ "$(uname)" = "Darwin" ]; then
   # install system dependencies on mac os with brew
   brew install cmake
   brew install ffmpeg@4
@@ -33,6 +41,9 @@ if [ "$(uname)" = "Darwin" ]; then
   export PKG_CONFIG_PATH="/opt/homebrew/opt/ffmpeg@4/lib/pkgconfig"
   export CXX=g++
   export CC=gcc
+else
+  echo "Could not detect package installer."
+  exit 1;
 fi
 
 mkdir build
