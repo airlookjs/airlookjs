@@ -12,18 +12,14 @@ rm -rf loudness-scanner
 git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
 cd loudness-scanner
 
-#if [ "$(uname)" = "" ]; then
-# TODO install system dependencies on linux, or use docker for tests, see dockerfile for dependencies
-#fi
-
 #YUM=$(which yum)
 APT=$(which apt)
 APK=$(which apk)
 
 if [[ ! -z $APT ]]; then
-    apt install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev 
+  apt install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev 
 elif [[ ! -z $APK ]]; then
-    apk add --no-cache git cmake make g++ ffmpeg-libavformat ffmpeg-libavcodec ffmpeg-libavutil libebur128-dev libsndfile
+  apk add --no-cache git cmake make g++ ffmpeg-libavformat ffmpeg-libavcodec ffmpeg-libavutil libebur128-dev libsndfile
 elif [ "$(uname)" = "Darwin" ]; then
   # install system dependencies on mac os with brew
   brew install cmake
