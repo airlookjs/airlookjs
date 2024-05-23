@@ -1,0 +1,28 @@
+{
+	"name": "node-healthcheck",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"tags": ["type:app"],
+	"targets": {
+		"lint": {
+		  "executor": "@nx/eslint:lint",
+		  "outputs": ["{options.outputFile}"]
+		},
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs",
+				"main": "./src/index.ts",
+				"tsConfig": "./tsconfig.json",
+				"assets": []
+			}
+		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"reportsDirectory": "../coverage/libs/util"
+			}
+		}
+	  }
+}

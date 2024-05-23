@@ -1,0 +1,38 @@
+{
+  "name": "@airlookjs/node-healthcheck",
+  "version": "1.4.2",
+  "main": "dist/healthcheck.routes.js",
+  "license": "MIT",
+  "repository": "https://github.com/airlookjs/airlookjs.git",
+  "scripts": {
+    "build": "nx build",
+    "test": "nx test",
+    "test:watch": "nx test --watch",
+    "lint": "nx lint"
+  },
+  "engine": "node >= 20",
+  "dependencies": {
+    "express": "4.18.2",
+    "xmlbuilder2": "3.1.1"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "9.2.6",
+    "@semantic-release/npm": "11.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/http-errors": "^2.0.4",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.7",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^9.0.1",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "vitest": "^1.6.0",
+    "semantic-release": "23.0.2",
+    "supertest": "6.3.4",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@9.1.2"
+}
