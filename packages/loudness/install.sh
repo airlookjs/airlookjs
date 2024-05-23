@@ -5,12 +5,6 @@ if result=$(./bin/loudness --version 2>&1); then
     exit 0
 fi
 
-mkdir -p lib
-cd lib 
-
-rm -rf loudness-scanner
-git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
-cd loudness-scanner
 
 #YUM=$(which yum)
 APT=$(which apt)
@@ -41,6 +35,14 @@ else
   echo "Could not detect package installer."
   exit 1;
 fi
+
+
+mkdir -p lib
+cd lib 
+
+rm -rf loudness-scanner
+git clone --recurse-submodules -j8 --depth=1 https://github.com/airlookjs/loudness-scanner
+cd loudness-scanner
 
 mkdir build
 cd build
