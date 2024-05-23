@@ -1,10 +1,14 @@
 {
   "name": "util",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/util/src",
   "projectType": "library",
   "tags": ["type:util", "scope:shared"],
   "targets": {
+    "lint": {
+		  "executor": "@nx/eslint:lint",
+		  "outputs": ["{options.outputFile}"]
+		},
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],

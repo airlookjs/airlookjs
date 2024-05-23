@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import fs from 'fs';
 import { pipeline } from 'stream/promises';
 import got from 'got';
@@ -7,6 +9,8 @@ import { v4 as uuid } from 'uuid';
 import { getScenes } from './scenedetect.js';
 import { config } from './config.js';
 
+// FIXME: rewrite as not a promise or use a plugin, errors are not handled correctly when using async/await for a request handler in express
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const scenedetectRequestHandler: RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.query.file);
 	// the query parameter might be other data types than string, if so throw error
@@ -97,7 +101,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 										sentCachedResult = true;
 									}
 								} catch (err) {
-									if (err.code === 'ENOENT') {
+									if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
 										console.info('Cached scenedetect file not found: ' + jsonFilePath);
 									} else {
 										next(err);

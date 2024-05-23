@@ -73,7 +73,6 @@ const loudnessExec = async (args: string) => {
 		//throw new Error(stderr)
 	}
 
-	console.info(cmd, 'done')
 	return stdout
 }
 
