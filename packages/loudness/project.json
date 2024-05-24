@@ -16,12 +16,28 @@
             "outputPath": "dist/loudness",
             "main": "packages/loudness/src/index.ts",
             "tsConfig": "packages/loudness/tsconfig.lib.json",
-            "assets": ["packages/loudness/bin/*", "packages/loudness/*.md"]
-          }
+            "assets": ["packages/loudness/install.sh"],
+            "generateLockfile": true
+          },
+          "dependsOn": ["^build"]
         },
-        "docker": {
+        "container": {
           "executor": "@nx-tools/nx-container:build",
+          "dependsOn": ["build"],
+          "defaultConfiguration": "local",
           "options": {
+            "context": "dist",
+            "file": "packages/loudness/Dockerfile"
+          },
+          "configurations": {
+            "local": {
+              "tags": ["loudness:latest"],
+              "push": false
+            },
+            "production": {
+              "tags": ["my.image-registry.com/my-app:latest"],
+              "push": true
+            }
           }
         },
         "test": {

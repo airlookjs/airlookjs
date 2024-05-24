@@ -1,42 +1,67 @@
-FROM node:20-alpine as compile-stage
-#RUN apt update
-# CMAKE is required
-#RUN apt install -y cmake
+# syntax=docker/dockerfile:1.4
+ARG NODE_VERSION=20
+ARG ALPINE_VERSION=3.18
+ARG PORT=80
 
-# Libtag is required if we want to use the tag input
-# RUN apt install -y libtag1-dev
-# RUN apt install -y libtagc0-dev
+FROM node:22-bookworm AS runtime-deps
+RUN apt-get update && apt-get install -y \
+    libavformat59 \
+    libavcodec59 \
+    libavutil57 \
+    libebur128-1 \
+    libsndfile1
 
-# FFMPEG input
-RUN apk add --no-cache git cmake make g++ ffmpeg-libavformat ffmpeg-libavcodec ffmpeg-libavutil libebur128-dev libsndfile
+FROM node:22-bookworm AS make
 
-# DISABLED INPUTS
-# MPG123 input
-# RUN apt install -y libmpg123-dev
-# LIBMPCDEC input
-# RUN apt install -y libmpcdec-dev
+RUN apt-get update && apt-get install -y \
+    git \
+    cmake \
+    libavformat-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libebur128-dev \
+    libsndfile1-dev
 
-# LIBSNDFILE input
+WORKDIR /app/loudness
+COPY loudness/install.sh .
+RUN ./install.sh
 
-# DISABLED GUIS
-# QT gui
-# RUN apt install -y qt5-default
-# GTK2 gui
-# RUN apt install -y gtk2.0
+FROM node:${NODE_VERSION}-alpine AS workspace
+#ENV PNPM_HOME="/pnpm"
+#ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-WORKDIR /usr/src/app
 
-ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
+COPY . /app
+WORKDIR /app/loudness
+RUN ls
+#RUN pnpm fetch --prod
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod
+#RUN pnpm --filter "./loudness" install --frozen-lockfile
 
-# Copy package.json and pnpm-lock.yaml
-COPY pnpm-lock.yaml package.json ./
-# Install dependencies
-RUN pnpm i 
+FROM workspace AS pruned
+#ARG service='loudness'
+WORKDIR /app/loudness
 
-COPY . /usr/src/app
-RUN /usr/src/app/install.sh
+# run nx build
+RUN pnpm deploy --prod pruned
 
-EXPOSE 1280
+FROM runtime-deps
+WORKDIR /app/loudness
+ENV NODE_ENV=production
+ENV PORT=$PORT
 
-CMD [ "pnpm", "start" ]
+#COPY --from=pruned /app/pruned/dist dist
+#COPY dist/loudness/ .
+#copy built binary
+COPY --from=make /app/loudness/bin bin
+COPY --from=pruned /app/loudness/pruned/package.json package.json
+COPY --from=pruned /app/loudness/pruned/node_modules node_modules
+
+EXPOSE $PORT
+#CMD [ "cat" ]
+#CMD [ "node", "dist/src/index.js" ]
+
+#ENTRYPOINT ["node", "./src/index.js"]
+#ENTRYPOINT [ "node" ]
+ENTRYPOINT [ "bash" ]
+#/root/.local/share/pnpm/store/v3

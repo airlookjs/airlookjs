@@ -14,7 +14,7 @@ import {
 	getExpressHealthRoute,
 	Status,
 	STATUS_FOR_CODE
-} from '../src/healthcheck.routes';
+} from './healthcheck-routes';
 
 describe('healthcheck.routes', function () {
 	let app: Express;
