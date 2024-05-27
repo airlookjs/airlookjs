@@ -18,6 +18,7 @@
       "packages/svelte-sequence-editor",
       "packages/loudness",
       "packages/mediainfo",
+      "packages/node-healthcheck",
       "packages/scenedetect"
     ],
     "version": {

@@ -1,9 +1,7 @@
 {
-	"name": "mediainfo",
+	"name": "node-healthcheck",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"tags": ["type:app"],
-	"projectType": "application",
-	"sourceRoot": "packages/mediainfo/src",
 	"targets": {
 		"lint": {
 		  "executor": "@nx/eslint:lint",
@@ -13,10 +11,9 @@
 			"executor": "@nx/js:tsc",
 			"outputs": ["{options.outputPath}"],
 			"options": {
-<<<<<<< HEAD
-				"outputPath": "dist/libs",
-				"main": "./src/index.ts",
-				"tsConfig": "./tsconfig.json",
+				"outputPath": "dist/node-healthcheck",
+				"main": "packages/node-healthcheck/src/index.ts",
+				"tsConfig": "packages/node-healthcheck/tsconfig.lib.json",
 				"assets": []
 			}
 		},
@@ -27,15 +24,5 @@
 				"reportsDirectory": "../coverage/libs/util"
 			}
 		}
-	}
-}
-=======
-			  "outputPath": "dist/mediainfo",
-			  "main": "packages/mediainfo/src/index.ts",
-			  "tsConfig": "packages/mediainfo/tsconfig.lib.json",
-			  "assets": []
-			}
-		  }
 	  }
 }
->>>>>>> @{-1}

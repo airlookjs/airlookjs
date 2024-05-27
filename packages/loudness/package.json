@@ -2,7 +2,6 @@
   "name": "@airlookjs/loudness",
   "version": "1.3.0",
   "description": "r128 loudness scanner",
-  "main": "dist/index.js",
   "repository": "https://github.com/airlookjs/airlookjs.git",
   "author": "Johan Bichel Lindegaard <public@johan.cc>",
   "license": "ISC",
@@ -11,16 +10,18 @@
     "loudness": "bin/loudness"
   },
   "scripts": {
-    "start": "node dist/index.js",
     "build": "nx build",
-    "postinstall": "./install.sh",
+    "build:bin": "./install.sh",
     "dev": "tsx watch src/index.ts",
     "test": "nx test",
     "lint": "nx lint"
   },
+  "files": [
+    "install.sh"
+  ],
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/node-healthcheck": "^1.4.2",
+    "@airlookjs/node-healthcheck": "workspace:*",
     "@airlookjs/shared": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "16.4.5",
