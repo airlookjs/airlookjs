@@ -1,7 +1,9 @@
 {
 	"name": "node-healthcheck",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"tags": ["type:app"],
+	"sourceRoot": "packages/node-healthcheck/src",
+	"projectType": "library",
+	"tags": ["type:util", "scope:shared"],
 	"targets": {
 		"lint": {
 		  "executor": "@nx/eslint:lint",
