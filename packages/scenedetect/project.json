@@ -1,6 +1,7 @@
 {
 	"name": "scenedetect",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "{projectRoot}/src",
 	"tags": ["type:app"],
 	"projectType": "application",
 
@@ -10,14 +11,7 @@
 		  "outputs": ["{options.outputFile}"]
 		},
 		"build": {
-			"executor": "@nx/js:tsc",
-			"outputs": ["{options.outputPath}"],
-			"options": {
-			  "outputPath": "dist/scenedetect",
-			  "main": "packages/scenedetect/src/index.ts",
-			  "tsConfig": "packages/scenedetect/tsconfig.lib.json",
-			  "assets": []
-			}
-		  }
+			"executor": "@nx/js:tsc"
+		}
 	  }
 }

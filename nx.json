@@ -5,6 +5,7 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
+      "default",
       "{workspaceRoot}/eslint.config.js",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.json",
@@ -12,6 +13,7 @@
     ],
     "sharedGlobals": []
   },
+  
   "release": {
     "projectsRelationship": "independent",
     "projects": [
@@ -22,7 +24,11 @@
       "packages/scenedetect"
     ],
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "generatorOptions": {
+        "packageRoot": "dist/packages/{projectRoot}",
+        "currentVersionResolver": "registry"
+      }
     },
     "changelog": {
       "projectChangelogs": {
@@ -50,15 +56,24 @@
     }
   ],
   "targetDefaults": {
-    "build": {
-      "cache": true
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectRoot}",
+      }
     },
     "test": {
       "cache": true,
+      "executor": "@nx/vite:test",
+      "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.ts"],
       "dependsOn": ["^build"]
+    },
+    "@nx/vite:test": {
+      "cache": true,
+      "inputs": ["default", "^production"]
     },
     "e2e": {
       "cache": true,
+      "inputs": ["default", "^production"],
       "dependsOn": ["^build"]
     },
     "lint": {
@@ -74,14 +89,23 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
+    "build": {
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "dependsOn": ["^build"]
+    },
     "@nx/js:tsc": {
       "cache": true,
+      "inputs": ["production", "^production"],
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "@nx/vite:test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/{projectRoot}",
+        "tsConfig": "{projectRoot}/tsconfig.lib.json",
+        "main": "{projectRoot}/index.ts",
+        "assets": ["{projectRoot}/*.md"],
+        "generateExportsFields": true
+      }
     }
   }
 }

@@ -2,8 +2,14 @@
   "name": "@airlookjs/shared",
   "type": "module",
   "version": "0.0.1",
+
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+
   "scripts": {
     "build": "nx build",
     "lint": "nx lint"
+  },
+  "devDependencies": {
   }
 }

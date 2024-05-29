@@ -9,14 +9,7 @@
 		  "outputs": ["{options.outputFile}"]
 		},
 		"build": {
-			"executor": "@nx/js:tsc",
-			"outputs": ["{options.outputPath}"],
-			"options": {
-			  "outputPath": "dist/mediainfo",
-			  "main": "packages/mediainfo/src/index.ts",
-			  "tsConfig": "packages/mediainfo/tsconfig.lib.json",
-			  "assets": []
-			}
-		  }
-	  }
+			"executor": "@nx/js:tsc"
+		}
+	}
 }

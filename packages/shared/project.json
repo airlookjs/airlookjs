@@ -1,7 +1,7 @@
 {
   "name": "shared",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shared/src",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "library",
   "tags": ["type:util", "scope:shared"],
   "targets": {
@@ -10,16 +10,8 @@
 		  "outputs": ["{options.outputFile}"]
 		},
     "build": {
-			"executor": "@nx/js:tsc",
-			"outputs": ["{options.outputPath}"],
-			"options": {
-			  "outputPath": "dist/shared",
-			  "main": "packages/shared/src/index.ts",
-			  "tsConfig": "packages/shared/tsconfig.lib.json",
-			  "assets": [],
-        "generateExportsField": true
-			}
-		  }
+		"executor": "@nx/js:tsc"
+	}
   }
 
 }

@@ -2,8 +2,10 @@
   "name": "@airlookjs/mediainfo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
+  
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "nx lint",
     "build": "nx build",
@@ -13,10 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@airlookjs/shared": "file:../shared",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "http-errors": "^2.0.0",
-    "@airlookjs/shared": "workspace:*"
+    "http-errors": "^2.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -26,6 +28,5 @@
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
-  },
-  "packageManager": "pnpm@9.1.2"
+  }
 }

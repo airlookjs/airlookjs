@@ -22,28 +22,40 @@ RUN apt-get update && apt-get install -y \
     libebur128-dev \
     libsndfile1-dev
 
-WORKDIR /app/loudness
-COPY loudness/install.sh .
+WORKDIR /app
+COPY packages/loudness/install.sh .
 RUN ./install.sh
 
 FROM node:${NODE_VERSION}-alpine AS workspace
 #ENV PNPM_HOME="/pnpm"
 #ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 
-COPY . /app
-WORKDIR /app/loudness
-RUN ls
+WORKDIR /app
+
+RUN corepack enable
+COPY ./pnpm-workspace.yaml ./
+COPY ./.npmrc ./
+COPY ./pnpm-lock.yaml ./
+
+COPY dist/packages/node-healthcheck ./dist/packages/node-healthcheck
+COPY dist/packages/shared ./dist/packages/shared
+
+RUN pnpm fetch --prod --frozen-lockfile
+COPY . ./
+RUN pnpm recursive install --offline --frozen-lockfile
+#COPY . /app
+#RUN pnpm --filter loudness --prefer-offline --prod deploy pruned --frozen-lockfile
+#WORKDIR /app/loudness
+
 #RUN pnpm fetch --prod
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod
+#RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod
 #RUN pnpm --filter "./loudness" install --frozen-lockfile
 
 FROM workspace AS pruned
 #ARG service='loudness'
-WORKDIR /app/loudness
-
-# run nx build
-RUN pnpm deploy --prod pruned
+WORKDIR /app
+RUN pnpm --filter loudness --prefer-offline --prod deploy pruned --frozen-lockfile
+#RUN pnpm deploy --prod pruned
 
 FROM runtime-deps
 WORKDIR /app/loudness
@@ -53,15 +65,17 @@ ENV PORT=$PORT
 #COPY --from=pruned /app/pruned/dist dist
 #COPY dist/loudness/ .
 #copy built binary
-COPY --from=make /app/loudness/bin bin
-COPY --from=pruned /app/loudness/pruned/package.json package.json
-COPY --from=pruned /app/loudness/pruned/node_modules node_modules
+COPY /dist/packages/loudness .
+COPY --from=make /app/bin bin
+#COPY --from=pruned /app/pruned/package.json package.json
+COPY --from=pruned /app/pruned/node_modules node_modules
+
 
 EXPOSE $PORT
 #CMD [ "cat" ]
-#CMD [ "node", "dist/src/index.js" ]
+CMD [ "node", "./src/index.js" ]
 
 #ENTRYPOINT ["node", "./src/index.js"]
 #ENTRYPOINT [ "node" ]
-ENTRYPOINT [ "bash" ]
+#ENTRYPOINT [ "bash" ]
 #/root/.local/share/pnpm/store/v3

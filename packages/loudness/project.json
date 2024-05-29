@@ -3,7 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "tags": ["type:app"],
     "projectType": "application",
-    "sourceRoot": "packages/loudness/src",
+    "sourceRoot": "{projectRoot}/src",
     "targets": {
         "lint": {
           "executor": "@nx/eslint:lint",
@@ -11,23 +11,17 @@
         },
         "build": {
           "executor": "@nx/js:tsc",
-          "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/loudness",
-            "main": "packages/loudness/src/index.ts",
-            "tsConfig": "packages/loudness/tsconfig.lib.json",
-            "assets": ["packages/loudness/install.sh"],
-            "generateLockfile": true
-          },
-          "dependsOn": ["^build"]
+            "assets": ["{projectRoot}/install.sh", "{projectRoot}/README.md"]
+          }
         },
         "container": {
           "executor": "@nx-tools/nx-container:build",
           "dependsOn": ["build"],
           "defaultConfiguration": "local",
           "options": {
-            "context": "dist",
-            "file": "packages/loudness/Dockerfile"
+            //"context": "",
+            "file": "{projectRoot}/Dockerfile"
           },
           "configurations": {
             "local": {

@@ -1,7 +1,7 @@
 {
 	"name": "node-healthcheck",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "packages/node-healthcheck/src",
+	"sourceRoot": "{projectRoot}/src",
 	"projectType": "library",
 	"tags": ["type:util", "scope:shared"],
 	"targets": {
@@ -10,14 +10,7 @@
 		  "outputs": ["{options.outputFile}"]
 		},
 		"build": {
-			"executor": "@nx/js:tsc",
-			"outputs": ["{options.outputPath}"],
-			"options": {
-				"outputPath": "dist/node-healthcheck",
-				"main": "packages/node-healthcheck/src/index.ts",
-				"tsConfig": "packages/node-healthcheck/tsconfig.lib.json",
-				"assets": []
-			}
+			"executor": "@nx/js:tsc"
 		},
 		"test": {
 			"executor": "@nx/vite:test",

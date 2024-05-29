@@ -16,13 +16,14 @@
     "test": "nx test",
     "lint": "nx lint"
   },
-  "files": [
-    "install.sh"
-  ],
+
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/node-healthcheck": "workspace:*",
-    "@airlookjs/shared": "workspace:*",
+    "@airlookjs/node-healthcheck": "file:../node-healthcheck",
+    "@airlookjs/shared": "file:../shared",
     "cors": "^2.8.5",
     "dotenv": "16.4.5",
     "express": "^4.19.2",

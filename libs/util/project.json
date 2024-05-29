@@ -1,7 +1,7 @@
 {
   "name": "util",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/util/src",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "library",
   "tags": ["type:util", "scope:shared"],
   "targets": {
@@ -10,14 +10,7 @@
 		  "outputs": ["{options.outputFile}"]
 		},
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs",
-        "main": "libs/util/src/index.ts",
-        "tsConfig": "libs/util/tsconfig.lib.json",
-        "assets": []
-      }
+      "executor": "@nx/js:tsc"
     },
     "test": {
       "executor": "@nx/vite:test",
