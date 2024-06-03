@@ -46,7 +46,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Install loudness dependencies - should move this test to run in dedicated container
-        run: apt-get update && apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
+        run: sudo apt-get update && apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
 
       - name: Install loudness - should move this test to run in dedicated container
         run: ./packages/loudness/install.sh
