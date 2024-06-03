@@ -9,25 +9,23 @@ const config = defineConfig({
 	// Retry on CI only.
 	retries: process.env.CI ? 2 : 0,
 
-	use: {
-		// Base URL to use in actions like `await page.goto('/')`.
-		baseURL: 'http://127.0.0.1:3000',
-	
-		// Collect trace when retrying the failed test.
-		trace: 'on-first-retry',
-	  },
 	projects: [
 		{
 		  name: 'chromium',
 		  use: { ...devices['Desktop Chrome'] },
 		},
 	],
-
 	reporter: process.env.CI ? 'github' : 'list',
 	webServer: {
 		command: 'pnpm run preview',
 		port: 4173
-	}
+	},
+  use: {
+		// Base URL to use in actions like `await page.goto('/')`.
+		baseURL: 'http://localhost:4173',
+		// Collect trace when retrying the failed test.
+		trace: 'on-first-retry',
+	  },
 });
 
 export default config;
