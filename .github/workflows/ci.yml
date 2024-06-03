@@ -45,7 +45,15 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Install loudness dependencies - should move this test to run in dedicated container
+        run: apt-get update && apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
+
+      - name: Install loudness - should move this test to run in dedicated container
+        run: ./packages/loudness/install.sh
+
       - run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
 
       - run: npx nx affected -t lint test build
+
+
