@@ -45,10 +45,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Install loudness dependencies - should move this test to run in dedicated container
-        run: sudo apt-get update && apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
+      - name: Install loudness dependencies - should move loudness test to run in dedicated container
+        run: sudo apt-get update && sudo apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
 
-      - name: Install loudness - should move this test to run in dedicated container
+      - name: Install loudness - should move loudness test to run in dedicated container
         run: ./packages/loudness/install.sh
 
       - run: git branch --track main origin/main
