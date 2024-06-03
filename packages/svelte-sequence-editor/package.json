@@ -40,7 +40,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
 		"@semantic-release/changelog": "^6.0.3",
-		"@semantic-release/commit-analyzer": "^11.1.0",
+		"@semantic-release/commit-analyzer": "^13.0.0",
 		"@semantic-release/git": "^10.0.1",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.5.4",
