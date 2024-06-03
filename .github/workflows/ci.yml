@@ -49,7 +49,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git cmake libavformat-dev libavcodec-dev libavutil-dev libebur128-dev libsndfile1-dev
 
       - name: Install loudness - should move loudness test to run in dedicated container
-        run: ./packages/loudness/install.sh
+        working-directory: ./packages/loudness
+        run: ./install.sh
 
       - run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
