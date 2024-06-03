@@ -13,21 +13,19 @@
     ],
     "sharedGlobals": []
   },
-  
+
   "release": {
     "projectsRelationship": "independent",
     "projects": [
       "packages/svelte-sequence-editor",
-      "packages/loudness",
-      "packages/mediainfo",
-      "packages/node-healthcheck",
-      "packages/scenedetect"
+      "packages/loudness"
     ],
     "version": {
-      "conventionalCommits": true,
       "generatorOptions": {
-        "packageRoot": "dist/packages/{projectRoot}",
-        "currentVersionResolver": "registry"
+        "packageRoot": "{projectRoot}",
+        "currentVersionResolver": "git-tag",
+        "fallbackCurrentVersionResolver": "disk",
+        "specifierSource": "conventional-commits",
       }
     },
     "changelog": {
@@ -58,7 +56,7 @@
   "targetDefaults": {
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist/packages/{projectRoot}",
+        "packageRoot": "dist/{projectRoot}",
       }
     },
     "test": {
@@ -100,7 +98,7 @@
       "dependsOn": ["^build"],
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/{projectRoot}",
+        "outputPath": "{projectRoot}/dist",
         "tsConfig": "{projectRoot}/tsconfig.lib.json",
         "main": "{projectRoot}/index.ts",
         "assets": ["{projectRoot}/*.md"],
