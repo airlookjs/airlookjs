@@ -1,4 +1,17 @@
 {
 	"name": "scenedetect",
-	"$schema": "../../node_modules/nx/schemas/project-schema.json"
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "{projectRoot}/src",
+	"tags": ["type:app"],
+	"projectType": "application",
+
+	"targets": {
+		"lint": {
+		  "executor": "@nx/eslint:lint",
+		  "outputs": ["{options.outputFile}"]
+		},
+		"build": {
+			"executor": "@nx/js:tsc"
+		}
+	  }
 }

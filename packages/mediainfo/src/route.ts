@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import createError from 'http-errors'
 import {stringIsAValidUrl} from './validateUrl.js'
 import { type RequestHandler } from 'express'
@@ -7,14 +9,18 @@ import { OutputFormats, OutputFormatKeys, getMediainfo } from './cmd.js'
 
 import { config } from './config.js'
 
+// FIXME: rewrite as not a promise or use a plugin, errors are not handled correctly when using async/await for a request handler in express
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 	console.log('Processing request', req.url, '->', req.params.path)
 
 	let foundMatchingMountedFile = false
 	const pathParam = req.params.path
 
-    const outputFormatParam = req.query.outputFormat || config.defaultOutputFormatName
+    const outputFormatParam = req.query.outputFormat ?? config.defaultOutputFormatName;
+	
     if(typeof outputFormatParam !== 'string' || !(outputFormatParam in OutputFormats)){
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
         return next(createError(400, `Invalid outputFormat: ${outputFormatParam}`))
     }
     const outputFormat = outputFormatParam as OutputFormatKeys
@@ -28,7 +34,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 			for (const match of share.matches) {
 				console.info('Checking match', match, 'for', pathParam)
 				const matchResult = pathParam.match(match)
-				if (matchResult && matchResult[1]) {
+				if (matchResult?.[1]) {
 					console.info('-> match found', matchResult[1])
 					const mountedFilePath = path.join(share.mount, matchResult[1])
 					if (fs.existsSync(mountedFilePath)) {
@@ -63,7 +69,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 										sentCachedResult = true
 									}
 								} catch (err) {
-									if (err.code === 'ENOENT') {
+									if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
 										console.info('Cached mediainfo file not found: ' + jsonFilePath)
 									} else {
 										next(err)
@@ -116,7 +122,7 @@ export const MediaInfoHandler : RequestHandler = async (req, res, next) => {
 		}
 		}
 
-		if (!foundMatchingMountedFile && pathParam.indexOf('http') === 0) {
+		if (!foundMatchingMountedFile && pathParam.startsWith('http')) {
 			// Media file is not mounted, attempt using URL
 
 			try {

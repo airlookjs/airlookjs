@@ -1,9 +1,9 @@
-export const uniqueClasses = (classNames = '') => {
+export const uniqueClasses = (classNames = '') : string => {
 	const classes = classNames
 		.split(' ')
 		.map((c) => c.trim())
 		.filter((c) => !!c);
-	const unique: Array<string> = [];
+	const unique: string[] = [];
 	classes.forEach((c) => {
 		if (unique.indexOf(c) < 0) unique.push(c);
 	});

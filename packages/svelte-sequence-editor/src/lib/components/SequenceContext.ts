@@ -3,8 +3,7 @@ import type { TSelectedHandle } from '$lib/types';
 import type { Writable } from 'svelte/store';
 
 import { getContext, setContext } from 'svelte';
-
-export type SequenceContext = {
+export interface SequenceContext {
 	time: Writable<number>;
 	width: Writable<number>;
 	duration: Writable<number>;
@@ -17,10 +16,10 @@ export type SequenceContext = {
 
 export const key = Symbol();
 
-export const setSequenceContext = (context: SequenceContext) => {
+export const setSequenceContext = (context: SequenceContext) : SequenceContext => {
 	return setContext<SequenceContext>(key, context);
 };
 
-export const getSequenceContext = () => {
+export const getSequenceContext = () : SequenceContext => {
 	return getContext<SequenceContext>(key);
 };

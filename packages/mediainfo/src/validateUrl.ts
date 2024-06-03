@@ -1,6 +1,6 @@
 import url from 'url'
 
-export const stringIsAValidUrl = (s: string, protocols: string[]) => {
+export const stringIsAValidUrl = (s: string, protocols: string[]) : boolean => {
     try {
         new url.URL(s)
         const parsed = url.parse(s)
@@ -9,7 +9,7 @@ export const stringIsAValidUrl = (s: string, protocols: string[]) => {
                 ? protocols.map((x) => `${x.toLowerCase()}:`).includes(parsed.protocol)
                 : false
             : true
-    } catch (err) {
+    } catch (_err) {
         return false
     }
 }

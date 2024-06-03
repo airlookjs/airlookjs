@@ -2,15 +2,40 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "{workspaceRoot}/eslint.config.js",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.json",
+      "!{projectRoot}/tsconfig.spec.json"
+    ],
+    "sharedGlobals": []
+  },
+
   "release": {
     "projectsRelationship": "independent",
-    "projects": ["packages/svelte-sequence-editor"],
+    "projects": [
+      "packages/svelte-sequence-editor",
+      "packages/loudness"
+    ],
     "version": {
-      "conventionalCommits": true
+      "generatorOptions": {
+        "packageRoot": "{projectRoot}",
+        "currentVersionResolver": "git-tag",
+        "fallbackCurrentVersionResolver": "disk",
+        "specifierSource": "conventional-commits",
+      }
     },
     "changelog": {
       "projectChangelogs": {
-        "createRelease": "github"
+        "createRelease": "github",
+        "renderOptions": {
+          "authors": false,
+          "commitReferences": true,
+          "versionTitleDate": true
+        }
       }
     }
   },
@@ -29,11 +54,56 @@
     }
   ],
   "targetDefaults": {
-    "build": {
-      "cache": true
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}",
+      }
     },
     "test": {
-      "cache": true
+      "cache": true,
+      "executor": "@nx/vite:test",
+      "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.ts"],
+      "dependsOn": ["^build"]
+    },
+    "@nx/vite:test": {
+      "cache": true,
+      "inputs": ["default", "^production"]
+    },
+    "e2e": {
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/eslint.config.js",
+        "{workspaceRoot}/eslint.config.mjs"
+      ],
+      "cache": true,
+      "options": {
+        "eslintConfig": "{workspaceRoot}/eslint.config.js"
+      },
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "build": {
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "dependsOn": ["^build"]
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "dependsOn": ["^build"],
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "tsConfig": "{projectRoot}/tsconfig.lib.json",
+        "main": "{projectRoot}/index.ts",
+        "assets": ["{projectRoot}/*.md"],
+        "generateExportsFields": true
+      }
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "{projectRoot}/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:shared"],
+  "targets": {
+    "lint": {
+		  "executor": "@nx/eslint:lint",
+		  "outputs": ["{options.outputFile}"]
+		},
+    "build": {
+		"executor": "@nx/js:tsc"
+	}
+  }
+
+}

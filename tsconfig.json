@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+  },
+  "include": [
+    "eslint.config.mjs",
+    "eslint.config.js",
+    "*/*/svelte.config.js",
+    "*/*/tailwind.config.cjs",
+    "*/*/playwright.config.ts",
+    "*/*/postcss.config.cjs",
+    "*/*/vite.config.ts",
+    "*/*/vitest.config.ts",
+  ]
+}
