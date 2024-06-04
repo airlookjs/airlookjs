@@ -150,10 +150,10 @@ importers:
   packages/loudness:
     dependencies:
       '@airlookjs/node-healthcheck':
-        specifier: file:../node-healthcheck
+        specifier: workspace:*
         version: link:../node-healthcheck
       '@airlookjs/shared':
-        specifier: file:../shared
+        specifier: workspace:*
         version: link:../shared
       cors:
         specifier: ^2.8.5
