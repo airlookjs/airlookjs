@@ -1,6 +1,6 @@
 {
   "name": "@airlookjs/loudness",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "r128 loudness scanner",
   "repository": "https://github.com/airlookjs/airlookjs.git",
   "author": "Johan Bichel Lindegaard <public@johan.cc>",
@@ -43,6 +43,6 @@
     "typescript": "^5.4.5"
   },
   "publishConfig": {
-		"access": "public"
-	}
+    "access": "public"
+  }
 }
