@@ -5,7 +5,7 @@
       "declaration": true,
       "types": ["node"]
     },
-    "include": ["**/*.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": [
       "src/**/*.spec.ts", 
       "vite.config.ts"]

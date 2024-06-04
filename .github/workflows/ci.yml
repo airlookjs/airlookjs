@@ -52,6 +52,9 @@ jobs:
         working-directory: ./packages/loudness
         run: ./install.sh
 
+      - name: Install mediainfo dependencies - should move mediainfo test to run in dedicated container
+        run: sudo apt-get install -y mediainfo
+
       - run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
 
