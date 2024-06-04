@@ -12,6 +12,9 @@
         "build": {
           "executor": "@nx/js:tsc",
           "options": {
+            "outputPath": "{projectRoot}/dist",
+            "tsConfig": "{projectRoot}/tsconfig.lib.json",
+            "main": "{projectRoot}/index.ts",
             "assets": ["{projectRoot}/install.sh", "{projectRoot}/README.md"]
           }
         },
