@@ -11,5 +11,8 @@
     "lint": "nx lint"
   },
   "devDependencies": {
-  }
+  },
+  "publishConfig": {
+		"access": "public"
+	}
 }
