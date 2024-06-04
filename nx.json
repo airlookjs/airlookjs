@@ -57,8 +57,9 @@
   "targetDefaults": {
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist/{projectRoot}",
-      }
+        "packageRoot": "{projectRoot}/dist"
+      },
+      "dependsOn": ["build"]
     },
     "test": {
       "cache": true,

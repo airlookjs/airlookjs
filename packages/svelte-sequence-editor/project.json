@@ -17,7 +17,13 @@
 		  "dependsOn": ["build"]
 		},
     "e2e": {
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "{projectRoot}"
+      }
     }
 	  }
+
 }
 
