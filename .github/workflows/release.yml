@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - release
+      - release*
 
 permissions:
   actions: read
