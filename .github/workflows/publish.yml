@@ -35,7 +35,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
-      - run: npx nx -t build
+      - run: npx nx run-many --target=build --parallel
 
       - name: Publish packages
         run: npx nx release publish
