@@ -18,7 +18,8 @@
     "projectsRelationship": "independent",
     "projects": [
       "packages/svelte-sequence-editor",
-      "packages/loudness"
+      "packages/loudness",
+      "packages/shared"
     ],
     "version": {
       "generatorOptions": {

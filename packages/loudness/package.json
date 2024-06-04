@@ -20,8 +20,7 @@
   "types": "src/index.d.ts",
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/node-healthcheck": "workspace:*",
-    "@airlookjs/shared": "workspace:*",
+    "@airlookjs/shared": "^0.0.1",
     "cors": "^2.8.5",
     "dotenv": "16.4.5",
     "express": "^4.19.2",
