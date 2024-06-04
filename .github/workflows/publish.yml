@@ -1,11 +1,11 @@
-name: Release and Publish
+name: Publish
 
 on:
   push:
     branches:
       - main
-    tags:
-      - *@v*.*.*
+    #tags:
+    #  - *@v*.*.*
 
 jobs:
   publish:
