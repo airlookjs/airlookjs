@@ -56,6 +56,9 @@ jobs:
       - name: Install mediainfo dependencies - should move mediainfo test to run in dedicated container
         run: sudo apt-get install -y mediainfo
 
+      - name: Install mediainfo dependencies - should move mediainfo test to run in dedicated container
+        run: sudo apt-get install -y libavformat-dev ffmpeg python3 mkvtoolnix pipx && pipx ensurepath && pipx install opencv-python --include-deps && pipx install scenedetect --include-deps && pipx inject scenedetect opencv-python
+
       - run: git branch --track main origin/main
         if: ${{ github.event_name == 'pull_request' }}
 
