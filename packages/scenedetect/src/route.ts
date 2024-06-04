@@ -88,6 +88,10 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 									const mountedFileStats = await fs.promises.stat(mountedFilePath);
 									const jsonFileStats = await fs.promises.stat(jsonFilePath);
 
+									console.log('timings')
+									console.log(jsonFileStats.birthtimeMs);
+									console.log(mountedFileStats.birthtimeMs);
+
 									if (jsonFileStats.mtimeMs < mountedFileStats.mtimeMs) {
 										console.info('Cached scenedetect file is older than file, ignoring');
 										// delete the cached file

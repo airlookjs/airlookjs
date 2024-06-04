@@ -97,7 +97,7 @@ describe('scenedetect', () => {
 			});
 		});
 
-    it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
+    it.only('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
 			const res = await request(server).get(`/api/scenedetect?file=tests/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
