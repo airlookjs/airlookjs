@@ -6,9 +6,6 @@
   "author": "Johan Bichel Lindegaard <public@johan.cc>",
   "license": "ISC",
   "type": "module",
-  "bin": {
-    "loudness": "bin/loudness"
-  },
   "scripts": {
     "build": "nx build",
     "build:bin": "./install.sh",
