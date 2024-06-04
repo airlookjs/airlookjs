@@ -1,24 +1,21 @@
-name: Release
+name: Release and Publish
 
 on:
   push:
     branches:
-      - release
-
-permissions:
-  actions: read
-  contents: write
+      - main
+    tags:
+      - *@v*.*.*
 
 jobs:
-  release:
-    name: Release
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     env:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
-      contents: write
-    timeout-minutes: 10
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,11 +37,8 @@ jobs:
 
       - run: npx nx affected -t build
 
-      - name: Print Environment Info
-        run: npx nx report
-
-      - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: git config --global user.name "github-actions[bot]"
-
-      - name: Release packages
-        run: npx nx release --skip-publish
+      - name: Publish packages
+        run: npx nx release publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
