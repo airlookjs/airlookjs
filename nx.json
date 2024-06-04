@@ -26,7 +26,8 @@
         "packageRoot": "{projectRoot}",
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
-        "specifierSource": "conventional-commits"
+        "specifierSource": "conventional-commits",
+        "updateDependents": true
       }
     },
     "changelog": {
