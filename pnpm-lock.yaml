@@ -319,6 +319,9 @@ importers:
       got:
         specifier: ^12.6.1
         version: 12.6.1
+      http-errors:
+        specifier: ^2.0.0
+        version: 2.0.0
       nconf:
         specifier: ^0.12.0
         version: 0.12.1
@@ -347,12 +350,18 @@ importers:
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.12
+      '@types/supertest':
+        specifier: ^6.0.2
+        version: 6.0.2
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.8
       nodemon:
         specifier: ^3.1.0
         version: 3.1.1
+      supertest:
+        specifier: ^7.0.0
+        version: 7.0.0
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.5.25(@swc/helpers@0.5.11))(@types/node@20.12.12)(typescript@5.4.5)

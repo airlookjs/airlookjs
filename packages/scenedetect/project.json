@@ -12,6 +12,13 @@
 		},
 		"build": {
 			"executor": "@nx/js:tsc"
+		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"reportsDirectory": "../coverage/libs/util"
+			}
 		}
-	  }
+	}
 }

@@ -4,6 +4,7 @@ import fs from 'fs';
 import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
+import createError, { HttpError } from 'http-errors';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { getScenes } from './scenedetect.js';
@@ -15,7 +16,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 	console.log('Processing request', req.url, '->', req.query.file);
 	// the query parameter might be other data types than string, if so throw error
 	if (typeof req.query.file !== 'string') {
-		throw new Error('query parameter file cannot be an array');
+		return next(createError.BadRequest('Invalid query parameter file must be a string'));
 	}
 
 	const fileUrl: string = req.query.file;
@@ -43,7 +44,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 						const jsonFolderPath = path.join(
 							path.dirname(mountedFilePath),
 							'.cache/scenedetect/',
-							path.basename(mountedFilePath) + '/'
+							path.basename(mountedFilePath).replaceAll('.', '-') + '/'
 						);
 
 						const jsonFilePath = path.join(jsonFolderPath, 'scenedetect.json');
@@ -124,7 +125,7 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 									next(err);
 								}
 							}
-							const data = await getScenes(mountedFilePath, jsonFolderPath);
+							const data = await getScenes(mountedFilePath, share.cached ? jsonFolderPath : undefined);
 							if (data.error) {
 								console.error('Error detecting scenes: ' + data.error);
 								error = data.error;
@@ -144,7 +145,9 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 								});
 							}
 							// remove the lock file
-							fs.rmSync(lockFilePath);
+							if (fs.existsSync(lockFilePath)) {
+								fs.rmSync(lockFilePath);
+							}
 						}
 					} else {
 						console.info('File not found: ' + mountedFilePath);
@@ -202,10 +205,18 @@ export const scenedetectRequestHandler: RequestHandler = async (req, res, next) 
 	}
 };
 
-export const errorRequestHandler: ErrorRequestHandler = (err, _req, res) => {
-	// The error id is attached to `res.sentry` to be returned
-	// and optionally displayed to the user for support.
-	res.statusCode = 500;
-	res.json({ error: err.message });
-	//res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
-};
+
+// TODO: write typesafe common error handler for all express apps
+export const errorRequestHandler: ErrorRequestHandler = (error, _req, res, next) => {
+  // The error id is attached to `res.sentry` to be returned
+  // and optionally displayed to the user for support.
+  if (res.headersSent) {
+		return next(error);
+	}
+  console.error((error as Error).stack);
+
+  res.status((error as HttpError).statusCode).json({ error: (error as Error).message });
+  //res.end(err + "\n" + "Report this Sentry ID to the developers: " + res.sentry + '\n');
+
+  next();
+}
