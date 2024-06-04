@@ -42,5 +42,8 @@
     "supertest": "^7.0.0",
     "tsx": "^4.10.1",
     "typescript": "^5.4.5"
-  }
+  },
+  "publishConfig": {
+		"access": "public"
+	}
 }
