@@ -45,11 +45,12 @@ interface Scene {
 export async function getScenes(file: string, cachePath?: string) : Promise<getScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
-	const cmd = '/usr/local/bin/scenedetect';
+	const cmd = 'scenedetect';
 
 	let cleanCachePath = false;
 
 	if (!cachePath) {
+		console.log("pathcache")
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
 		cleanCachePath = true;
 	}
@@ -106,14 +107,15 @@ export async function getScenes(file: string, cachePath?: string) : Promise<getS
 							);
 						}) as [string, string, string];
 
-						for (const imagePath of imagePaths) {
+						for (const [index, imagePath] of imagePaths.entries()) {
 							if (!fs.existsSync(imagePath)) {
 								console.warn('Scene image not found:', imagePath);
 							} else {
 								console.info('Scene image found:', imagePath);
-								const imagePathNoScene = imagePath.split('-Scene-').pop() ?? [];
+								const imagePathNoScene = imagePath.split('-Scene-').pop() ?? index.toString();
+
 								// rename the file to a shorter name
-								const newImagePath = path.join(cachePath, ...imagePathNoScene);
+								const newImagePath = path.join(cachePath, imagePathNoScene);
 								fs.renameSync(imagePath, newImagePath);
 								console.info('Renamed scene image to:', newImagePath);
 								imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
