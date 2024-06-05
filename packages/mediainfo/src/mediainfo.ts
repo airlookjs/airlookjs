@@ -15,13 +15,23 @@ export const OutputFormats = {
 export type OutputFormatKeys = keyof typeof OutputFormats
 export const MEDIAINFO_CMD = 'mediainfo'
 
+
+interface NestedRecord { [k: string]: string | NestedRecord | NestedRecord[] };
+
+// Standard Json
 //TODO: does anyone maintain the types for mediainfo? - should we?
-export interface MediaInfo {
+export interface MediaInfoJson {
   media: {
     track: Record<string, string>[];
   },
   creatingLibrary: Record<string, string>;
 }
+
+// EBUCoreJson
+export type MediaInfoEbuCoreJson = Record<string, NestedRecord>;
+
+export type MediaInfo =  | MediaInfoJson;
+
 
 // xml and json types - type specifically
 export const mediainfoVersion = async () : Promise<string> => {
