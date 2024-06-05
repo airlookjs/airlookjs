@@ -1,12 +1,3 @@
-export interface ShareInfo {
-	name: string;
-	//localizedName: string; // TODO: seems to be unused unnecessary to include here
-	mount: string;
-	uncRoot: string;
-	cached: boolean;
-	systemRoot: string;
-	matches: RegExp[];
-}
 
 // parse ints from env safely
 export const parseIntEnv = (env:  string | undefined, defaultValue: number) : number => {
@@ -18,6 +9,18 @@ export const parseIntEnv = (env:  string | undefined, defaultValue: number) : nu
 		return defaultValue;
 	}
 	return parsed;
+};
+
+// parse floats from env safely
+export const parseFloatEnv = (env: string | undefined, defaultValue: number) : number => {
+  if (env === undefined) {
+    return defaultValue;
+  }
+  const parsed = parseFloat(env);
+  if (isNaN(parsed)) {
+    return defaultValue;
+  }
+  return parsed;
 };
 
 // parse bools from env safely
