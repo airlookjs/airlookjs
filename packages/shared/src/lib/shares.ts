@@ -11,7 +11,7 @@ export interface ShareInfo {
 	matches: RegExp[];
 }
 
-export const matchShare = (searchPath: string, share: ShareInfo) => {
+export const matchShare = (searchPath: string, share: ShareInfo) : false | string => {
   for (const match of share.matches) {
     const matchResult = searchPath.match(match)
     if (matchResult?.[1]) {
