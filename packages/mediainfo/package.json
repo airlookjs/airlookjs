@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@airlookjs/shared": "file:../shared",
+    "@airlookjs/shared": "workspace:*",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "http-errors": "^2.0.0"
