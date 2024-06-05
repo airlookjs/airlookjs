@@ -15,17 +15,11 @@ export const OutputFormats = {
 export type OutputFormatKeys = keyof typeof OutputFormats
 const cmd = 'mediainfo'
 
-type MediaInfo = object/*{
-    version: string
-    media: {
-        track: {
-            [key: string]: string
-        }[]
-    }[]
-}*/
+interface NestedRecord { [k: string]: string | NestedRecord | NestedRecord[] };
+
+export type MediaInfo = Record<string, NestedRecord>;
 
 export async function getMediainfo(file: string, outputFormatKey: OutputFormatKeys) : Promise<MediaInfo | string>{
-
     const [value, format] = OutputFormats[outputFormatKey]
 	console.log('Getting MediaInfo for: ' + file)
 
@@ -41,6 +35,7 @@ export async function getMediainfo(file: string, outputFormatKey: OutputFormatKe
 	if (format == 'JSON') {
 		return JSON.parse(stdout) as MediaInfo
 	}
+
 	return stdout
 	
 }

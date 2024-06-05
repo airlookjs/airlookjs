@@ -19,7 +19,8 @@
     "@airlookjs/shared": "file:../shared",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "http-errors": "^2.0.0"
+    "http-errors": "^2.0.0",
+    "got": "^14.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

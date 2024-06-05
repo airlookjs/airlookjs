@@ -10,7 +10,12 @@
     "build": "nx build",
     "lint": "nx lint"
   },
+  "dependencies": {
+    "got": "^14.2.1",
+    "uuid": "^9.0.1"
+  },
   "devDependencies": {
+    "@types/uuid": "^9.0.1"
   },
   "publishConfig": {
 		"access": "public"
