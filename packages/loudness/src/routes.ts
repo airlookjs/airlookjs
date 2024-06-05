@@ -1,5 +1,5 @@
 import { type LoudnessData, getLoudness, loudnessVersion } from './loudness.js';
-import { ShareInfo, findPathInShares } from '@airlookjs/shared';
+import { ShareInfo, findPathInShares, readCached, writeCached } from '@airlookjs/shared';
 
 import path from 'node:path';
 import fs from 'node:fs';
@@ -9,8 +9,6 @@ import { pipeline } from 'stream/promises';
 import createError from 'http-errors'
 import { FastifyPluginAsync } from 'fastify';
 import { VERSION } from './config.js';
-import { readCached, writeCached } from './cache.js';
-
 
 interface LoudnessDataCached {
   loudness: LoudnessData;
