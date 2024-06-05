@@ -1,11 +1,12 @@
 import { server } from './server.js';
 import request from 'supertest';
 import express, { type Express } from "express";
+import fs from 'fs';
 
 // import express, { type Express } from "express";
 import * as configExports from './config.js';
 
-import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
+import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from 'vitest';
 
 const TEST_FILE = 'test_file.mp4'; 
 
@@ -96,6 +97,12 @@ describe('scenedetect', () => {
 					}
 				]
 			});
+		});
+
+		afterAll(() => {
+			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
+				fs.rmdirSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
+			}
 		});
 
     it('returns non cached file', { timeout: 10000 }, async () => {
