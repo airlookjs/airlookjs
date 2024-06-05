@@ -80,7 +80,7 @@ const loudnessExec = async (args: string[]) => {
 //import { LOUDNESS_CMD, config } from './config.js';
 //const exec = promisify(child_process.execFile)
 
-export async function loudnessVersion() {
+export async function loudnessVersion() : Promise<string> {
   return await loudnessExec(["--version"])
 }
 

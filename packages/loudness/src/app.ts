@@ -1,8 +1,7 @@
 //import express, { type Express } from "express";
 //import cors from 'cors';
 //import prometheus from 'prom-client';
-import { VERSION, defaultConfig, type LoudnessConfig } from './config.js';
-import { loudnessVersion } from './loudness.js';
+import { defaultConfig, type LoudnessConfig } from './config.js';
 import loudnessPlugin from './plugin.js';
 //import { LOUDNESS_CMD, loudnessVersion } from './loudness.js';
 
@@ -40,9 +39,9 @@ server.use('/status', getExpressHealthRoute(checks));
 // Fallthrough error handler
 //server.use(errorRequestHandler);
 
-import fastify, { FastifyServerOptions } from 'fastify'
+import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 
-export const build = (config?: Partial<LoudnessConfig>, fastifyOptions: FastifyServerOptions={}) => {
+export const build = (config?: Partial<LoudnessConfig>, fastifyOptions: FastifyServerOptions={}): FastifyInstance => {
     const app = fastify(fastifyOptions);
     const c = { ...defaultConfig, ...config };
 
@@ -50,7 +49,8 @@ export const build = (config?: Partial<LoudnessConfig>, fastifyOptions: FastifyS
     // opentelemetry option
     // prometheus option
 
-    app.register(loudnessPlugin, {
+
+    void app.register(loudnessPlugin, {
       prefix: c.routePrefix,
       shares: c.shares
     })

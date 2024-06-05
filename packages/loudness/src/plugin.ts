@@ -1,10 +1,10 @@
-import { FastifyPluginAsync } from 'fastify'
+import { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
 import { DEFAULT_SAMPLE_RATE, CACHE_DIR, defaultConfig } from './config.js';
 
 import { routes, LoudnessRoutesOptions} from './routes.js';
 
-const plugin: FastifyPluginAsync<Partial<LoudnessRoutesOptions>> = async (fastify, _options) => {
+const plugin: FastifyPluginCallback<Partial<LoudnessRoutesOptions>> = (fastify, _options, done) => {
 
   const options : LoudnessRoutesOptions = {
     sampleRate: DEFAULT_SAMPLE_RATE,
@@ -14,8 +14,9 @@ const plugin: FastifyPluginAsync<Partial<LoudnessRoutesOptions>> = async (fastif
     ..._options
   }
 
-  fastify.register(routes, options)
+  void fastify.register(routes, options)
 
+  done()
 }
 
 export default fp(plugin, '4.x')

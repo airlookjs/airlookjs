@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import got from 'got';
 import { pipeline } from 'stream/promises';
 import createError from 'http-errors'
-import { FastifyPluginAsync } from 'fastify';
+import { FastifyPluginCallback } from 'fastify';
 import { VERSION } from './config.js';
 
 interface LoudnessDataCached {
@@ -15,7 +15,7 @@ interface LoudnessDataCached {
   cachedVersion: string;
 }
 
-interface LoudnessDataResponse extends Omit<LoudnessDataCached, 'cachedVersion'> {
+export interface LoudnessDataResponse extends Omit<LoudnessDataCached, 'cachedVersion'> {
   cached: boolean;
   version: string;
   cachedVersion?: string;
@@ -25,13 +25,6 @@ interface IQuerystring {
   file: string;
   sampleRate?: number;
 }
-
-interface IParams {
-}
-
-interface IHeaders {
-}
-
 interface IReply {
   200: LoudnessDataResponse;
 }
@@ -45,11 +38,11 @@ export interface LoudnessRoutesOptions {
 
 const CACHE_FILE_EXTENSION = ".loudness.json"
 
-export const routes: FastifyPluginAsync<LoudnessRoutesOptions> = async (fastify, options) => {
+export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, options, done) => {
 
   const unlinkQueue : string[] = [];
 
-  fastify.get<{}>('/', async (req, res) => {
+  fastify.get('/', async (_req, res) => {
       const v = await loudnessVersion();
       return res.code(200).send({ message: 'Loudness scanner is running',
           v,
@@ -58,28 +51,27 @@ export const routes: FastifyPluginAsync<LoudnessRoutesOptions> = async (fastify,
   })
 
   fastify.get<{Querystring: IQuerystring,
-    Params: IParams,
-    Headers: IHeaders,
     Reply: IReply}>('/loudness', {
-      preValidation: async (request) => {
+      preValidation: (req, _res, done) => {
         console.log('preValidation')
-        if (!request.query.file) {
-
+        if (!req.query.file) {
           throw createError(400, 'File parameter is required')
         }
+        done()
       },
-      onResponse: async () => {
+      onResponse: (_req, _res, done) => {
         // delete files in unlinkQueue and remove from unlinkQueue pop, warn on error
         while (unlinkQueue.length > 0) {
           const file = unlinkQueue.pop()
           if (file) {
-            fs.unlink(file, (err) => {
-              if (err) {
-                console.warn('Error deleting file', file, err)
-              }
-            })
+            try {
+              fs.rmSync(file)
+            } catch (err) {
+              console.warn('Error deleting file', file, err)
+            }
           }
         }
+        done()
       }
   }, async (request, reply) => {
 
@@ -169,4 +161,6 @@ export const routes: FastifyPluginAsync<LoudnessRoutesOptions> = async (fastify,
 
       }
   })
+
+  done()
 }
