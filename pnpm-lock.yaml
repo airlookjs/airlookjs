@@ -214,7 +214,7 @@ importers:
   packages/mediainfo:
     dependencies:
       '@airlookjs/shared':
-        specifier: file:../shared
+        specifier: workspace:*
         version: link:../shared
       cors:
         specifier: ^2.8.5
@@ -318,7 +318,7 @@ importers:
   packages/scenedetect:
     dependencies:
       '@airlookjs/shared':
-        specifier: file:../shared
+        specifier: workspace:*
         version: link:../shared
       axios:
         specifier: ^1.4.0
