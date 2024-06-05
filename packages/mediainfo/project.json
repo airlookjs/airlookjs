@@ -1,8 +1,9 @@
 {
-    "name": "mediainfo",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "tags": ["type:app"],
+	"name": "mediainfo",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"tags": ["type:app"],
 	"projectType": "application",
+	"sourceRoot": "packages/mediainfo/src",
 	"targets": {
 		"lint": {
 		  "executor": "@nx/eslint:lint",
@@ -10,6 +11,13 @@
 		},
 		"build": {
 			"executor": "@nx/js:tsc"
+		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"reportsDirectory": "../coverage/libs/util"
+			}
 		}
 	}
 }

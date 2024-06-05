@@ -18,7 +18,8 @@
     "projectsRelationship": "independent",
     "projects": [
       "packages/svelte-sequence-editor",
-      "packages/loudness"
+      "packages/loudness",
+      "packages/shared"
     ],
     "version": {
       "generatorOptions": {
@@ -26,9 +27,11 @@
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
+        "updateDependents": true
       }
     },
     "changelog": {
+      "automaticFromRef": true,
       "projectChangelogs": {
         "createRelease": "github",
         "renderOptions": {
@@ -56,8 +59,9 @@
   "targetDefaults": {
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist/{projectRoot}",
-      }
+        "packageRoot": "{projectRoot}/dist"
+      },
+      "dependsOn": ["build"]
     },
     "test": {
       "cache": true,

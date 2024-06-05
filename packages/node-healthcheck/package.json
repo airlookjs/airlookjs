@@ -37,5 +37,8 @@
     "semantic-release": "23.0.2",
     "supertest": "6.3.4",
     "typescript": "^5.4.5"
-  }
+  },
+  "publishConfig": {
+		"access": "public"
+	}
 }
