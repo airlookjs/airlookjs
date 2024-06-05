@@ -5,22 +5,17 @@ dotenv.config();
 //if(fs.existsSync('../loudness.config.ts')) {
 //import configfile from '../loudness.config.ts';
 import { parseIntEnv, type ShareInfo } from '@airlookjs/shared';
-import path from "node:path";
-
 export interface LoudnessConfig {
-  environment: string;
-  route: string;
+  routePrefix: string;
   shares: ShareInfo[];
-  version: string;
-  port: number;
 };
 
-export const config: LoudnessConfig = {	
-	environment: process.env.NODE_ENV ?? 'development',
-	version: process.env.npm_package_version ?? 'dev',
-	port: parseIntEnv(process.env.PORT, 3000),
-	route: process.env.ROUTE ?? '/api/loudness',
+export const defaultConfig: LoudnessConfig = {
+	routePrefix: process.env.ROUTE ?? '/api',
 	shares: []
 };
 
-export const LOUDNESS_CMD = path.resolve(import.meta.dirname, '../bin/loudness');
+export const VERSION = process.env.npm_package_version ?? 'dev';
+export const PORT = parseIntEnv(process.env.PORT, 3000);
+export const DEFAULT_SAMPLE_RATE = 0.02;
+export const CACHE_DIR = '.cache/loudness';

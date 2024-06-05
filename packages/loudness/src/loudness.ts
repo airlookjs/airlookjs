@@ -1,6 +1,8 @@
 import child_process from 'child_process'
+import path from 'node:path';
 import { promisify } from 'util'
-import { LOUDNESS_CMD } from './config.js';
+
+export const LOUDNESS_CMD = path.resolve(import.meta.dirname, '../bin/loudness');
 
 type numberOrNullArray = (number | null)[];
 export interface LoudnessData {
@@ -31,7 +33,7 @@ const loudnessScan = async (file: string) => {
 
 	if (isNaN(lufs)) {
 		// this used to print stderr
-		console.error('unexpected value'); 
+		console.error('unexpected value');
 		throw new Error('unexpected value');
 	}
 
@@ -67,18 +69,25 @@ const loudnessExec = async (args: string[]) => {
 
 	if (stderr) {
 		// progress is reported to stderr
-
 		console.error('stderr', stderr)
 		//throw new Error(stderr)
 	}
-
 	return stdout
+}
+
+//import child_process from 'child_process';
+//import { promisify } from 'util';
+//import { LOUDNESS_CMD, config } from './config.js';
+//const exec = promisify(child_process.execFile)
+
+export async function loudnessVersion() {
+  return await loudnessExec(["--version"])
 }
 
 export async function getLoudness(file: string, sampleRate: number): Promise<LoudnessOutput> {
 	console.log('Measuring loudness for: ' + file)
 	// sampleRatein seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
-	
+
 	const [scan, integrated, momentary, shortterm] = await Promise.all([
 		loudnessScan(file),
 		loudnessDump('integrated', sampleRate, file),
