@@ -1,9 +1,9 @@
 name: Release
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - release
 
 permissions:
   actions: read
