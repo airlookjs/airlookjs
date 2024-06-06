@@ -4,7 +4,7 @@ import fs from 'fs';
 import { pipeline } from 'stream/promises';
 import got from 'got';
 import path from 'path';
-import createError, { HttpError } from 'http-errors';
+import createError, { type HttpError } from 'http-errors';
 import { type RequestHandler, type ErrorRequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { getScenes } from './scenedetect.js';

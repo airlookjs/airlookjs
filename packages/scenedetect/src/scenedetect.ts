@@ -7,7 +7,7 @@ import child_process from 'child_process';
 import path from 'path';
 import { promisify } from 'util';
 import fs from 'fs';
-import { parse as csvLibParse, Options, Parser } from 'csv-parse';
+import { parse as csvLibParse, type Options, type Parser } from 'csv-parse';
 
 interface scenedetectInfo {
 	// scenes is generated from mapping the csv parsing
