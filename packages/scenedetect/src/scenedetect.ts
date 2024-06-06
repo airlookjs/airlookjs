@@ -106,18 +106,21 @@ export async function getScenes(file: string, cachePath?: string) : Promise<getS
 							);
 						}) as [string, string, string];
 
-						for (const [index, imagePath] of imagePaths.entries()) {
+						for (const imagePath of imagePaths) {
 							if (!fs.existsSync(imagePath)) {
 								console.warn('Scene image not found:', imagePath);
 							} else {
 								console.info('Scene image found:', imagePath);
-								const imagePathNoScene = imagePath.split('-Scene-').pop() ?? index.toString();
-
-								// rename the file to a shorter name
-								const newImagePath = path.join(cachePath, imagePathNoScene);
-								fs.renameSync(imagePath, newImagePath);
-								console.info('Renamed scene image to:', newImagePath);
-								imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
+								const imagePathNoScene = imagePath.split('-Scene-').pop();
+								if (imagePathNoScene) {
+									// rename the file to a shorter name
+									const newImagePath = path.join(cachePath, imagePathNoScene);
+									fs.renameSync(imagePath, newImagePath);
+									console.info('Renamed scene image to:', newImagePath);
+									imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
+								} else {
+									console.info('Expected scene image to contain "-Scene-" aborting renaming:', imagePath);
+								}
 							}
 						}
 
