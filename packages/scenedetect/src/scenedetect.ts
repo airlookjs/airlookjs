@@ -50,7 +50,6 @@ export async function getScenes(file: string, cachePath?: string) : Promise<getS
 	let cleanCachePath = false;
 
 	if (!cachePath) {
-		console.log("pathcache")
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
 		cleanCachePath = true;
 	}
