@@ -2,11 +2,9 @@ import { server } from './server.js';
 import request from 'supertest';
 import express, { type Express } from "express";
 import fs from 'fs';
-
-// import express, { type Express } from "express";
-import * as configExports from './config.js';
-
 import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from 'vitest';
+
+import * as configExports from './config.js';
 
 const TEST_FILE = 'test_file.mp4'; 
 
