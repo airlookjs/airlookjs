@@ -8,7 +8,7 @@ import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from "vites
 const dateMatch = /\d{4}-\d{2}-\d{2}/;
 const timeMatch = /\d{2}:\d{2}:\d{2}/;
 const mediaInfoVersion = /\d{2}.\d{2}/;
-const TEST_FILE = 'seq-3341-13-1-24bit.wav'; 
+const TEST_FILE = 'seq-3341-13-1-24bit.wav';
 const version = '1.0'
 
 const defaultConfig = {
@@ -347,7 +347,7 @@ describe('mediainfo', () => {
 														},
 													],
 												},
-											],												
+											],
 											"ebucore:containerFormat": expect.any(Array) as unknown,
 											"ebucore:duration": [
 												{
@@ -471,7 +471,7 @@ describe('mediainfo', () => {
 														},
 													],
 												},
-											],												
+											],
 											"ebucore:containerFormat": expect.any(Array) as unknown,
 											"ebucore:duration": [
 												{
@@ -622,7 +622,7 @@ describe('mediainfo', () => {
 														},
 													],
 												},
-											],												
+											],
 											"ebucore:containerFormat": expect.any(Array) as unknown,
 											"ebucore:duration": [
 												{

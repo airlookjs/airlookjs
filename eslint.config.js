@@ -47,7 +47,7 @@ export default tseslint.config(
 				//project: true,
 				project: ['./tsconfig.json', './packages/*/tsconfig.json'],
 				EXPERIMENTAL_useProjectService: true, //Enable project references, that is otherwise not supported and will cause us to have either poor performing tsconfig files including too many things or maintain seperate tsconfigs for eslint. This is experimental but so far seems to work well. See https://github.com/typescript-eslint/typescript-eslint/pull/6754
-				
+
 			}
 		},
 	},
@@ -59,7 +59,7 @@ export default tseslint.config(
 					postcss: {
 						configFilePath: './packages/*/postcss.config.cjs'
 					}
-					
+
 				}
 			}
 		}
@@ -92,8 +92,6 @@ export default tseslint.config(
 			},
 		},
 	},
-
-
 	{
 		files: ['**/*.ts'],
 		rules: {
@@ -112,9 +110,6 @@ export default tseslint.config(
 		  ]
 		  },
 	},
-
-
-
 	{
 		files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
 		rules: {
@@ -155,6 +150,6 @@ export default tseslint.config(
 		},
 		rules: {},
 	},
-		
+
 
 );
