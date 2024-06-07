@@ -19,6 +19,8 @@
     "projects": [
       "packages/svelte-sequence-editor",
       "packages/loudness",
+      "packages/mediainfo",
+      "packages/scenedetect",
       "packages/shared"
     ],
     "version": {
