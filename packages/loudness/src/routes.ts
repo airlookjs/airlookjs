@@ -1,4 +1,4 @@
-import { type LoudnessData, getLoudness, loudnessVersion } from './loudness.js';
+import { type LoudnessData, getLoudness, loudnessVersion, LoudnessOutput } from './loudness.js';
 import { ShareInfo, findPathInShares, readCached, writeCached, processFileOnShareOrDownload } from '@airlookjs/shared';
 
 import path from 'node:path';
@@ -49,8 +49,6 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
       });
   })
 
-
-
   fastify.get<{Querystring: IQuerystring,
     Reply: IReply}>('/loudness', {
       preValidation: (req, _res, done) => {
@@ -77,7 +75,7 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
 
       const { file, sampleRate=options.defaultSampleRate } = request.query
 
-      const result = await processFileOnShareOrDownload<LoudnessData>({
+      const result = await processFileOnShareOrDownload<LoudnessOutput>({
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,

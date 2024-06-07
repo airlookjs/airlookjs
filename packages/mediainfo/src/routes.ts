@@ -40,7 +40,6 @@ export interface MediainfoRoutesOptions {
 
 export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, options, done) => {
 
-
   fastify.get('/', async (_req, res) => {
     const v = await mediainfoVersion();
     return res.code(200).send({ message: 'Mediainfo server is running',

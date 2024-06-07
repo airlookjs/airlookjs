@@ -12,7 +12,6 @@ const plugin: FastifyPluginCallback<Partial<MediainfoRoutesOptions>> = (fastify,
     prefix: config.routePrefix,
     ..._options
   }
-
   void fastify.register(routes, options)
   done()
 

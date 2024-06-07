@@ -15,7 +15,7 @@ export interface LoudnessConfig extends CommonServiceConfig {
 };
 
 export const config: LoudnessConfig = {
-	routePrefix: process.env.ROUTE ?? '/api',
+	routePrefix: process.env.ROUTE_PREFIX ?? '/api',
 	shares: [],
   rateLimit: {
     max: parseIntEnv(process.env.RATE_LIMIT_MAX, 50),

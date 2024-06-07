@@ -4,6 +4,7 @@ import { parseIntEnv, type CommonServiceConfig } from '@airlookjs/shared';
 export interface MediainfoConfig extends CommonServiceConfig {
     mediainfo: {
         defaultOutputFormat: string;
+        cacheDir: string;
     }
 }
 
@@ -11,7 +12,8 @@ export const config : MediainfoConfig = {
   routePrefix: process.env.ROUTE_PREFIX ?? '/api',
   shares: [],
   mediainfo: {
-	  defaultOutputFormat: process.env.DEFAULT_OUTPUT_FORMAT ?? 'EBUCore_JSON'
+	  defaultOutputFormat: process.env.DEFAULT_OUTPUT_FORMAT ?? 'EBUCore_JSON',
+    cacheDir: '.cache/mediainfo',
   },
 }
 

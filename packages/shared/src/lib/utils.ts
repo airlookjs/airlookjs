@@ -76,7 +76,6 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
 	// the for ... const .. of syntax works for async
   try {
     const match = findPathInShares(fileUrl, shares)
-
     const cacheDir = path.join(path.dirname(match.filePath), relativeCacheFolderPath)
     const cacheFilePath = path.join(
           cacheDir,
