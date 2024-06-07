@@ -35,6 +35,6 @@
       "@airlookjs/node-healthcheck": ["packages/node-healthcheck/src/index.ts"],
       "@airlookjs/shared": ["packages/shared/src/index.ts"],
       "@airlookjs/util": ["libs/util/src/index.ts"]
-    },
-  },
+    }
+  }
 }
