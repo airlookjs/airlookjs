@@ -26,7 +26,7 @@ import { LoudnessDataResponse } from './routes.js';
     }
 });*/
 
-const app = build({
+const app = await build({
   shares: [{
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
