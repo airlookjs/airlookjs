@@ -1,7 +1,6 @@
 {
   "name": "airlookjs-workspace",
   "private": true,
-  "version": "1.0.0",
   "scripts": {
     "nx": "nx",
     "build": "nx run-many --target=build --parallel",
