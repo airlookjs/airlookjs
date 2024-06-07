@@ -11,8 +11,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "checkJs": true,
-    "lib": ["es2023"],
+    "lib": ["es2021"],
     "module": "ES2022",
     "moduleResolution": "bundler",
     "target": "es2022",
@@ -36,8 +35,6 @@
       "@airlookjs/node-healthcheck": ["packages/node-healthcheck/src/index.ts"],
       "@airlookjs/shared": ["packages/shared/src/index.ts"],
       "@airlookjs/util": ["libs/util/src/index.ts"]
-    }
+    },
   },
-  "include": [],
-  "exclude": ["node_modules", "tmp", "dist"]
 }

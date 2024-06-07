@@ -23,7 +23,7 @@
     ],
     "version": {
       "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
+        "packageRoot": "{projectRoot}",
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
@@ -34,6 +34,7 @@
       "automaticFromRef": true,
       "projectChangelogs": {
         "createRelease": "github",
+        "file": false,
         "renderOptions": {
           "authors": false,
           "commitReferences": true,
@@ -57,6 +58,12 @@
     }
   ],
   "targetDefaults": {
+    "nx-release-version": {
+      "options": {
+        "packageRoot": "{projectRoot}"
+      },
+      "dependsOn": ["build"]
+    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"
