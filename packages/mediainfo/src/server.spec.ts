@@ -1,6 +1,7 @@
-import { server } from './server.js';
+import { build } from './app.js';
 import request from "supertest";
-import express, { type Express } from "express";
+import { VERSION } from './config.js';
+
 import * as configExports from './config.js';
 import fs from 'fs';
 import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from "vitest";
@@ -10,6 +11,22 @@ const timeMatch = /\d{2}:\d{2}:\d{2}/;
 const mediaInfoVersion = /\d{2}.\d{2}/;
 const TEST_FILE = 'seq-3341-13-1-24bit.wav';
 const version = '1.0'
+
+
+const routePrefix = '/api/test';
+
+const app = await build({
+  routePrefix,
+  shares: [{
+      name: 'test',
+      mount: `${import.meta.dirname}/../tests`,// '../tests',
+      matches: [RegExp('tests/(.*)')],
+      cached: false,
+  }]});
+
+beforeAll(async () => {
+    await app.ready();
+})
 
 const defaultConfig = {
 	port: 8080,
@@ -25,7 +42,6 @@ describe('GET /', () => {
 		expect(res.status).toBe(200);
 	});
 });
-
 
 describe('mediainfo', () => {
 	afterEach(() => {

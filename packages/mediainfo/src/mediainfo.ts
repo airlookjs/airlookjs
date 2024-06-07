@@ -13,11 +13,24 @@ export const OutputFormats = {
  } as const;
 
 export type OutputFormatKeys = keyof typeof OutputFormats
-const cmd = 'mediainfo'
+export const MEDIAINFO_CMD = 'mediainfo'
 
 interface NestedRecord { [k: string]: string | NestedRecord | NestedRecord[] };
 
 export type MediaInfo = Record<string, NestedRecord>;
+
+export const mediainfoVersion = async () : Promise<string> => {
+  const execFile = promisify(child_process.execFile)
+
+  const { stdout, stderr } = await execFile(MEDIAINFO_CMD, ['--version'])
+
+  if (stderr) {
+    console.error('exec stderr', stderr)
+    throw new Error(stderr)
+  }
+
+  return stdout
+}
 
 export async function getMediainfo(file: string, outputFormatKey: OutputFormatKeys) : Promise<MediaInfo | string>{
     const [value, format] = OutputFormats[outputFormatKey]
@@ -25,7 +38,7 @@ export async function getMediainfo(file: string, outputFormatKey: OutputFormatKe
 
 	const execFile = promisify(child_process.execFile)
 
-	const { stdout, stderr } = await execFile(cmd, [`--Output=${value}`, file])
+	const { stdout, stderr } = await execFile(MEDIAINFO_CMD, [`--Output=${value}`, file])
 
 	if (stderr) {
 		console.error('exec stderr', stderr)
@@ -37,5 +50,4 @@ export async function getMediainfo(file: string, outputFormatKey: OutputFormatKe
 	}
 
 	return stdout
-	
 }

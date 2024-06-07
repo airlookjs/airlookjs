@@ -19,8 +19,9 @@
     "@airlookjs/shared": "workspace:*",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "http-errors": "^2.0.0",
-    "got": "^14.2.1"
+    "fastify": "^4.27.0",
+    "got": "^14.2.1",
+    "http-errors": "^2.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -34,6 +35,6 @@
     "typescript": "^5.4.5"
   },
   "publishConfig": {
-		"access": "public"
-	}
+    "access": "public"
+  }
 }
