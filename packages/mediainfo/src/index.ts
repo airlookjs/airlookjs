@@ -1,8 +1,5 @@
-import { config } from './config.js'
-import { server } from './server.js'
-
-console.log("Starting MediaInfo service...")
-
-server.listen(config.port, () => {
-	console.log(`MediaInfo ${config.version} server listening on http://127.0.0.1:${config.port}`)
-})
+export { build } from './app.js';
+export { config, type MediainfoConfig } from './config.js';
+import plugin from './plugin.js';
+export { plugin as fastifyMediainfoPlugin};
+export { getMediainfo } from './mediainfo.js';

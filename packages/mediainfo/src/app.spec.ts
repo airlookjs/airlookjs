@@ -1,44 +1,42 @@
 import { build } from './app.js';
 import request from "supertest";
 import { VERSION } from './config.js';
-
-import * as configExports from './config.js';
-import fs from 'fs';
-import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from "vitest";
+import express  from 'express';
+import fs from 'node:fs';
+import { expect, describe, it, vi, afterEach, afterAll, beforeAll } from "vitest";
 
 const dateMatch = /\d{4}-\d{2}-\d{2}/;
 const timeMatch = /\d{2}:\d{2}:\d{2}/;
 const mediaInfoVersion = /\d{2}.\d{2}/;
 const TEST_FILE = 'seq-3341-13-1-24bit.wav';
-const version = '1.0'
-
 
 const routePrefix = '/api/test';
 
 const app = await build({
   routePrefix,
-  shares: [{
+  defaultOutputFormatName: 'EBUCore_JSON',
+  shares: [
+    {
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('tests/(.*)')],
-      cached: false,
-  }]});
+      cached: false
+    },
+    {
+      name: 'testcached',
+      mount: `${import.meta.dirname}/../tests`,// '../tests',
+      matches: [RegExp('testscached/(.*)')],
+      cached: true
+    }
+  ]});
 
 beforeAll(async () => {
     await app.ready();
 })
 
-const defaultConfig = {
-	port: 8080,
-	route: '/api/mediainfo',
-	defaultOutputFormatName: 'EBUCore_JSON',
-	version,
-	shares: [],
-}
-
 describe('GET /', () => {
 	it('should return 200 OK', async () => {
-		const res = await request(server).get('/');
+		const res = await request(app.server).get(`${routePrefix}`);
 		expect(res.status).toBe(200);
 	});
 });
@@ -49,35 +47,20 @@ describe('mediainfo', () => {
 	});
 
 	describe('shares that are not cached', () => {
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'test',
-						mount: `${import.meta.dirname}/../tests`,// '../tests',
-						matches: [RegExp('tests/(.*)')],
-						cached: false,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
-		});
 
     it('should return 400 Bad Request with no query params', async () => {
-        const res = await request(server).get('/api/mediainfo');
+        const res = await request(app.server).get(`${routePrefix}/mediainfo`);
         expect(res.status).toBe(400);
     });
 
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
-        const res = await request(server).get(`/api/mediainfo?file=tests/${TEST_FILE}`);
+        const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}`);
 
         expect(res.status).toBe(200);
 
 				expect(res.body).toEqual(
 					{
-						"version": '1.0',
+						"version": VERSION,
 					  "mediainfo": {
 							"ebucore:ebuCoreMain": {
 								"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
@@ -196,7 +179,7 @@ describe('mediainfo', () => {
 
 
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/mediainfo?file=tests/${TEST_FILE}&outputFormat=JSON`);
+			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=JSON`);
 
 			expect(res.status).toBe(200);
 
@@ -243,13 +226,13 @@ describe('mediainfo', () => {
 				      ],
 				    },
 				  },
-				  "version": "1.0",
+				  "version": VERSION,
 				}
 			);
 	});
 
     it('should return valid result for a valid file and use output from parameters', { timeout: 10000 }, async () => {
-        const res = await request(server).get(`/api/mediainfo?file=tests/${TEST_FILE}&outputFormat=PBCore2`);
+        const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=PBCore2`);
 
         expect(res.status).toBe(200);
 
@@ -261,21 +244,6 @@ describe('mediainfo', () => {
 
 	// runs sequentially, first test writes cache file second test returns it
 	describe.sequential ('shares that are cached', () => {
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'test',
-						mount: `${import.meta.dirname}/../tests`,// '../tests',
-						matches: [RegExp('tests/(.*)')],
-						cached: true,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
-		});
 
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
@@ -284,13 +252,13 @@ describe('mediainfo', () => {
 		});
 
     it('returns non cached file', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/mediainfo?file=tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 
 			expect(res.body).toEqual(
 				{
-					version: '1.0',
+					version: VERSION,
 					mediainfo: {
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
@@ -407,14 +375,14 @@ describe('mediainfo', () => {
     });
 
     it('returns cached file', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/mediainfo?file=tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 
 			expect(res.body).toEqual(
 				{
 					cached: true,
-					version: '1.0',
+					version: VERSION,
 					mediainfo: {
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
@@ -532,40 +500,27 @@ describe('mediainfo', () => {
   });
 
 	describe('download file over url', ()  => {
-		let app: Express;
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'no-mount-just-http',
-						mount: ``,
-						matches: [],
-						cached: false,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
 
-			app = express();
+		let staticServer: express.Express;
+    beforeAll(() => {
+			staticServer = express();
 			// Setup express static middleware to look for files in the api directory for all requests starting with /api
-			app.use(`/tests`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
+			staticServer.use(`/uri-tests`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
 				// Optional 404 handler
 				res.status(404);
 				res.json({error:{code:404}})
 			});
 
-			app.listen('9090');
+			staticServer.listen('9090');
 		});
 
 		it('should return 200 OK', async () => {
-			const res = await request(server).get(`/api/mediainfo?file=http://127.0.0.1:9090/tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`/api/mediainfo?file=http://127.0.0.1:9090/uri-tests/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
 				{
-					"version": '1.0',
+					"version": VERSION,
 				  "mediainfo": {
 				    "ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
@@ -661,7 +616,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:locator": [
 												{
-													"#value": "http://127.0.0.1:9090/tests/seq-3341-13-1-24bit.wav",
+													"#value": "http://127.0.0.1:9090/uri-tests/seq-3341-13-1-24bit.wav",
 												},
 											],
 											"ebucore:technicalAttributeInteger": [
@@ -683,4 +638,5 @@ describe('mediainfo', () => {
 	});
 
     // TODO: test multiple shares
+
 });

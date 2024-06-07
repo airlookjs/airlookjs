@@ -1,9 +1,9 @@
-import { parseIntEnv, type ShareInfo, type CommonServiceConfig } from '@airlookjs/shared';
+import { parseIntEnv, type CommonServiceConfig } from '@airlookjs/shared';
 // TODO: parse config file to docker image to set up shares
 
 export interface MediainfoConfig extends CommonServiceConfig {
     mediainfo: {
-        defaultOutputFormatName: string;
+        defaultOutputFormat: string;
     }
 }
 
@@ -11,7 +11,7 @@ export const config : MediainfoConfig = {
   routePrefix: process.env.ROUTE_PREFIX ?? '/api',
   shares: [],
   mediainfo: {
-	  defaultOutputFormatName: process.env.DEFAULT_OUTPUT_FORMAT ?? 'EBUCore_JSON'
+	  defaultOutputFormat: process.env.DEFAULT_OUTPUT_FORMAT ?? 'EBUCore_JSON'
   },
 }
 

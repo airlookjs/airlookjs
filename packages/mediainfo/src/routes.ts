@@ -40,6 +40,7 @@ export interface MediainfoRoutesOptions {
 
 export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, options, done) => {
 
+
   fastify.get('/', async (_req, res) => {
     const v = await mediainfoVersion();
     return res.code(200).send({ message: 'Mediainfo server is running',
@@ -79,14 +80,14 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 			processFile: (file) => getMediainfo(file, outputFormat)
 		}).then(({ data, cached }) => {
 			if (OutputFormats[outputFormat][1] == 'JSON') {
-				res.json({
+				res.code(200).send({
 					mediainfo: data,
 					version: VERSION,
 					...(cached && { cached })
-				} as MediaInfoHandlerJsonResponse)
+				})
 			} else if (OutputFormats[outputFormat][1] == 'XML') {
-												res.set('Content-Type', 'text/xml')
-												res.send(data)
+												res.type('text/xml').code(200)
+												.send(data)
 			} else {
 				res.code(200).send(data)
 			}
