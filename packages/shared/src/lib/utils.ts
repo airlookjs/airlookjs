@@ -27,6 +27,18 @@ export const parseIntEnv = (env:  string | undefined, defaultValue: number) : nu
 	return parsed;
 };
 
+// parse floats from env safely
+export const parseFloatEnv = (env: string | undefined, defaultValue: number) : number => {
+  if (env === undefined) {
+    return defaultValue;
+  }
+  const parsed = parseFloat(env);
+  if (isNaN(parsed)) {
+    return defaultValue;
+  }
+  return parsed;
+};
+
 // parse bools from env safely
 export const parseBoolEnv = (env: string | undefined, defaultValue: boolean) : boolean => {
 	if (env === undefined) {
