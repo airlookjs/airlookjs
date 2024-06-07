@@ -1,8 +1,8 @@
 import { build } from "./app.js";
-import { PORT } from "./config.js";
+import { PORT, config } from "./config.js";
 import { LOUDNESS_CMD, loudnessVersion } from "./loudness.js";
 
-const server = await build();
+const server = await build(config);
 
 const version = await loudnessVersion();
 console.log(`Starting loudness scanner service...`)

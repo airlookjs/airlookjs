@@ -1,7 +1,7 @@
 import { build } from './app.js';
 import request from "supertest";
 import { expect, describe, it, beforeAll } from "vitest";
-import { VERSION, defaultConfig } from './config.js';
+import { VERSION } from './config.js';
 import { LoudnessDataResponse } from './routes.js';
 
 // TODO: share matches and cached
@@ -26,7 +26,10 @@ import { LoudnessDataResponse } from './routes.js';
     }
 });*/
 
+const routePrefix = '/api/test';
+
 const app = await build({
+  routePrefix,
   shares: [{
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
@@ -43,14 +46,14 @@ beforeAll(async () => {
 describe('GET /', () => {
 
     it('should return 200 OK', async () => {
-        const res = await request(app.server).get(`${defaultConfig.routePrefix}`);
+        const res = await request(app.server).get(`${routePrefix}`);
         expect(res.status).toBe(200);
     });
 });
 
 describe('loudness', () => {
     it('should return 400 Bad Request with no query params', async () => {
-        const res = await request(app.server).get(`${defaultConfig.routePrefix}/loudness`);
+        const res = await request(app.server).get(`${routePrefix}/loudness`);
         expect(res.status).toBe(400);
     });
 
@@ -59,7 +62,7 @@ describe('loudness', () => {
         // Test file from https://tech.ebu.ch/publications/ebu_loudness_test_set
         const TEST_FILE = 'seq-3341-13-1-24bit.wav';
 
-        const res = await request(app.server).get(`${defaultConfig.routePrefix}/loudness?file=tests/${TEST_FILE}`);
+        const res = await request(app.server).get(`${routePrefix}/loudness?file=tests/${TEST_FILE}`);
 
         const body = res.body as LoudnessDataResponse;
 

@@ -32,7 +32,7 @@ interface IReply {
 export interface LoudnessRoutesOptions {
   prefix: string;
   shares: ShareInfo[];
-  sampleRate: number;
+  defaultSampleRate: number;
   cacheDir: string;
 }
 
@@ -75,7 +75,7 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
       }
   }, async (request, reply) => {
 
-      const { file, sampleRate=options.sampleRate } = request.query
+      const { file, sampleRate=options.defaultSampleRate } = request.query
 
       try {
         const match = findPathInShares(file, options.shares)
