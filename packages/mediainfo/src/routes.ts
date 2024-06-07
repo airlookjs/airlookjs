@@ -61,25 +61,25 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
       //onResponse:
     }, async (req, res) => {
 
-      const { file, outputFormat=config.defaultOutputFormat } = req.query
-
-		const outputFormatParam = req.query.outputFormat ?? options.defaultOutputFormatName;
+    const { file, outputFormat=options.defaultOutputFormat } = req.query
 
     console.info('Using outputFormat', outputFormat);
 
-    const outputFormatMatchesDefault = outputFormat == config.defaultOutputFormatName;
+    const outputFormatMatchesDefault = outputFormat == options.defaultOutputFormat;
 
-		processFileOnShareOrDownload<MediaInfo | string>({
-      version: VERSION,
-			shares: options.shares,
-			fileUrl: file,
-			relativeCacheFolderPath: '.cache/mediainfo/',
-			cacheFileExtension: '.mediainfo.json',
-			lockfile: 'mediainfo.lock',
-			ignoreCache: !outputFormatMatchesDefault,
-			processFile: (file) => getMediainfo(file, outputFormat)
-		}).then(({ data, cached }) => {
-			if (OutputFormats[outputFormat][1] == 'JSON') {
+    try {
+      const result = await processFileOnShareOrDownload<MediaInfo | string>({
+        version: VERSION,
+        shares: options.shares,
+        fileUrl: file,
+        relativeCacheFolderPath: options.cacheDir,
+        cacheFileExtension: '.mediainfo.json',
+        lockfile: 'mediainfo.lock',
+        ignoreCache: !outputFormatMatchesDefault,
+        processFile: async (file) => getMediainfo(file, outputFormat)
+      })
+
+      if (OutputFormats[outputFormat][1] == 'JSON') {
 				res.code(200).send({
 					mediainfo: data,
 					version: VERSION,
@@ -91,14 +91,15 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 			} else {
 				res.code(200).send(data)
 			}
-		}).catch((error: Error) => {
+
+		} catch (error: Error) {
 			if (error instanceof FileNotFoundError) {
 				throw createError(404, `File not found: ${file}`)
 			} else {
 				throw error
 			}
-		})
-})
+		}
+  })
 
-done()
+  done()
 }
