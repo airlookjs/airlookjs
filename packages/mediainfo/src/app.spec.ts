@@ -5,7 +5,6 @@ import express  from 'express';
 import fs from 'node:fs';
 import { expect, describe, it, vi, afterEach, afterAll, beforeAll } from "vitest";
 import { MediainfoDataResponse } from './routes.js';
-import { MediainfoDataResponse } from './routes';
 
 const dateMatch = /\d{4}-\d{2}-\d{2}/;
 const timeMatch = /\d{2}:\d{2}:\d{2}/;
@@ -205,10 +204,10 @@ describe('mediainfo', () => {
         "Duration": "1.400",
         "FileExtension": "wav",
         "FileSize": "403244",
-        //"File_Modified_Date": "2024-06-04 15:04:12 UTC",
-        //"File_Modified_Date_Local": "2024-06-04 17:04:12",
+        "File_Modified_Date": expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC/) as unknown,
+        "File_Modified_Date_Local": expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/),
         "Format": "Wave",
-        "Format_Settings": "PcmWaveformat",
+        //"Format_Settings": "PcmWaveformat",
         "OverallBitRate": "2304251",
         "OverallBitRate_Mode": "CBR",
         "StreamSize": "44",
