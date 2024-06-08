@@ -30,7 +30,8 @@
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
         "updateDependents": true
-      }
+      },
+      "skipLockFileUpdate": true
     },
     "changelog": {
       "automaticFromRef": true,
