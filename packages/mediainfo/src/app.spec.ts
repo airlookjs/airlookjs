@@ -204,7 +204,7 @@ describe('mediainfo', () => {
         "Duration": "1.400",
         "FileExtension": "wav",
         "FileSize": "403244",
-        "File_Modified_Date": expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) && expect.stringContaining('UTC') as unknown,
+        "File_Modified_Date": expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) as unknown && expect.stringContaining('UTC') as unknown,
         "File_Modified_Date_Local": expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) as unknown,
         "Format": "Wave",
         //"Format_Settings": "PcmWaveformat",
