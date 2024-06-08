@@ -79,7 +79,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 
       if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'JSON') {
 				return res.code(200).send({
-          mediainfo: result.data,
+          mediainfo: result.data as MediaInfo,
            ...outMixin})
 
 			} else if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
@@ -87,7 +87,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 												.send(result.data as string)
 			} else {
 				return res.code(200).send({
-          mediainfo: result.data, ...outMixin})
+          mediainfo: result.data as MediaInfo, ...outMixin})
 			}
 
 		} catch (error: unknown) {

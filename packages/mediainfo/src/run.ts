@@ -8,7 +8,8 @@ const version = await mediainfoVersion();
 console.log(`Starting mediainfo service...`)
 console.log(`$ ${MEDIAINFO_CMD} --version\n${version}`);
 
-server.listen({ port: PORT }, (err, address) => {
+// FIXME: typescript build, not lint complains about the callback not being typed, but it should be inferred from fastify, adding the same type manually to silence the error
+server.listen({ port: PORT }, (err: Error | null, address: string) => {
   if (err) {
     console.error(err)
     process.exit(1)

@@ -5,7 +5,7 @@
       "declaration": true,
       "types": ["node"]
     },
-    "include": ["src/**/*.ts", "../shared/src/lib/validateUrl.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": [
       "src/**/*.spec.ts",
       "vite.config.ts"]
