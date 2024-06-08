@@ -133,15 +133,6 @@ importers:
       '@airlookjs/shared':
         specifier: workspace:*
         version: link:../shared
-      '@fastify/cors':
-        specifier: ^9.0.1
-        version: 9.0.1
-      '@fastify/rate-limit':
-        specifier: ^9.1.0
-        version: 9.1.0
-      cors:
-        specifier: ^2.8.5
-        version: 2.8.5
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -164,30 +155,18 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
     devDependencies:
-      '@types/cors':
-        specifier: ^2.8.5
-        version: 2.8.17
-      '@types/express':
-        specifier: 4.17.21
-        version: 4.17.21
       '@types/http-errors':
         specifier: ^2.0.4
         version: 2.0.4
       '@types/node':
         specifier: 20.12.7
         version: 20.12.7
-      '@types/nodemon':
-        specifier: 1.19.6
-        version: 1.19.6
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.8
-      nodemon:
-        specifier: ^3.1.0
-        version: 3.1.1
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
@@ -206,9 +185,15 @@ importers:
       cors:
         specifier: ^2.8.5
         version: 2.8.5
-      express:
-        specifier: ^4.19.2
-        version: 4.19.2
+      fastify:
+        specifier: ^4.27.0
+        version: 4.27.0
+      fastify-plugin:
+        specifier: ^4.5.1
+        version: 4.5.1
+      got:
+        specifier: ^14.2.1
+        version: 14.3.0
       http-errors:
         specifier: ^2.0.0
         version: 2.0.0
@@ -228,6 +213,9 @@ importers:
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
       nodemon:
         specifier: ^3.1.0
         version: 3.1.1
@@ -372,7 +360,27 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
-  packages/shared: {}
+  packages/shared:
+    dependencies:
+      '@fastify/cors':
+        specifier: ^9.0.1
+        version: 9.0.1
+      '@fastify/rate-limit':
+        specifier: ^9.1.0
+        version: 9.1.0
+      fastify:
+        specifier: ^4.27.0
+        version: 4.27.0
+      got:
+        specifier: ^14.2.1
+        version: 14.3.0
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
+    devDependencies:
+      '@types/uuid':
+        specifier: ^9.0.1
+        version: 9.0.8
 
   packages/svelte-sequence-editor:
     devDependencies:
@@ -8803,7 +8811,7 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.1
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@20.12.7)(@vitest/ui@1.6.0)
+      vitest: 1.6.0(@types/node@20.12.12)(@vitest/ui@1.6.0)
 
   '@vitest/utils@1.6.0':
     dependencies:

@@ -1,5 +1,5 @@
-import url from 'url'
-
+import url from 'node:url'
+// currently unused, do we need to keep it?
 export const stringIsAValidUrl = (s: string, protocols: string[]) : boolean => {
     try {
         new url.URL(s)

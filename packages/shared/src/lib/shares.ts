@@ -1,6 +1,5 @@
 import path from "node:path";
 import fs from 'fs';
-
 export interface ShareInfo {
 	name: string;
 	//localizedName: string; // TODO: seems to be unused unnecessary to include here

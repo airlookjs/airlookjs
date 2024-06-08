@@ -2,17 +2,16 @@ import { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
 import { config } from './config.js';
 
-import { routes, LoudnessRoutesOptions} from './routes.js';
+import { routes, MediainfoRoutesOptions} from './routes.js';
 
-const plugin: FastifyPluginCallback<Partial<LoudnessRoutesOptions>> = (fastify, _options, done) => {
+const plugin: FastifyPluginCallback<Partial<MediainfoRoutesOptions>> = (fastify, _options, done) => {
 
-  const options : LoudnessRoutesOptions = {
-    ...config.loudness,
+  const options : MediainfoRoutesOptions = {
+    ...config.mediainfo,
     shares: config.shares,
     prefix: config.routePrefix,
     ..._options
   }
-
   void fastify.register(routes, options)
   done()
 
