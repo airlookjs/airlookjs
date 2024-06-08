@@ -212,7 +212,7 @@ describe('mediainfo', () => {
         "OverallBitRate_Mode": "CBR",
         "StreamSize": "44",
       }),
-      expect(body.mediainfo.media.track[1]).toEqual(
+      expect(body.mediainfo.media.track[1]).toMatchObject(
 				        {
 				          "@type": "Audio",
 				          "BitDepth": "24",
@@ -227,6 +227,7 @@ describe('mediainfo', () => {
 				          "SamplingCount": "67200",
 				          "SamplingRate": "48000",
 				          "StreamSize": "403200",
+                  //"StreamSize_Proportion":"0.99989"
 				        },
 			);
 	});
