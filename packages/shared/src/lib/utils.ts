@@ -77,9 +77,10 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
   try {
     const match = findPathInShares(fileUrl, shares)
     const cacheDir = path.join(path.dirname(match.filePath), relativeCacheFolderPath)
+
     const cacheFilePath = path.join(
           cacheDir,
-          `path.basename(match.filePath)${cacheFileExtension}`
+          `${path.basename(match.filePath)}${cacheFileExtension}`
         )
     const lockFilePath = path.join(cacheDir, lockfile);
 
@@ -182,27 +183,27 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
 
           console.error('Error getting loudness from shares falling back to uri', error);
 
+  }
 
-          if (fileUrl.startsWith('http')) {
-            const gotStream = got.stream.get(fileUrl);
-            const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
-            const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
 
-            console.info(
+  if (fileUrl.startsWith('http')) {
+    const gotStream = got.stream.get(fileUrl);
+    const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
+    const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
+
+    console.info(
               'File is not mounted, attempt download from',
               fileUrl,
               'to /tmp/' + tmpFileBasename
-            );
+    );
             try {
               await pipeline(gotStream, outStream)
               console.info('Downloaded file', outStream.path)
 
               try {
-
                 const data = await processFile(path.normalize(outStream.path as string));
 
                 //TODO: unlinkQueue.push(outStream.path as string)
-
                 return { data, cached: false, version};
 
               } catch (error) {
@@ -217,7 +218,6 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
             }
           }
 
-        }
         throw(new FileNotFoundError('File was not found: ' + fileUrl));
 }
 

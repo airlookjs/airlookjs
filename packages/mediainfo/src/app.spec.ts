@@ -14,7 +14,10 @@ const routePrefix = '/api/test';
 
 const app = await build({
   routePrefix,
-  defaultOutputFormatName: 'EBUCore_JSON',
+  mediainfo: {
+    defaultOutputFormat: 'EBUCore_JSON',
+    cacheDir: '.cache/mediainfotest'
+  },
   shares: [
     {
       name: 'test',
@@ -60,8 +63,9 @@ describe('mediainfo', () => {
 
 				expect(res.body).toEqual(
 					{
-						"version": VERSION,
-					  "mediainfo": {
+            cached: false,
+						version: VERSION,
+					  mediainfo: {
 							"ebucore:ebuCoreMain": {
 								"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
 								"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
@@ -176,38 +180,36 @@ describe('mediainfo', () => {
 				);
     });
 
-
-
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
 			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=JSON`);
 
 			expect(res.status).toBe(200);
-
-			expect(res.body).toEqual(
+			expect(res.body.mediainfo.creatingLibrary).toEqual(
 				{
-				  "mediainfo": {
-				    "creatingLibrary": {
-				      "name": "MediaInfoLib",
-				      "url": "https://mediaarea.net/MediaInfo",
-				      "version": "24.05",
-				    },
-				    "media": {
-				      "@ref": "/Users/drexbemh/repos/airlookjs/airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav",
-				      "track": [
-				        {
-				          "@type": "General",
-				          "AudioCount": "1",
-				          "Duration": "1.400",
-				          "FileExtension": "wav",
-				          "FileSize": "403244",
-				          "File_Modified_Date": "2024-06-04 15:04:12 UTC",
-				          "File_Modified_Date_Local": "2024-06-04 17:04:12",
-				          "Format": "Wave",
-				          "Format_Settings": "PcmWaveformat",
-				          "OverallBitRate": "2304251",
-				          "OverallBitRate_Mode": "CBR",
-				          "StreamSize": "44",
-				        },
+				"name": "MediaInfoLib",
+				"url": "https://mediaarea.net/MediaInfo",
+				"version": "24.05",
+      })
+
+// 				      "@ref": "/Users/drexbemh/repos/airlookjs/airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav",
+
+      expect(res.body.version).toEqual(VERSION);
+
+      expect(res.body.mediainfo.media.track[0]).toMatchObject({
+        "@type": "General",
+        "AudioCount": "1",
+        "Duration": "1.400",
+        "FileExtension": "wav",
+        "FileSize": "403244",
+        //"File_Modified_Date": "2024-06-04 15:04:12 UTC",
+        //"File_Modified_Date_Local": "2024-06-04 17:04:12",
+        "Format": "Wave",
+        "Format_Settings": "PcmWaveformat",
+        "OverallBitRate": "2304251",
+        "OverallBitRate_Mode": "CBR",
+        "StreamSize": "44",
+      }),
+      expect(res.body.mediainfo.media.track[1]).toEqual(
 				        {
 				          "@type": "Audio",
 				          "BitDepth": "24",
@@ -223,11 +225,6 @@ describe('mediainfo', () => {
 				          "SamplingRate": "48000",
 				          "StreamSize": "403200",
 				        },
-				      ],
-				    },
-				  },
-				  "version": VERSION,
-				}
 			);
 	});
 
@@ -256,10 +253,12 @@ describe('mediainfo', () => {
 
 			expect(res.status).toBe(200);
 
-			expect(res.body).toEqual(
-				{
-					version: VERSION,
-					mediainfo: {
+      expect(res.body).toMatchObject({
+        cached: false,
+        version: VERSION,
+      });
+
+			expect(res.body.mediainfo).toEqual({
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
 							"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
@@ -370,7 +369,6 @@ describe('mediainfo', () => {
 							],
 						}
 				}
-			 }
 			);
     });
 
@@ -505,7 +503,7 @@ describe('mediainfo', () => {
     beforeAll(() => {
 			staticServer = express();
 			// Setup express static middleware to look for files in the api directory for all requests starting with /api
-			staticServer.use(`/uri-tests`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
+			staticServer.use(`/notmounted`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
 				// Optional 404 handler
 				res.status(404);
 				res.json({error:{code:404}})
@@ -515,11 +513,12 @@ describe('mediainfo', () => {
 		});
 
 		it('should return 200 OK', async () => {
-			const res = await request(app.server).get(`/api/mediainfo?file=http://127.0.0.1:9090/uri-tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
 				{
+          "cached": false,
 					"version": VERSION,
 				  "mediainfo": {
 				    "ebucore:ebuCoreMain": {
@@ -606,7 +605,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:fileName": [
 												{
-													"#value": "seq-3341-13-1-24bit.wav",
+													"#value": expect.stringContaining("seq-3341-13-1-24bit.wav"),
 												},
 											],
 											"ebucore:fileSize": [
@@ -616,7 +615,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:locator": [
 												{
-													"#value": "http://127.0.0.1:9090/uri-tests/seq-3341-13-1-24bit.wav",
+													"#value": expect.stringContaining("-seq-3341-13-1-24bit.wav"),
 												},
 											],
 											"ebucore:technicalAttributeInteger": [

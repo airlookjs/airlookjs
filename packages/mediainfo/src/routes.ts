@@ -13,7 +13,7 @@ export interface MediaInfoHandlerJsonResponse {
 }
 
 interface MediainfoDataCached {
-  Mediainfo: MediaInfo;
+  mediainfo: MediaInfo;
   cachedVersion: string;
 }
 
@@ -28,7 +28,7 @@ interface IQuerystring {
   outputFormat?: string;
 }
 interface IReply {
-  200: MediainfoDataResponse;
+  200: MediainfoDataResponse | string;
 }
 
 export interface MediainfoRoutesOptions {
@@ -78,20 +78,25 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         processFile: async (file) => getMediainfo(file, outputFormat)
       })
 
+      const outMixin = {
+        version: VERSION,
+        cached: result.cached,
+      }
+
       if (OutputFormats[outputFormat][1] == 'JSON') {
 				res.code(200).send({
-					mediainfo: data,
-					version: VERSION,
-					...(cached && { cached })
-				})
+          mediainfo: result.data,
+           ...outMixin})
+
 			} else if (OutputFormats[outputFormat][1] == 'XML') {
-												res.type('text/xml').code(200)
-												.send(data)
+					res.type('text/xml').code(200)
+												.send(result.data)
 			} else {
-				res.code(200).send(data)
+				res.code(200).send({...result.data, ...outMixin})
 			}
 
-		} catch (error: Error) {
+		} catch (error: unknown) {
+      console.error('Error getting mediainfo', error)
 			if (error instanceof FileNotFoundError) {
 				throw createError(404, `File not found: ${file}`)
 			} else {
