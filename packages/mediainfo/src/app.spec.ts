@@ -192,7 +192,7 @@ describe('mediainfo', () => {
 				{
 				"name": "MediaInfoLib",
 				"url": "https://mediaarea.net/MediaInfo",
-				"version": "24.05",
+				"version": expect.stringMatching(mediaInfoVersion) as unknown,
       })
 
 // 				      "@ref": "/Users/drexbemh/repos/airlookjs/airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav",
