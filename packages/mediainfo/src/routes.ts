@@ -1,16 +1,10 @@
-import { type MediaInfo, OutputFormats, OutputFormatKeys, getMediainfo, mediainfoVersion } from './mediainfo.js'
+import { type MediaInfo, OutputFormats, getMediainfo, mediainfoVersion, OutputFormatKeys } from './mediainfo.js'
 import { processFileOnShareOrDownload, FileNotFoundError, ShareInfo } from '@airlookjs/shared';
 import createError from 'http-errors'
 import type { FastifyPluginCallback } from 'fastify';
 
 
 import { VERSION } from './config.js'
-
-export interface MediaInfoHandlerJsonResponse {
-	cached?: boolean,
-	version: string,
-	mediainfo: MediaInfo
-}
 
 interface MediainfoDataCached {
   mediainfo: MediaInfo;
@@ -75,7 +69,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         cacheFileExtension: '.mediainfo.json',
         lockfile: 'mediainfo.lock',
         ignoreCache: !outputFormatMatchesDefault,
-        processFile: async (file) => getMediainfo(file, outputFormat)
+        processFile: async (file) => getMediainfo(file, outputFormat as OutputFormatKeys)
       })
 
       const outMixin = {
@@ -83,16 +77,17 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         cached: result.cached,
       }
 
-      if (OutputFormats[outputFormat][1] == 'JSON') {
-				res.code(200).send({
+      if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'JSON') {
+				return res.code(200).send({
           mediainfo: result.data,
            ...outMixin})
 
-			} else if (OutputFormats[outputFormat][1] == 'XML') {
-					res.type('text/xml').code(200)
-												.send(result.data)
+			} else if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
+					return res.type('text/xml').code(200)
+												.send(result.data as string)
 			} else {
-				res.code(200).send({...result.data, ...outMixin})
+				return res.code(200).send({
+          mediainfo: result.data, ...outMixin})
 			}
 
 		} catch (error: unknown) {

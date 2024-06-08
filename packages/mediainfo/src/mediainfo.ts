@@ -15,10 +15,15 @@ export const OutputFormats = {
 export type OutputFormatKeys = keyof typeof OutputFormats
 export const MEDIAINFO_CMD = 'mediainfo'
 
-interface NestedRecord { [k: string]: string | NestedRecord | NestedRecord[] };
+//TODO: does anyone maintain the types for mediainfo? - should we?
+export interface MediaInfo {
+  media: {
+    track: Record<string, string>[];
+  },
+  creatingLibrary: Record<string, string>;
+}
 
-export type MediaInfo = Record<string, NestedRecord>;
-
+// xml and json types - type specifically
 export const mediainfoVersion = async () : Promise<string> => {
   const execFile = promisify(child_process.execFile)
 

@@ -4,6 +4,8 @@ import { VERSION } from './config.js';
 import express  from 'express';
 import fs from 'node:fs';
 import { expect, describe, it, vi, afterEach, afterAll, beforeAll } from "vitest";
+import { MediainfoDataResponse } from './routes.js';
+import { MediainfoDataResponse } from './routes';
 
 const dateMatch = /\d{4}-\d{2}-\d{2}/;
 const timeMatch = /\d{2}:\d{2}:\d{2}/;
@@ -183,8 +185,10 @@ describe('mediainfo', () => {
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
 			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=JSON`);
 
+      const body = res.body as MediainfoDataResponse;
+
 			expect(res.status).toBe(200);
-			expect(res.body.mediainfo.creatingLibrary).toEqual(
+			expect(body.mediainfo.creatingLibrary).toEqual(
 				{
 				"name": "MediaInfoLib",
 				"url": "https://mediaarea.net/MediaInfo",
@@ -193,9 +197,9 @@ describe('mediainfo', () => {
 
 // 				      "@ref": "/Users/drexbemh/repos/airlookjs/airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav",
 
-      expect(res.body.version).toEqual(VERSION);
+      expect(body.version).toEqual(VERSION);
 
-      expect(res.body.mediainfo.media.track[0]).toMatchObject({
+      expect(body.mediainfo.media.track[0]).toMatchObject({
         "@type": "General",
         "AudioCount": "1",
         "Duration": "1.400",
@@ -209,7 +213,7 @@ describe('mediainfo', () => {
         "OverallBitRate_Mode": "CBR",
         "StreamSize": "44",
       }),
-      expect(res.body.mediainfo.media.track[1]).toEqual(
+      expect(body.mediainfo.media.track[1]).toEqual(
 				        {
 				          "@type": "Audio",
 				          "BitDepth": "24",
@@ -252,13 +256,14 @@ describe('mediainfo', () => {
 			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
+      const body = res.body as MediainfoDataResponse;
 
-      expect(res.body).toMatchObject({
+      expect(body).toMatchObject({
         cached: false,
         version: VERSION,
       });
 
-			expect(res.body.mediainfo).toEqual({
+			expect(body.mediainfo).toEqual({
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
 							"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
@@ -605,7 +610,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:fileName": [
 												{
-													"#value": expect.stringContaining("seq-3341-13-1-24bit.wav"),
+													"#value": expect.stringContaining("seq-3341-13-1-24bit.wav") as unknown,
 												},
 											],
 											"ebucore:fileSize": [
@@ -615,7 +620,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:locator": [
 												{
-													"#value": expect.stringContaining("-seq-3341-13-1-24bit.wav"),
+													"#value": expect.stringContaining("-seq-3341-13-1-24bit.wav") as unknown,
 												},
 											],
 											"ebucore:technicalAttributeInteger": [
