@@ -133,12 +133,6 @@ importers:
       '@airlookjs/shared':
         specifier: workspace:*
         version: link:../shared
-      '@fastify/cors':
-        specifier: ^9.0.1
-        version: 9.0.1
-      '@fastify/rate-limit':
-        specifier: ^9.1.0
-        version: 9.1.0
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -8817,7 +8811,7 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.1
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@20.12.7)(@vitest/ui@1.6.0)
+      vitest: 1.6.0(@types/node@20.12.12)(@vitest/ui@1.6.0)
 
   '@vitest/utils@1.6.0':
     dependencies:
