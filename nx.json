@@ -29,9 +29,9 @@
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
-        "updateDependents": true
-      },
-      "skipLockFileUpdate": true
+        "updateDependents": true,
+        "skipLockFileUpdate": true
+      }
     },
     "changelog": {
       "automaticFromRef": true,
@@ -63,7 +63,7 @@
   "targetDefaults": {
     "nx-release-version": {
       "options": {
-        "packageRoot": "{projectRoot}"
+        "packageRoot": "{projectRoot}",
       },
       "dependsOn": ["build"]
     },
