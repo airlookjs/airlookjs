@@ -131,8 +131,8 @@ importers:
   packages/loudness:
     dependencies:
       '@airlookjs/shared':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: workspace:*
+        version: link:../shared
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -180,8 +180,8 @@ importers:
   packages/mediainfo:
     dependencies:
       '@airlookjs/shared':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: workspace:*
+        version: link:../shared
       cors:
         specifier: ^2.8.5
         version: 2.8.5
