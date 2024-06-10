@@ -8,6 +8,7 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
 
+
   "scripts": {
     "build": "nx build",
     "test": "nx test",

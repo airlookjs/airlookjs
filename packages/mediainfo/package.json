@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "repository": "https://github.com/airlookjs/airlookjs.git",
   "type": "module",
   "scripts": {
     "build": "nx build",
