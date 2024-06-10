@@ -43,8 +43,9 @@ export const MediaInfoHandler : RequestHandler = (async (req, res, next) => {
 			relativeCacheFolderPath: '.cache/mediainfo/', 
 			cacheFileExtension: '.mediainfo.json', 
 			lockfile: 'mediainfo.lock',
-			ignoreCache: !outputFormatMatchesDefault,
-			processFile: (file) => getMediainfo(file, outputFormat)
+			isCacheUsed: outputFormatMatchesDefault,
+			canProcessFileOnHttp: true,
+			processFile: (file) => getMediainfo(file, outputFormat),
 		}).then(({ data, cached }) => {
 			if (OutputFormats[outputFormat][1] == 'JSON') {
 				res.json({ 

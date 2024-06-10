@@ -71,7 +71,6 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
   version: string,
 	processFile: (file: string) => Promise<ProcessedDataResponse>
 }): Promise<FileMetaData<ProcessedDataResponse>> => {
-
 	// check if file is matched by a share and if so, run the loudness analysis
 	// the for ... const .. of syntax works for async
   try {
@@ -120,65 +119,65 @@ export const processFileOnShareOrDownload = async <ProcessedDataResponse>(
 
 			// check if data is cached on drive
       if (fs.existsSync(cacheFilePath) && !ignoreCache) {
-							try {
-								// check if json file is newer than the file itself
-                const fileStats = fs.statSync(match.filePath)
-                const cacheFileStats = fs.statSync(cacheFilePath)
+        try {
+          // check if json file is newer than the file itself
+          const fileStats = fs.statSync(match.filePath)
+          const cacheFileStats = fs.statSync(cacheFilePath)
 
-                if (cacheFileStats.mtimeMs < fileStats.mtimeMs) {
-                  console.info("Cached loudness file is older than file, ignoring");
-                  // TODO: we should probably delete the cache file here
+          if (cacheFileStats.mtimeMs < fileStats.mtimeMs) {
+            console.info("Cached loudness file is older than file, ignoring");
+            // TODO: we should probably delete the cache file here
 
-								} else {
-                  const data = readCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath)
+          } else {
+            const data = readCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath)
 
-                // data format is compatible across all versions currently, we can add a check for a semver range here later if nessessary
-                /*if(cachedData.version !== VERSION) {
-                  console.warn("Cached loudness file is outdated");
-                } else {
-                }*/
-                  return {
-                    ...data,
-                    cached: true,
-                    version
-								  }
-                }
-							} catch (error) {
-								if( (error as NodeJS.ErrnoException).code === 'ENOENT') {
-									console.info('Cached file not found: ' + cacheFilePath)
-								} else {
-									throw error;
-								}
-							}
-						}
-					}
+          // data format is compatible across all versions currently, we can add a check for a semver range here later if nessessary
+          /*if(cachedData.version !== VERSION) {
+            console.warn("Cached loudness file is outdated");
+          } else {
+          }*/
+            return {
+              ...data,
+              cached: true,
+              version
+            }
+          }
+        } catch (error) {
+          if( (error as NodeJS.ErrnoException).code === 'ENOENT') {
+            console.info('Cached file not found: ' + cacheFilePath)
+          } else {
+            throw error;
+          }
+        }
+      }
+    }
 
-					try {
-						const data = await processFile(match.filePath);
-						if (match.share.cached) {
-							try {
-								// create lock file
-								fs.writeFileSync(lockFilePath, '');
-							} catch (error) {
-								console.error('Error creating cache folder', error)
-								throw error
-							}
-							// save the result to file
-							try {
-                writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, cachedVersion: version})
-							} catch (error) {
-								console.error("Error writing file", error)
-							}
-						}
-						return { data, cached: false, version };
-					} catch (error) {
-						console.error(`Error computing: ${(error as Error).message}`)
-						throw (error);
-					} finally {
-						if (fs.existsSync(lockFilePath)) {
-							fs.rmSync(lockFilePath);
-						}
-					}
+    try {
+      const data = await processFile(match.filePath);
+      if (match.share.cached) {
+        try {
+          // create lock file
+          fs.writeFileSync(lockFilePath, '');
+        } catch (error) {
+          console.error('Error creating cache folder', error)
+          throw error
+        }
+        // save the result to file
+        try {
+          writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, cachedVersion: version})
+        } catch (error) {
+          console.error("Error writing file", error)
+        }
+      }
+      return { data, cached: false, version };
+    } catch (error) {
+      console.error(`Error computing: ${(error as Error).message}`)
+      throw (error);
+    } finally {
+      if (fs.existsSync(lockFilePath)) {
+        fs.rmSync(lockFilePath);
+      }
+    }
 	} catch (error) {
 
           console.error('Error getting loudness from shares falling back to uri', error);

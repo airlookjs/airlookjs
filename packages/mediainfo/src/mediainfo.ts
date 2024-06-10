@@ -30,8 +30,7 @@ export interface MediaInfoJson {
 // EBUCoreJson
 export type MediaInfoEbuCoreJson = Record<string, NestedRecord>;
 
-export type MediaInfo =  | MediaInfoJson;
-
+export type MediaInfo = MediaInfoEbuCoreJson | MediaInfoJson;
 
 // xml and json types - type specifically
 export const mediainfoVersion = async () : Promise<string> => {

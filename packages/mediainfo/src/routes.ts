@@ -1,5 +1,5 @@
 import { type MediaInfo, OutputFormats, getMediainfo, mediainfoVersion, OutputFormatKeys } from './mediainfo.js'
-import { processFileOnShareOrDownload, FileNotFoundError, ShareInfo } from '@airlookjs/shared';
+import { processFileOnShareOrDownload, FileNotFoundError, ShareInfo, processFileOnShareOrHttp, FileMetaData } from '@airlookjs/shared';
 import createError from 'http-errors'
 import type { FastifyPluginCallback } from 'fastify';
 
@@ -60,8 +60,9 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 
     const outputFormatMatchesDefault = outputFormat == options.defaultOutputFormat;
 
+    
     try {
-      const result = await processFileOnShareOrDownload<MediaInfo | string>({
+      const result = await processFileOnShareOrHttp<MediaInfo | string>({
         version: VERSION,
         shares: options.shares,
         fileUrl: file,
@@ -77,12 +78,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         cached: result.cached,
       }
 
-      if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'JSON') {
-				return res.code(200).send({
-          mediainfo: result.data as MediaInfo,
-           ...outMixin})
-
-			} else if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
+      if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
 					return res.type('text/xml').code(200)
 												.send(result.data as string)
 			} else {
