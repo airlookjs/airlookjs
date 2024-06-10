@@ -131,7 +131,7 @@ importers:
   packages/loudness:
     dependencies:
       '@airlookjs/shared':
-        specifier: 0.2.0
+        specifier: ^0.2.0
         version: 0.2.0
       dotenv:
         specifier: 16.4.5
@@ -180,7 +180,7 @@ importers:
   packages/mediainfo:
     dependencies:
       '@airlookjs/shared':
-        specifier: 0.2.0
+        specifier: ^0.2.0
         version: 0.2.0
       cors:
         specifier: ^2.8.5
@@ -293,7 +293,7 @@ importers:
   packages/scenedetect:
     dependencies:
       '@airlookjs/shared':
-        specifier: 0.2.0
+        specifier: ^0.2.0
         version: 0.2.0
       axios:
         specifier: ^1.4.0
