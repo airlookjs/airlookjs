@@ -3,9 +3,9 @@ import { pipeline } from 'node:stream/promises';
 import got from 'got';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
-import { FileNotFoundError } from './FileNotFoundError';
-import { ShareInfo, findPathInShares } from './shares';
-import { readCached, writeCached } from './cache';
+import { FileNotFoundError } from './FileNotFoundError.js';
+import { ShareInfo, findPathInShares } from './shares.js';
+import { readCached, writeCached } from './cache.js';
 
 // parse ints from env safely
 export const parseIntEnv = (env:  string | undefined, defaultValue: number) : number => {

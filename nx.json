@@ -29,7 +29,7 @@
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
-        "updateDependents": true,
+        "updateDependents": false,
         "skipLockFileUpdate": true
       }
     },

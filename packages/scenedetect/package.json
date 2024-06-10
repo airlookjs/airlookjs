@@ -1,6 +1,6 @@
 {
 	"name": "@airlookjs/scenedetect",
-	"version": "0.3.1",
+	"version": "0.3.3",
 	"description": "scenedetect service",
 	"author": "Ole Kristensen <k-denfrie-ok@tv2.dk>",
 	"type": "module",
@@ -26,7 +26,7 @@
 		"prettier": "^2.8.8",
 		"prom-client": "^14.2.0",
 		"uuid": "^9.0.0",
-		"@airlookjs/shared": "0.2.0"
+		"@airlookjs/shared": "^0.2.0"
 	},
 	"devDependencies": {
 		"@intility/helm-version": "^1.3.0",

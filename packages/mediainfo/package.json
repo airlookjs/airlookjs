@@ -1,6 +1,6 @@
 {
   "name": "@airlookjs/mediainfo",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@airlookjs/shared": "0.2.0",
+    "@airlookjs/shared": "^0.2.0",
     "cors": "^2.8.5",
     "fastify": "^4.27.0",
     "fastify-plugin": "^4.5.1",
