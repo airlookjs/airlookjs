@@ -1,15 +1,20 @@
 # airlookjs
-Main monorepo for packages and services developed by airlookjs
+Main monorepo for packages and services in the airlookjs namespace
 
-# TODO
-- [ ] Setup releases for all packages
-- [ ] Setup versioning for all packages
-- [ ] Setup changelog generation for all packages
-- [ ] Setup documentation generation for all packages
-- [ ] Setup testing for all packages
-- [ ] Setup linting for all packages
-- [ ] Migrate loudness to this repo 
-- [ ] Migrate mediainfo to this repo
-- [ ] Migrate node-healthcheck to this repo
-- [ ] Migrate scenedetect to this repo
-- [ ] Protect main branch
+## File services
+Services that expose endpoints to compute information about media files. They share the same configuration structure and cann be consumed as a fastify server instance, a fastify plugin or as low level methods. 
+### @airlookjs/loudness
+EBU r128 loudness data for media files.
+
+### @airlookjs/scenedetect
+Detect scenes in mediafiles.
+
+### @airlookjs/mediainfo
+Media metadata usssing the mediainfo package.
+
+## UI
+### @airlookjs/svelte-sequence-editor
+UI package for time baswed sequence editing.
+
+## Utility
+@airlookjs/shared
