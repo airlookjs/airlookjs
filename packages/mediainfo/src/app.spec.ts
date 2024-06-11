@@ -609,7 +609,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:fileName": [
 												{
-													"#value": expect.stringContaining("seq-3341-13-1-24bit.wav") as unknown,
+													"#value": "seq-3341-13-1-24bit.wav",
 												},
 											],
 											"ebucore:fileSize": [
@@ -619,7 +619,7 @@ describe('mediainfo', () => {
 											],
 											"ebucore:locator": [
 												{
-													"#value": expect.stringContaining("-seq-3341-13-1-24bit.wav") as unknown,
+													"#value": "http://127.0.0.1:9090/notmounted/seq-3341-13-1-24bit.wav",
 												},
 											],
 											"ebucore:technicalAttributeInteger": [

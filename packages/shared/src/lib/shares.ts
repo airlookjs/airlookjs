@@ -99,7 +99,7 @@ const waitForAlreadyRunningJob = async (lockFilePath: string): Promise<void> => 
   }
 }
 
-const processFileWithLockFile = async <T>(processFile: () => Promise<T>, lockFilePath: string, isLockable: boolean): Promise<T> => {
+const processWithLockFile = async <T>(processFile: () => Promise<T>, lockFilePath: string, isLockable: boolean): Promise<T> => {
   try {
     if (isLockable) {
       try {
@@ -119,10 +119,42 @@ const processFileWithLockFile = async <T>(processFile: () => Promise<T>, lockFil
   }
 }
 
+export const processFileOnHttp = async <ProcessedDataResponse>(
+	{ fileUrl, processFile }: {
+	fileUrl: string, 
+	processFile: (filePath: string) => Promise<ProcessedDataResponse>
+}): Promise<ProcessedDataResponse> => {
+  const gotStream = got.stream.get(fileUrl);
+  const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
+  const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
+
+  console.info(
+    'Attempting download from',
+    fileUrl,
+    'to /tmp/' + tmpFileBasename
+  );
+
+  try {
+    await pipeline(gotStream, outStream) 
+    console.info('Downloaded file', outStream.path)
+    try {
+      return await processFile(path.normalize(outStream.path as string));
+    } catch (error) {
+      console.error(`Error computing: ${(error as Error).message}`)
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error downloading file', error)
+    throw error;
+  } finally {
+    fs.rmSync(outStream.path);
+  }
+}
+
 // relativeCacheFolderPath: ".cache/loudness/"
 // cacheFileExtension: ".loudness.json"
 export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
-	{ shares, fileUrl, relativeCacheFolderPath, cacheFileExtension, lockFileExtension, ignoreCache, version, processFile }: {
+	{ shares, fileUrl, relativeCacheFolderPath, cacheFileExtension, lockFileExtension, ignoreCache, version, canProcessFileOnHttp = false, processFile }: {
 	shares: ShareInfo[], 
 	fileUrl: string, 
 	relativeCacheFolderPath: string, 
@@ -130,6 +162,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
 	lockFileExtension: string, 
 	ignoreCache: boolean,
   version: string,
+  canProcessFileOnHttp?: boolean,
 	processFile: (mountedFilePath: string) => Promise<ProcessedDataResponse>
 }): Promise<FileMetaData<ProcessedDataResponse>> => {
   try {
@@ -183,7 +216,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
     }
     
     try {
-      const data = await processFileWithLockFile<ProcessedDataResponse>(
+      const data = await processWithLockFile<ProcessedDataResponse>(
         () => processFile(match.filePath), 
         lockFilePath, 
         match.share.cached
@@ -208,35 +241,18 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
   }
 
 	if (fileUrl.startsWith('http')) {
-    const gotStream = got.stream.get(fileUrl);
-    const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
-    const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
-
-    console.info(
-      'File is not mounted, attempt download from',
-      fileUrl,
-      'to /tmp/' + tmpFileBasename
-    );
+    if (canProcessFileOnHttp) {
+      const data = await processFile(fileUrl);
+      return { data, cached: false, version };
+    }
 
     try {
-      await pipeline(gotStream, outStream)
-      console.info('Downloaded file', outStream.path)
-
-      try {
-        const data = await processFile(path.normalize(outStream.path as string));
-
-        //TODO: unlinkQueue.push(outStream.path as string)
-        return { data, cached: false, version};
-
-      } catch (error) {
-        console.error(`Error computing: ${(error as Error).message}`)
-        throw error;
-      }
+      const data = await processFileOnHttp<ProcessedDataResponse>({ fileUrl, processFile });
+      
+      return { data, cached: false, version};
     } catch (error) {
-      console.error('Error downloading file', error)
+      console.error((error as Error).message)
       throw error;
-    } finally {
-      fs.rmSync(outStream.path); // TODO: unlink in onResponse handler instead
     }
 	}
 
