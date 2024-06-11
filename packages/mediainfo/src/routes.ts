@@ -1,5 +1,5 @@
 import { type MediaInfo, OutputFormats, getMediainfo, mediainfoVersion, OutputFormatKeys } from './mediainfo.js'
-import { processFileOnShareOrDownload, FileNotFoundError, ShareInfo, processFileOnShareOrHttp, FileMetaData } from '@airlookjs/shared';
+import { FileNotFoundError, ShareInfo, processFileOnShareOrDownload, processFileOnShareOrHttp } from '@airlookjs/shared';
 import createError from 'http-errors'
 import type { FastifyPluginCallback } from 'fastify';
 
@@ -68,7 +68,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
         cacheFileExtension: '.mediainfo.json',
-        lockfile: 'mediainfo.lock',
+        lockFileExtension: '.mediainfo.lock',
         ignoreCache: !outputFormatMatchesDefault,
         processFile: async (file) => getMediainfo(file, outputFormat as OutputFormatKeys)
       })

@@ -245,7 +245,6 @@ describe('mediainfo', () => {
 
 	// runs sequentially, first test writes cache file second test returns it
 	describe.sequential ('shares that are cached', () => {
-
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
 				fs.rmdirSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})

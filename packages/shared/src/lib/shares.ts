@@ -70,7 +70,7 @@ export interface FileMetaData<ProcessedDataResponse> {
   version: string
 }
 
-const alreadyRunningJob = async (lockFilePath: string): Promise<void> => {
+const waitForAlreadyRunningJob = async (lockFilePath: string): Promise<void> => {
   if (fs.existsSync(lockFilePath)) {
     console.info('Job is already running for this file');
 
@@ -122,12 +122,12 @@ const processFileWithLockFile = async <T>(processFile: () => Promise<T>, lockFil
 // relativeCacheFolderPath: ".cache/loudness/"
 // cacheFileExtension: ".loudness.json"
 export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
-	{ shares, fileUrl, relativeCacheFolderPath, cacheFileExtension, lockfile, ignoreCache, version, processFile }: {
+	{ shares, fileUrl, relativeCacheFolderPath, cacheFileExtension, lockFileExtension, ignoreCache, version, processFile }: {
 	shares: ShareInfo[], 
 	fileUrl: string, 
 	relativeCacheFolderPath: string, 
 	cacheFileExtension: string, 
-	lockfile: string, 
+	lockFileExtension: string, 
 	ignoreCache: boolean,
   version: string,
 	processFile: (mountedFilePath: string) => Promise<ProcessedDataResponse>
@@ -137,12 +137,14 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
 
     const cacheDir = path.join(path.dirname(match.filePath), relativeCacheFolderPath)
 
+    const fileName = path.basename(match.filePath);
+
     const cacheFilePath = path.join(
       cacheDir,
-      `${path.basename(match.filePath)}${cacheFileExtension}`
+      `${fileName}${cacheFileExtension}`
     )
 
-    const lockFilePath = path.join(cacheDir, lockfile);
+    const lockFilePath = path.join(cacheDir, `${fileName}${lockFileExtension}`);
 
     if (match.share.cached) {
       // check if cache dir exists, if not create it
@@ -150,7 +152,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
         fs.mkdirSync(cacheDir, { recursive: true })
       }
 
-      await alreadyRunningJob(lockFilePath);
+      await waitForAlreadyRunningJob(lockFilePath);
 
       // check if data is cached on drive
       if (fs.existsSync(cacheFilePath) && !ignoreCache) {
@@ -205,15 +207,15 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
     console.error((error as Error).message)
   }
 
-	if (!fileUrl.startsWith('http')) {
+	if (fileUrl.startsWith('http')) {
     const gotStream = got.stream.get(fileUrl);
     const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
     const outStream = fs.createWriteStream('/tmp/' + tmpFileBasename);
 
     console.info(
-              'File is not mounted, attempt download from',
-              fileUrl,
-              'to /tmp/' + tmpFileBasename
+      'File is not mounted, attempt download from',
+      fileUrl,
+      'to /tmp/' + tmpFileBasename
     );
 
     try {
