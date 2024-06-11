@@ -7,7 +7,7 @@ import child_process from 'child_process';
 import path from 'path';
 import { promisify } from 'util';
 import fs from 'fs';
-import { parse as csvLibParse, Options, Parser } from 'csv-parse';
+import { parse as csvLibParse, type Options, type Parser } from 'csv-parse';
 
 interface scenedetectInfo {
 	// scenes is generated from mapping the csv parsing
@@ -45,7 +45,7 @@ interface Scene {
 export async function getScenes(file: string, cachePath?: string) : Promise<getScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
-	const cmd = '/usr/local/bin/scenedetect';
+	const cmd = 'scenedetect';
 
 	let cleanCachePath = false;
 
@@ -111,12 +111,16 @@ export async function getScenes(file: string, cachePath?: string) : Promise<getS
 								console.warn('Scene image not found:', imagePath);
 							} else {
 								console.info('Scene image found:', imagePath);
-								const imagePathNoScene = imagePath.split('-Scene-').pop() ?? [];
-								// rename the file to a shorter name
-								const newImagePath = path.join(cachePath, ...imagePathNoScene);
-								fs.renameSync(imagePath, newImagePath);
-								console.info('Renamed scene image to:', newImagePath);
-								imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
+								const imagePathNoScene = imagePath.split('-Scene-').pop();
+								if (imagePathNoScene) {
+									// rename the file to a shorter name
+									const newImagePath = path.join(cachePath, imagePathNoScene);
+									fs.renameSync(imagePath, newImagePath);
+									console.info('Renamed scene image to:', newImagePath);
+									imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
+								} else {
+									console.info('Expected scene image to contain "-Scene-" aborting renaming:', imagePath);
+								}
 							}
 						}
 
