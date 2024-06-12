@@ -52,32 +52,9 @@ const findSceneImages = (sceneNumber: string, file: string, cachePath: string): 
 	return ['1', '2', '3'].map((indicies) => {
 		return path.join(
 			cachePath,
-			`${path.basename(file, path.extname(file))}-Scene-${sceneNumber.padStart(
-				3,
-				'0'
-			)}-${indicies.padStart(2, '0')}.jpg`
+			`${sceneNumber.padStart(3, '0')}-${indicies.padStart(2, '0')}.jpg`
 		);
 	}) as [string, string, string];
-}
-
-const renameSceneImages = (imagePaths: string[], cachePath: string): void => {
-	for (const imagePath of imagePaths) {
-		if (!fs.existsSync(imagePath)) {
-			console.warn('Scene image not found:', imagePath);
-		} else {
-			console.info('Scene image found:', imagePath);
-			const imagePathNoScene = imagePath.split('-Scene-').pop();
-			if (imagePathNoScene) {
-				// rename the file to a shorter name
-				const newImagePath = path.join(cachePath, imagePathNoScene);
-				fs.renameSync(imagePath, newImagePath);
-				console.info('Renamed scene image to:', newImagePath);
-				imagePaths[imagePaths.indexOf(imagePath)] = newImagePath;
-			} else {
-				console.info('Expected scene image to contain "-Scene-" aborting renaming:', imagePath);
-			}
-		}
-	}
 }
 
 // Fixed length of string for scene detect csv file.
@@ -102,8 +79,8 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, file: string, cleanC
 		if (!cleanCachePath) {
 			// declare as fixed length tuple, to be able to access imagePaths directly by index
 			const imagePaths = findSceneImages(sceneNumber, file, cachePath);
-
-			renameSceneImages(imagePaths, cachePath);
+			console.log(imagePaths);
+			// renameSceneImages(imagePaths, cachePath);
 
 			if (fs.existsSync(imagePaths[0])) {
 				scene.start.image = path.basename(imagePaths[0]);
@@ -123,7 +100,6 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, file: string, cleanC
 
 	return mappedScenes as unknown as Scene[];
 }
-
 export async function getScenes({ file, cachePath }: { file: string, cachePath?: string }) : Promise<ScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
@@ -133,18 +109,33 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
 		cleanCachePath = true;
 	}
+	const execFile = promisify(child_process.execFile)
 
-	const detectCmd = `${SCENEDETECT_CMD} -v error -i "${file}" detect-adaptive list-scenes -s --output "${cachePath}" save-images --output "${cachePath}"`;
+	// const detectCmd = `${SCENEDETECT_CMD} --verbosity error --input "${file}" detect-adaptive list-scenes --skip-cuts --output "${cachePath}" save-images --filename \\$SCENE_NUMBER-\\$IMAGE_NUMBER --output "${cachePath}"`;
 
-	const exec = promisify(child_process.exec);
+	// const exec = promisify(child_process.exec);
 	const csvParse = promisify<Buffer | string, Options, Parser>(csvLibParse);
 
-	const { stderr } = await exec(detectCmd);
+	const { stderr } = await execFile(
+		SCENEDETECT_CMD, [
+			'--verbosity', 'error', 
+			'--input', file, 
+			'detect-adaptive',
+			'list-scenes',
+			'--skip-cuts',
+			'--output', cachePath,
+			'save-images', 
+			'--filename', '$SCENE_NUMBER-$IMAGE_NUMBER',
+			'--output', cachePath
+		]);
+
+	// const { stderr } = await exec(detectCmd);
+
 
 	if (stderr) {
 		console.error('stderr', stderr);
 	}
-	console.info(detectCmd, 'done');
+	// console.info(detectCmd, 'done');
 
 	const csvContent = fs.readFileSync(
 		path.join(cachePath, `${path.basename(file, path.extname(file))}-Scenes.csv`),
