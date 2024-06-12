@@ -32,6 +32,9 @@ interface Scene {
 	};
 }
 
+// type of row from scene detect csv
+type SceneDetectRow = [string, string, string, string, string, string, string];
+
 export const SCENEDETECT_CMD = 'scenedetect';
 
 export const scenedetectVersion = async () : Promise<string> => {
@@ -48,7 +51,7 @@ export const scenedetectVersion = async () : Promise<string> => {
 }
 
 
-const findSceneImages = (sceneNumber: string, file: string, cachePath: string): [string, string, string] => {
+const findSceneImages = (sceneNumber: string, cachePath: string): [string, string, string] => {
 	return ['1', '2', '3'].map((indicies) => {
 		return path.join(
 			cachePath,
@@ -57,10 +60,8 @@ const findSceneImages = (sceneNumber: string, file: string, cachePath: string): 
 	}) as [string, string, string];
 }
 
-// Fixed length of string for scene detect csv file.
-type SceneDetectRow = [string, string, string ,string, string, string, string];
 
-const mapCsvToScenes = (csvData: Parser, cachePath: string, file: string, cleanCachePath: boolean): Scene[] => {
+const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: boolean): Scene[] => {
 	const mappedScenes = csvData.map(([sceneNumber, startFrame, startTimecode, startTimeSeconds, endFrame, endTimecode, endTimeSeconds]: SceneDetectRow) => {
 		const scene: Scene = {
 			index: parseInt(sceneNumber),
@@ -78,7 +79,7 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, file: string, cleanC
 
 		if (!cleanCachePath) {
 			// declare as fixed length tuple, to be able to access imagePaths directly by index
-			const imagePaths = findSceneImages(sceneNumber, file, cachePath);
+			const imagePaths = findSceneImages(sceneNumber, cachePath);
 			console.log(imagePaths);
 			// renameSceneImages(imagePaths, cachePath);
 
@@ -109,11 +110,8 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
 		cleanCachePath = true;
 	}
+
 	const execFile = promisify(child_process.execFile)
-
-	// const detectCmd = `${SCENEDETECT_CMD} --verbosity error --input "${file}" detect-adaptive list-scenes --skip-cuts --output "${cachePath}" save-images --filename \\$SCENE_NUMBER-\\$IMAGE_NUMBER --output "${cachePath}"`;
-
-	// const exec = promisify(child_process.exec);
 	const csvParse = promisify<Buffer | string, Options, Parser>(csvLibParse);
 
 	const { stderr } = await execFile(
@@ -127,15 +125,12 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 			'save-images', 
 			'--filename', '$SCENE_NUMBER-$IMAGE_NUMBER',
 			'--output', cachePath
-		]);
-
-	// const { stderr } = await exec(detectCmd);
-
+		]
+	);
 
 	if (stderr) {
 		console.error('stderr', stderr);
 	}
-	// console.info(detectCmd, 'done');
 
 	const csvContent = fs.readFileSync(
 		path.join(cachePath, `${path.basename(file, path.extname(file))}-Scenes.csv`),
@@ -145,7 +140,7 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 	const csvData = await csvParse(csvContent, { delimiter: ',', fromLine: 2 });
 	const output: ScenesOutput = {
 		scenedetect:  {
-			scenes: mapCsvToScenes(csvData, cachePath, file, cleanCachePath)
+			scenes: mapCsvToScenes(csvData, cachePath, cleanCachePath)
 		}
 	}
 
