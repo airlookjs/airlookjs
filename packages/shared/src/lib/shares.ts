@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { FileNotFoundError } from './FileNotFoundError';
+import { FileNotFoundError } from './FileNotFoundError.js';
 import { pipeline } from 'node:stream/promises';
 import got from 'got';
 import path from "node:path";
