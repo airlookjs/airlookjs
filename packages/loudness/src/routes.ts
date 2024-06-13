@@ -1,5 +1,5 @@
 import { type LoudnessData, getLoudness, loudnessVersion, LoudnessOutput } from './loudness.js';
-import { ShareInfo, processFileOnShareOrDownload } from '@airlookjs/shared';
+import { ShareInfo, processFileOnShareOrHttp } from '@airlookjs/shared';
 import fs from 'node:fs';
 import createError from 'http-errors'
 import type { FastifyPluginCallback } from 'fastify';
@@ -30,6 +30,7 @@ export interface LoudnessRoutesOptions {
 }
 
 const CACHE_FILE_EXTENSION = ".loudness.json"
+const LOCK_FILE_EXTENSION = ".loudness.lock"
 
 export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, options, done) => {
 
@@ -65,22 +66,22 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
         }
         done()
       }
-  }, async (request, reply) => {
+  }, async (request, response) => {
 
       const { file, sampleRate=options.defaultSampleRate } = request.query
 
-      const result = await processFileOnShareOrDownload<LoudnessOutput>({
+      const result = await processFileOnShareOrHttp<LoudnessOutput>({
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
         cacheFileExtension: CACHE_FILE_EXTENSION,
-        lockfile: 'loudness.lock',
+        lockFileExtension: LOCK_FILE_EXTENSION,
         ignoreCache: false,
         version: VERSION,
-        processFile: async(file) => getLoudness(file, sampleRate)
+        processFile: async({ file }) => getLoudness({ file, sampleRate })
       })
 
-      return reply.code(200).send({
+      return response.code(200).send({
         ...result.data,
         version: VERSION,
         cached: result.cached,

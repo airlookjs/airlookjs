@@ -131,8 +131,8 @@ importers:
   packages/loudness:
     dependencies:
       '@airlookjs/shared':
-        specifier: workspace:*
-        version: link:../shared
+        specifier: ^0.2.0
+        version: 0.2.0
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -180,8 +180,8 @@ importers:
   packages/mediainfo:
     dependencies:
       '@airlookjs/shared':
-        specifier: workspace:*
-        version: link:../shared
+        specifier: ^0.2.0
+        version: 0.2.0
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -316,6 +316,12 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.19.2
+      fastify:
+        specifier: ^4.27.0
+        version: 4.27.0
+      fastify-plugin:
+        specifier: ^4.5.1
+        version: 4.5.1
       got:
         specifier: ^12.6.1
         version: 12.6.1

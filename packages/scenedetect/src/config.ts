@@ -1,20 +1,18 @@
-import { parseIntEnv, type ShareInfo } from '@airlookjs/shared';
-import dotenv from 'dotenv';
-dotenv.config();
+import { parseIntEnv, type CommonServiceConfig } from '@airlookjs/shared';
 
-//import { ShareInfo } from '../../libs/common/config';
-export interface SceneDetectConfig {
-	environment: string;
-	route: string;
-	shares: ShareInfo[];
-	version: string;
-	port: number;
+export interface SceneDetectConfig extends CommonServiceConfig {
+	scenedetect: {
+		cacheDir: string
+	}
 }
 
-export const config: SceneDetectConfig = {
-	environment: process.env.NODE_ENV ?? 'development',
-	version: process.env.npm_package_version ?? 'dev',
-	port: parseIntEnv(process.env.PORT, 3000),
-	route: process.env.ROUTE ?? '/api/scenedetect',
-	shares: []
-};
+export const config : SceneDetectConfig = {
+  routePrefix: process.env.ROUTE_PREFIX ?? '/api',
+  shares: [],
+  scenedetect: {
+    cacheDir: '.cache/scenedetect',
+  },
+}
+
+export const VERSION = process.env.npm_package_version ?? 'dev';
+export const PORT = parseIntEnv(process.env.PORT, 3000);

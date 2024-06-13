@@ -1,17 +1,13 @@
 import { type MediaInfo, OutputFormats, getMediainfo, mediainfoVersion, OutputFormatKeys } from './mediainfo.js'
-import { processFileOnShareOrDownload, FileNotFoundError, ShareInfo } from '@airlookjs/shared';
+import { FileNotFoundError, ShareInfo, processFileOnShareOrHttp } from '@airlookjs/shared';
 import createError from 'http-errors'
 import type { FastifyPluginCallback } from 'fastify';
 
 
 import { VERSION } from './config.js'
 
-interface MediainfoDataCached {
+export interface MediainfoDataResponse {
   mediainfo: MediaInfo;
-  cachedVersion: string;
-}
-
-export interface MediainfoDataResponse extends Omit<MediainfoDataCached, 'cachedVersion'> {
   cached: boolean;
   version: string;
   cachedVersion?: string;
@@ -45,7 +41,6 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
   fastify.get<{Querystring: IQuerystring,
     Reply: IReply}>('/mediainfo', {
       preValidation: (req, _res, done) => {
-        console.log('preValidation')
         if (!req.query.file) {
           throw createError(400, 'File parameter is required')
         }
@@ -60,16 +55,18 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
 
     const outputFormatMatchesDefault = outputFormat == options.defaultOutputFormat;
 
+    
     try {
-      const result = await processFileOnShareOrDownload<MediaInfo | string>({
+      const result = await processFileOnShareOrHttp<MediaInfo | string>({
         version: VERSION,
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
         cacheFileExtension: '.mediainfo.json',
-        lockfile: 'mediainfo.lock',
+        lockFileExtension: '.mediainfo.lock',
         ignoreCache: !outputFormatMatchesDefault,
-        processFile: async (file) => getMediainfo(file, outputFormat as OutputFormatKeys)
+        canProcessFileOnHttp: true,
+        processFile: async ({ file }) => getMediainfo({ file, outputFormatKey: outputFormat as OutputFormatKeys })
       })
 
       const outMixin = {
@@ -77,12 +74,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         cached: result.cached,
       }
 
-      if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'JSON') {
-				return res.code(200).send({
-          mediainfo: result.data as MediaInfo,
-           ...outMixin})
-
-			} else if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
+      if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
 					return res.type('text/xml').code(200)
 												.send(result.data as string)
 			} else {

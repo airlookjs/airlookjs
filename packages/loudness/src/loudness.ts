@@ -84,7 +84,7 @@ export async function loudnessVersion() : Promise<string> {
   return await loudnessExec(["--version"])
 }
 
-export async function getLoudness(file: string, sampleRate: number): Promise<LoudnessOutput> {
+export async function getLoudness({ file, sampleRate }: { file: string, sampleRate: number }): Promise<LoudnessOutput> {
 	console.log('Measuring loudness for: ' + file)
 	// sampleRatein seconds, has to be at least 1 Hz to comply with ebu 128 // error on sampleRate not conforming to ebu 128
 
