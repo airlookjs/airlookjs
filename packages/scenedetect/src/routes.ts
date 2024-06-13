@@ -37,7 +37,7 @@ export const routes: FastifyPluginCallback<ScenedetectRoutesOptions> = (fastify,
   })
 
   fastify.get<{Querystring: IQuerystring,
-    Reply: IReply}>('/scenedetect', {
+    Reply: IReply}>('/get', {
       preValidation: (req, _res, done) => {
         console.log('preValidation')
         if (!req.query.file) {

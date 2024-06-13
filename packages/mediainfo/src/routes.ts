@@ -39,7 +39,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
   })
 
   fastify.get<{Querystring: IQuerystring,
-    Reply: IReply}>('/mediainfo', {
+    Reply: IReply}>('/get', {
       preValidation: (req, _res, done) => {
         if (!req.query.file) {
           throw createError(400, 'File parameter is required')
