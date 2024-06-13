@@ -4,6 +4,7 @@ import { VERSION } from './config.js';
 import express, { type Express } from "express";
 import fs from 'fs';
 import { expect, describe, it, vi, beforeAll, afterEach, afterAll } from 'vitest';
+import { ScenedetectDataResponse } from './routes.js'
 
 const TEST_FILE = 'test_file.mp4'; 
 
@@ -53,9 +54,10 @@ describe('scenedetect', () => {
 
     it('should return valid result for a valid file', { timeout: 10000 }, async () => {
 			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=tests/${TEST_FILE}`);
+      const body = res.body as ScenedetectDataResponse;
 
 			expect(res.status).toBe(200);
-			expect(res.body).toEqual(
+			expect(body).toEqual(
 				{
 					cached: false,
 				  scenedetect: {

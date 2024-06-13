@@ -1,8 +1,4 @@
 // TODO: type safety eslint rewrite, silenced error to test CI pipeline
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import child_process from 'child_process';
 import path from 'path';
 import { promisify } from 'util';
@@ -50,7 +46,6 @@ export const scenedetectVersion = async () : Promise<string> => {
   return stdout
 }
 
-
 const findSceneImages = (sceneNumber: string, cachePath: string): [string, string, string] => {
 	return ['1', '2', '3'].map((indicies) => {
 		return path.join(
@@ -59,7 +54,6 @@ const findSceneImages = (sceneNumber: string, cachePath: string): [string, strin
 		);
 	}) as [string, string, string];
 }
-
 
 const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: boolean): Scene[] => {
 	const mappedScenes = csvData.map(([sceneNumber, startFrame, startTimecode, startTimeSeconds, endFrame, endTimecode, endTimeSeconds]: SceneDetectRow) => {
@@ -78,10 +72,7 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: bool
 		};
 
 		if (!cleanCachePath) {
-			// declare as fixed length tuple, to be able to access imagePaths directly by index
 			const imagePaths = findSceneImages(sceneNumber, cachePath);
-			console.log(imagePaths);
-			// renameSceneImages(imagePaths, cachePath);
 
 			if (fs.existsSync(imagePaths[0])) {
 				scene.start.image = path.basename(imagePaths[0]);
@@ -101,6 +92,7 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: bool
 
 	return mappedScenes as unknown as Scene[];
 }
+
 export async function getScenes({ file, cachePath }: { file: string, cachePath?: string }) : Promise<ScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
