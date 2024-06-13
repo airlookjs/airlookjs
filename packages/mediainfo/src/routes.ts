@@ -6,12 +6,8 @@ import type { FastifyPluginCallback } from 'fastify';
 
 import { VERSION } from './config.js'
 
-interface MediainfoDataCached {
+export interface MediainfoDataResponse {
   mediainfo: MediaInfo;
-  cachedVersion: string;
-}
-
-export interface MediainfoDataResponse extends Omit<MediainfoDataCached, 'cachedVersion'> {
   cached: boolean;
   version: string;
   cachedVersion?: string;
@@ -70,7 +66,7 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         lockFileExtension: '.mediainfo.lock',
         ignoreCache: !outputFormatMatchesDefault,
         canProcessFileOnHttp: true,
-        processFile: async (file) => getMediainfo(file, outputFormat as OutputFormatKeys)
+        processFile: async ({ file }) => getMediainfo({ file, outputFormatKey: outputFormat as OutputFormatKeys })
       })
 
       const outMixin = {

@@ -1,24 +1,42 @@
-import { server } from './server.js';
+import { build } from './app.js';
 import request from 'supertest';
+import { VERSION } from './config.js';
 import express, { type Express } from "express";
 import fs from 'fs';
-import { expect, describe, it, vi, beforeEach, afterEach, afterAll } from 'vitest';
-
-import * as configExports from './config.js';
+import { expect, describe, it, vi, beforeAll, afterEach, afterAll } from 'vitest';
+import { ScenedetectDataResponse } from './routes.js'
 
 const TEST_FILE = 'test_file.mp4'; 
 
-const defaultConfig = {
-	port: 8080,
-	route: '/api/scenedetect',
-	version: '1.0',
-	shares: [],
-	environment: ''
-};
+const routePrefix = '/api/test';
+
+const app = await build({
+  routePrefix,
+  scenedetect: {
+    cacheDir: '.cache/scenedetecttest'
+  },
+  shares: [
+    {
+      name: 'test',
+      mount: `${import.meta.dirname}/../tests`,// '../tests',
+      matches: [RegExp('tests/(.*)')],
+      cached: false
+    },
+    {
+      name: 'testcached',
+      mount: `${import.meta.dirname}/../tests`,// '../tests',
+      matches: [RegExp('testscached/(.*)')],
+      cached: true
+    }
+  ]});
+
+beforeAll(async () => {
+    await app.ready();
+})
 
 describe('GET /', () => {
 	it('should return 200 OK', async () => {
-		const res = await request(server).get('/');
+		const res = await request(app.server).get(routePrefix);
 		expect(res.status).toBe(200);
 	});
 });
@@ -29,33 +47,19 @@ describe('scenedetect', () => {
 	});
 
 	describe('shares that are not cached', () => {
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'test',
-						mount: `${import.meta.dirname}/../tests`,// '../tests',
-						matches: [RegExp('tests/(.*)')],
-						cached: false,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
-		});
-
     it('should return 400 Bad Request with no query params', async () => {
-			const res = await request(server).get('/api/scenedetect');
+			const res = await request(app.server).get(`${routePrefix}/scenedetect`);
 			expect(res.status).toBe(400);
     });
 
-    it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/scenedetect?file=tests/${TEST_FILE}`);
+    it('should return valid result for a valid file', { timeout: 10000 }, async () => {
+			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=tests/${TEST_FILE}`);
+      const body = res.body as ScenedetectDataResponse;
 
 			expect(res.status).toBe(200);
-			expect(res.body).toEqual(
+			expect(body).toEqual(
 				{
+					cached: false,
 				  scenedetect: {
 				    scenes: [
 				      {
@@ -73,7 +77,7 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
-				  version: "1.0",
+				  version: VERSION,
 				}
 			);
 		});
@@ -81,22 +85,6 @@ describe('scenedetect', () => {
 
 	// needs to be sequential as first run will write cache files
 	describe.sequential('shares that are cached', () => {
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'test',
-						mount: `${import.meta.dirname}/../tests`,// '../tests',
-						matches: [RegExp('tests/(.*)')],
-						cached: true,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
-		});
-
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
 				fs.rmdirSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
@@ -104,11 +92,12 @@ describe('scenedetect', () => {
 		});
 
     it('returns non cached file', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/scenedetect?file=tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
 				{
+					cached: false,
 				  scenedetect: {
 				    scenes: [
 				      {
@@ -129,18 +118,19 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
-				  version: "1.0",
+				  version: VERSION,
 				}
 			);
     });
 
     it('returns cached file', { timeout: 10000 }, async () => {
-			const res = await request(server).get(`/api/scenedetect?file=tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
 				{
 					cached: true,
+					cachedVersion: VERSION,
 				  scenedetect: {
 				    scenes: [
 				      {
@@ -161,46 +151,33 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
-				  version: "1.0",
+				  version: VERSION,
 				}
 			);
     });
   });
 
 	describe('download file over url', ()  => {
-		let app: Express;
-		beforeEach(() => {
-			vi.spyOn(configExports, 'config', 'get').mockReturnValue({
-				...defaultConfig,
-				shares: [
-					{
-						name: 'no-mount-just-http',
-						mount: ``,
-						matches: [],
-						cached: false,
-						uncRoot: '',
-						systemRoot: '',
-					}
-				]
-			});
-
-			app = express();
+		let staticServer: Express;
+		beforeAll(() => {
+			staticServer = express();
 			// Setup express static middleware to look for files in the api directory for all requests starting with /api
-			app.use(`/tests`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
+			staticServer.use(`/notmounted`, express.static(`${import.meta.dirname}/../tests`) , function(_req, res){
 				// Optional 404 handler
 				res.status(404);
 				res.json({error:{code:404}})
 			});
 
-			app.listen('9090');
+			staticServer.listen('9090');
 		});
 
 		it('should return 200 OK', async () => {
-			const res = await request(server).get(`/api/scenedetect?file=http://127.0.0.1:9090/tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
 				{
+					cached: false,
 				  scenedetect: {
 				    scenes: [
 				      {
@@ -218,10 +195,9 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
-				  version: "1.0",
+				  version: VERSION,
 				}
 			);
 		});
 	});
-
 });

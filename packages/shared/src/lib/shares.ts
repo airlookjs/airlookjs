@@ -122,7 +122,7 @@ const processWithLockFile = async <T>(processFile: () => Promise<T>, lockFilePat
 export const processFileOnHttp = async <ProcessedDataResponse>(
 	{ fileUrl, processFile }: {
 	fileUrl: string, 
-	processFile: (filePath: string) => Promise<ProcessedDataResponse>
+	processFile: ({ file }: { file: string }) => Promise<ProcessedDataResponse>
 }): Promise<ProcessedDataResponse> => {
   const gotStream = got.stream.get(fileUrl);
   const tmpFileBasename = uuid() + '-' + path.basename(new URL(fileUrl).pathname);
@@ -138,7 +138,7 @@ export const processFileOnHttp = async <ProcessedDataResponse>(
     await pipeline(gotStream, outStream) 
     console.info('Downloaded file', outStream.path)
     try {
-      return await processFile(path.normalize(outStream.path as string));
+      return await processFile({ file: path.normalize(outStream.path as string)});
     } catch (error) {
       console.error(`Error computing: ${(error as Error).message}`)
       throw error;
@@ -163,7 +163,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
 	ignoreCache: boolean,
   version: string,
   canProcessFileOnHttp?: boolean,
-	processFile: (mountedFilePath: string) => Promise<ProcessedDataResponse>
+	processFile: ({ file, cachePath }: { file: string, cachePath?: string }) => Promise<ProcessedDataResponse>
 }): Promise<FileMetaData<ProcessedDataResponse>> => {
   try {
     const match = findPathInShares(fileUrl, shares);
@@ -217,7 +217,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
     
     try {
       const data = await processWithLockFile<ProcessedDataResponse>(
-        () => processFile(match.filePath), 
+        () => processFile({ file: match.filePath, ...(match.share.cached && !ignoreCache && { cachePath: cacheDir })}), 
         lockFilePath, 
         match.share.cached
       )
@@ -225,7 +225,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
       if (match.share.cached) {
         // save the result to file
         try {
-          writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, cachedVersion: version})
+          writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, cachedVersion: version })
         } catch (error) {
           console.error("Error writing file", error)
         }
@@ -242,14 +242,14 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
 
 	if (fileUrl.startsWith('http')) {
     if (canProcessFileOnHttp) {
-      const data = await processFile(fileUrl);
+      const data = await processFile({ file: fileUrl });
       return { data, cached: false, version };
     }
 
     try {
       const data = await processFileOnHttp<ProcessedDataResponse>({ fileUrl, processFile });
       
-      return { data, cached: false, version};
+      return { data, cached: false, version  };
     } catch (error) {
       console.error((error as Error).message)
       throw error;

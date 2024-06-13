@@ -46,7 +46,7 @@ export const mediainfoVersion = async () : Promise<string> => {
   return stdout
 }
 
-export async function getMediainfo(file: string, outputFormatKey: OutputFormatKeys) : Promise<MediaInfo | string>{
+export async function getMediainfo({ file, outputFormatKey }: { file: string, outputFormatKey: OutputFormatKeys }) : Promise<MediaInfo | string>{
     const [value, format] = OutputFormats[outputFormatKey]
 	console.log('Getting MediaInfo for: ' + file)
 
@@ -56,8 +56,8 @@ export async function getMediainfo(file: string, outputFormatKey: OutputFormatKe
 
 	if (stderr) {
 		console.error('exec stderr', stderr)
-        throw new Error(stderr)
-    }
+    throw new Error(stderr)
+  }
 
 	if (format == 'JSON') {
 		return JSON.parse(stdout) as MediaInfo

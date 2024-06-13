@@ -66,7 +66,7 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
         }
         done()
       }
-  }, async (request, reply) => {
+  }, async (request, response) => {
 
       const { file, sampleRate=options.defaultSampleRate } = request.query
 
@@ -78,10 +78,10 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
         lockFileExtension: LOCK_FILE_EXTENSION,
         ignoreCache: false,
         version: VERSION,
-        processFile: async(file) => getLoudness(file, sampleRate)
+        processFile: async({ file }) => getLoudness({ file, sampleRate })
       })
 
-      return reply.code(200).send({
+      return response.code(200).send({
         ...result.data,
         version: VERSION,
         cached: result.cached,
