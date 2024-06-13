@@ -13,7 +13,7 @@ import { LoudnessDataResponse } from './routes.js';
         ...o,
         config: {
             port: 8080,
-            route: '/api/loudness',
+            route: '/api/get',
             shares: [
                 {
                     name: 'test',
