@@ -8,6 +8,7 @@
     "test": "nx run-many --target=test --parallel",
     "release": "node ./tools/release/release.js"
   },
+  "pkgx": "node@20.10.0 pnpm@9.2.0",
   "type": "module",
   "keywords": [],
   "devDependencies": {

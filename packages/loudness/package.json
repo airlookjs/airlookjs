@@ -13,11 +13,12 @@
     "test": "nx test",
     "lint": "nx lint"
   },
+  "pkgx": "cmake ffmpeg@4 glib gstreamer taglib libsndfile",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/shared": "^0.3.0",
+    "@airlookjs/shared": "^0.3.2",
     "dotenv": "16.4.5",
     "fastify": "^4.27.0",
     "fastify-plugin": "^4.5.1",
