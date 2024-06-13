@@ -48,12 +48,12 @@ describe('scenedetect', () => {
 
 	describe('shares that are not cached', () => {
     it('should return 400 Bad Request with no query params', async () => {
-			const res = await request(app.server).get(`${routePrefix}/scenedetect`);
+			const res = await request(app.server).get(`${routePrefix}/get`);
 			expect(res.status).toBe(400);
     });
 
     it('should return valid result for a valid file', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=tests/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=tests/${TEST_FILE}`);
       const body = res.body as ScenedetectDataResponse;
 
 			expect(res.status).toBe(200);
@@ -92,7 +92,7 @@ describe('scenedetect', () => {
 		});
 
     it('returns non cached file', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=testscached/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
@@ -124,7 +124,7 @@ describe('scenedetect', () => {
     });
 
     it('returns cached file', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=testscached/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
@@ -172,7 +172,7 @@ describe('scenedetect', () => {
 		});
 
 		it('should return 200 OK', async () => {
-			const res = await request(app.server).get(`${routePrefix}/scenedetect?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(

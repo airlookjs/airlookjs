@@ -45,7 +45,7 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
   })
 
   fastify.get<{Querystring: IQuerystring,
-    Reply: IReply}>('/loudness', {
+    Reply: IReply}>('/get', {
       preValidation: (req, _res, done) => {
         if (!req.query.file) {
           throw createError(400, 'File parameter is required')
