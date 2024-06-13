@@ -4,7 +4,7 @@ import { pipeline } from 'node:stream/promises';
 import got from 'got';
 import path from "node:path";
 import fs from 'fs';
-import { readCached, writeCached } from './cache';
+import { readCached, writeCached } from './cache.js';
 
 export interface ShareInfo {
 	name: string;

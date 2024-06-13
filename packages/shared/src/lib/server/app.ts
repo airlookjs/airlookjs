@@ -3,7 +3,7 @@
 import type { FastifyRateLimitOptions } from '@fastify/rate-limit';
 import type { FastifyCorsOptions } from '@fastify/cors';
 import fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify'
-import type { ShareInfo } from '../shares';
+import type { ShareInfo } from '../shares.js';
 
 export interface CommonServiceConfig {
   routePrefix: string;
