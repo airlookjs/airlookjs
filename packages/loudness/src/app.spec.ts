@@ -13,7 +13,7 @@ import { LoudnessDataResponse } from './routes.js';
         ...o,
         config: {
             port: 8080,
-            route: '/api/loudness',
+            route: '/api/get',
             shares: [
                 {
                     name: 'test',
@@ -53,7 +53,7 @@ describe('GET /', () => {
 
 describe('loudness', () => {
     it('should return 400 Bad Request with no query params', async () => {
-        const res = await request(app.server).get(`${routePrefix}/loudness`);
+        const res = await request(app.server).get(`${routePrefix}/get`);
         expect(res.status).toBe(400);
     });
 
@@ -62,7 +62,7 @@ describe('loudness', () => {
         // Test file from https://tech.ebu.ch/publications/ebu_loudness_test_set
         const TEST_FILE = 'seq-3341-13-1-24bit.wav';
 
-        const res = await request(app.server).get(`${routePrefix}/loudness?file=tests/${TEST_FILE}`);
+        const res = await request(app.server).get(`${routePrefix}/get?file=tests/${TEST_FILE}`);
 
         const body = res.body as LoudnessDataResponse;
 

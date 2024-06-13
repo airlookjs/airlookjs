@@ -53,12 +53,12 @@ describe('mediainfo', () => {
 	describe('shares that are not cached', () => {
 
     it('should return 400 Bad Request with no query params', async () => {
-        const res = await request(app.server).get(`${routePrefix}/mediainfo`);
+        const res = await request(app.server).get(`${routePrefix}/get`);
         expect(res.status).toBe(400);
     });
 
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
-        const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}`);
+        const res = await request(app.server).get(`${routePrefix}/get?file=tests/${TEST_FILE}`);
 
         expect(res.status).toBe(200);
 
@@ -182,7 +182,7 @@ describe('mediainfo', () => {
     });
 
     it('should return valid result for a valid file and use default output', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=JSON`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=tests/${TEST_FILE}&outputFormat=JSON`);
 
       const body = res.body as MediainfoDataResponse;
 
@@ -233,7 +233,7 @@ describe('mediainfo', () => {
 	});
 
     it('should return valid result for a valid file and use output from parameters', { timeout: 10000 }, async () => {
-        const res = await request(app.server).get(`${routePrefix}/mediainfo?file=tests/${TEST_FILE}&outputFormat=PBCore2`);
+        const res = await request(app.server).get(`${routePrefix}/get?file=tests/${TEST_FILE}&outputFormat=PBCore2`);
 
         expect(res.status).toBe(200);
 
@@ -252,7 +252,7 @@ describe('mediainfo', () => {
 		});
 
     it('returns non cached file', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=testscached/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
       const body = res.body as MediainfoDataResponse;
@@ -377,7 +377,7 @@ describe('mediainfo', () => {
     });
 
     it('returns cached file', { timeout: 10000 }, async () => {
-			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=testscached/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=testscached/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 
@@ -517,7 +517,7 @@ describe('mediainfo', () => {
 		});
 
 		it('should return 200 OK', async () => {
-			const res = await request(app.server).get(`${routePrefix}/mediainfo?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
+			const res = await request(app.server).get(`${routePrefix}/get?file=http://127.0.0.1:9090/notmounted/${TEST_FILE}`);
 
 			expect(res.status).toBe(200);
 			expect(res.body).toEqual(
