@@ -55,7 +55,7 @@ const findSceneImages = (sceneNumber: string, cachePath: string): [string, strin
 	}) as [string, string, string];
 }
 
-const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: boolean): Scene[] => {
+const mapCsvToScenes = ({ csvData,	cachePath, hasImages }: { csvData: Parser, cachePath: string, hasImages: boolean }): Scene[] => {
 	const mappedScenes = csvData.map(([sceneNumber, startFrame, startTimecode, startTimeSeconds, endFrame, endTimecode, endTimeSeconds]: SceneDetectRow) => {
 		const scene: Scene = {
 			index: parseInt(sceneNumber),
@@ -71,7 +71,7 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: bool
 			}
 		};
 
-		if (!cleanCachePath) {
+		if (hasImages) {
 			const imagePaths = findSceneImages(sceneNumber, cachePath);
 
 			if (fs.existsSync(imagePaths[0])) {
@@ -96,28 +96,34 @@ const mapCsvToScenes = (csvData: Parser, cachePath: string, cleanCachePath: bool
 export async function getScenes({ file, cachePath }: { file: string, cachePath?: string }) : Promise<ScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
-	let cleanCachePath = false;
+	let cleanCachePath = !cachePath;
 
 	if (!cachePath) {
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
-		cleanCachePath = true;
+	}
+
+	const scenedetectArgs: string[] = [
+		'--verbosity', 'error', 
+		'--input', file, 
+		'detect-adaptive',
+		'list-scenes',
+		'--skip-cuts',
+		'--output', cachePath,
+	];
+
+	if (!cleanCachePath) {
+		scenedetectArgs.push(
+			'save-images', 
+			'--filename', '$SCENE_NUMBER-$IMAGE_NUMBER',
+			'--output', cachePath
+		)
 	}
 
 	const execFile = promisify(child_process.execFile)
 	const csvParse = promisify<Buffer | string, Options, Parser>(csvLibParse);
 
 	const { stderr } = await execFile(
-		SCENEDETECT_CMD, [
-			'--verbosity', 'error', 
-			'--input', file, 
-			'detect-adaptive',
-			'list-scenes',
-			'--skip-cuts',
-			'--output', cachePath,
-			'save-images', 
-			'--filename', '$SCENE_NUMBER-$IMAGE_NUMBER',
-			'--output', cachePath
-		]
+		SCENEDETECT_CMD, scenedetectArgs
 	);
 
 	if (stderr) {
@@ -132,7 +138,7 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 	const csvData = await csvParse(csvContent, { delimiter: ',', fromLine: 2 });
 	const output: ScenesOutput = {
 		scenedetect:  {
-			scenes: mapCsvToScenes(csvData, cachePath, cleanCachePath)
+			scenes: mapCsvToScenes({ csvData, cachePath, hasImages: !cleanCachePath })
 		}
 	}
 
