@@ -96,7 +96,7 @@ const mapCsvToScenes = ({ csvData,	cachePath, hasImages }: { csvData: Parser, ca
 export async function getScenes({ file, cachePath }: { file: string, cachePath?: string }) : Promise<ScenesOutput> {
 	console.log('Detecting scenes for: ' + file);
 
-	let cleanCachePath = !cachePath;
+	const canSaveImages = !!cachePath;
 
 	if (!cachePath) {
 		cachePath = path.join('/tmp/scenedetect/', path.basename(file) + '/');
@@ -111,7 +111,7 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 		'--output', cachePath,
 	];
 
-	if (!cleanCachePath) {
+	if (canSaveImages) {
 		scenedetectArgs.push(
 			'save-images', 
 			'--filename', '$SCENE_NUMBER-$IMAGE_NUMBER',
@@ -138,11 +138,11 @@ export async function getScenes({ file, cachePath }: { file: string, cachePath?:
 	const csvData = await csvParse(csvContent, { delimiter: ',', fromLine: 2 });
 	const output: ScenesOutput = {
 		scenedetect:  {
-			scenes: mapCsvToScenes({ csvData, cachePath, hasImages: !cleanCachePath })
+			scenes: mapCsvToScenes({ csvData, cachePath, hasImages: canSaveImages })
 		}
 	}
 
-	if (cleanCachePath) {
+	if (!canSaveImages) {
 		fs.rmSync(cachePath, { recursive: true, force: true });
 	}
 
