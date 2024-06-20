@@ -7,7 +7,9 @@
   "repository": "https://github.com/airlookjs/airlookjs.git",
   "scripts": {
     "build": "nx build",
-    "lint": "nx lint"
+    "lint": "nx lint",
+    "test": "nx test",
+    "test:watch": "nx test --watch"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",

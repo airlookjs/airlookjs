@@ -247,7 +247,7 @@ describe('mediainfo', () => {
 	describe.sequential ('shares that are cached', () => {
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
-				fs.rmdirSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
+				fs.rmSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
 			}
 		});
 

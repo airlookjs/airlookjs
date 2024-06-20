@@ -257,6 +257,6 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
 	}
 
   // if we get here, no match was found for the file in any of the shares
-  console.log('File was not found: ' + fileUrl);
+  console.info('File was not found: ' + fileUrl);
   throw(new FileNotFoundError('File was not found: ' + fileUrl));
 }

@@ -9,6 +9,13 @@
 		  "executor": "@nx/eslint:lint",
 		  "outputs": ["{options.outputFile}"]
 		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"reportsDirectory": "../coverage/libs/util"
+			}
+		},
     "build": {
 		"executor": "@nx/js:tsc"
 	}

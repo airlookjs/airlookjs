@@ -28,10 +28,11 @@ const app = await build({
       matches: [RegExp('testscached/(.*)')],
       cached: true
     }
-  ]});
+	]
+});
 
 beforeAll(async () => {
-    await app.ready();
+	await app.ready();
 })
 
 describe('GET /', () => {
@@ -87,7 +88,7 @@ describe('scenedetect', () => {
 	describe.sequential('shares that are cached', () => {
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
-				fs.rmdirSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
+				fs.rmSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
 			}
 		});
 
