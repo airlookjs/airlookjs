@@ -18,7 +18,7 @@
   "types": "src/index.d.ts",
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/shared": "^0.3.2",
+    "@airlookjs/shared": "^0.3.1",
     "dotenv": "16.4.5",
     "fastify": "^4.27.0",
     "fastify-plugin": "^4.5.1",
@@ -39,5 +39,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.7.0"
+  "version": "1.7.1"
 }
