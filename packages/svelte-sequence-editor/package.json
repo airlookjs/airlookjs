@@ -1,6 +1,6 @@
 {
 	"name": "@airlookjs/svelte-sequence-editor",
-	"version": "4.1.7",
+	"version": "4.1.8",
 	"author": "Johan Bichel Lindegaard <public@johan.cc>",
 	"license": "ISC",
 	"homepage": "https://github.com/airlookjs/airlookjs/packages/svelte-sequence-editor#readme",
