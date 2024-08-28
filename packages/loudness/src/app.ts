@@ -1,4 +1,5 @@
-import { config, type LoudnessConfig } from './config.js';
+import type { LoudnessConfig } from './config.js';
+import { config } from './config.js';
 import plugin from './plugin.js';
 import { getBuildFunction } from '@airlookjs/shared';
 
