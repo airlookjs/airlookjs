@@ -28,7 +28,7 @@
 		"fastify-plugin": "^4.5.1",
 		"got": "^12.6.1",
 		"nconf": "^0.12.0",
-		"prettier": "^2.8.8",
+		"prettier": "^3.3.3",
 		"prom-client": "^14.2.0",
 		"uuid": "^9.0.0",
 		"@airlookjs/shared": "^0.3.2",
