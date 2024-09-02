@@ -20,6 +20,7 @@ export default tseslint.config(
 		  '**/build/**',
 		  '**/bin/**',
 		  "**/.svelte-kit/**/*",
+      "**/vite.config.ts.timestamp*"
 		],
 	},
   eslint.configs.recommended,
