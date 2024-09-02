@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/ui": "^2.0.5",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-svelte": "^2.43.0",
     "globals": "^15.9.0",
     "nx": "19.6.4",
@@ -48,7 +48,7 @@
     "tslib": "^2.7.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^7.0.0",
+    "typescript-eslint": "^7.18.0",
     "vite": "~5.4.2",
     "vitest": "^2.0.5",
     "yargs": "^17.7.2"
