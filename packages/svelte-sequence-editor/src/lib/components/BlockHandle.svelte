@@ -1,7 +1,7 @@
 <!-- @component `BlockHandle` must be descendent of `SequenceBlock`. -->
 
 <script lang="ts">
-	import type { Block } from '../Block';
+	import type { Block } from '../Sequence';
 	import { getSequenceContext } from './SequenceContext';
 
 	const { time, selectedHandle, scrubOverride, snapTimes } = getSequenceContext();
@@ -49,7 +49,7 @@
 	{/if}
 
 	{#if selected == type}s
-	{:else}	
+	{:else}
 	{/if}
 */
 </script>

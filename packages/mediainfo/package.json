@@ -1,6 +1,6 @@
 {
   "name": "@airlookjs/mediainfo",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -19,22 +19,22 @@
   "dependencies": {
     "@airlookjs/shared": "^0.3.2",
     "cors": "^2.8.5",
-    "fastify": "^4.27.0",
+    "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
-    "got": "^14.2.1",
+    "got": "^14.4.2",
     "http-errors": "^2.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/http-errors": "^2.0.4",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.16.3",
     "@types/supertest": "^6.0.2",
     "express": "^4.19.2",
-    "nodemon": "^3.1.0",
+    "nodemon": "^3.1.4",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.4"
   },
   "publishConfig": {
     "access": "public"

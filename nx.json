@@ -6,14 +6,13 @@
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
-      "{workspaceRoot}/eslint.config.js",
+      "{projectRoot}/eslint.config.js",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.json",
       "!{projectRoot}/tsconfig.spec.json"
     ],
     "sharedGlobals": []
   },
-
   "release": {
     "projectsRelationship": "independent",
     "projects": [
@@ -63,7 +62,7 @@
   "targetDefaults": {
     "nx-release-version": {
       "options": {
-        "packageRoot": "{projectRoot}",
+        "packageRoot": "{projectRoot}"
       },
       "dependsOn": ["build"]
     },
@@ -76,7 +75,11 @@
     "test": {
       "cache": true,
       "executor": "@nx/vite:test",
-      "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.ts"],
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/vitest.workspace.ts"
+      ],
       "dependsOn": ["^build"]
     },
     "@nx/vite:test": {
@@ -91,12 +94,11 @@
     "lint": {
       "inputs": [
         "default",
-        "{workspaceRoot}/eslint.config.js",
-        "{workspaceRoot}/eslint.config.mjs"
+        "{projectRoot}/eslint.config.js"
       ],
       "cache": true,
       "options": {
-        "eslintConfig": "{workspaceRoot}/eslint.config.js"
+        "eslintConfig": "{projectRoot}/eslint.config.js"
       },
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

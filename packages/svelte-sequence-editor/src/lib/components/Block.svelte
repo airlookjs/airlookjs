@@ -12,7 +12,7 @@
 	import BlockHandle from '../components/BlockHandle.svelte';
 	import BlockMarker from '../components/BlockMarker.svelte';
 
-	import type { Block } from '../Block';
+	import type { Block } from '../Sequence';
 
 	const { duration, width, selectedHandle, sequence, time, scrubOverride, snapTimes } =
 		getSequenceContext();

@@ -11,8 +11,8 @@
 	import { afterUpdate } from 'svelte';
 	import { uniqueClasses } from '../utils';
 	import { fade } from 'svelte/transition';
-	import type { Layer } from '../Layer';
-	import type { Block } from '../Block';
+	import type { Layer } from '../Sequence';
+	import type { Block } from '../Sequence';
 
 	//export let animate: FlipParams = {};
 	const { width, duration } = getSequenceContext();
