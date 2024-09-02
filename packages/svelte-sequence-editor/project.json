@@ -1,29 +1,25 @@
 {
 	"name": "svelte-sequence-editor",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"tags": ["type:ui"],
 	"projectType": "library",
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "{projectRoot}"
-      }
-    }
-  },
+	"release": {
+		"version": {
+			"generatorOptions": {
+				"packageRoot": "{projectRoot}"
+			}
+		}
+	},
+	"tags": ["type:ui"],
 	"targets": {
 		"lint": {
-		  "executor": "@nx/eslint:lint",
-		  "outputs": ["{options.outputFile}"],
-		  "dependsOn": ["build"]
+			"dependsOn": ["build"],
+      "executor": "@nx/eslint:lint"
 		},
-    "e2e": {
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "{projectRoot}"
-      }
-    }
-	  }
-
+		"e2e": {},
+		"nx-release-publish": {
+			"options": {
+				"packageRoot": "{projectRoot}"
+			}
+		}
+	}
 }
-
