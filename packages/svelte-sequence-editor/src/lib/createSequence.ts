@@ -1,8 +1,6 @@
 import { writable, derived, type Updater, type Writable } from 'svelte/store';
-import { Layer } from './Layer';
 import type { TSequenceLayerOptions, TSequenceOptions, TSequenceChild } from './types';
-import { Sequence } from './Sequence';
-import type { Block } from './Block';
+import { Sequence, Block, Layer } from './Sequence';
 
 const DEFAULT_DURATION = 30000;
 const DEFAULT_OPTIONS: Required<TSequenceOptions> = {
@@ -111,8 +109,8 @@ export const createSequence = ({
 	};
 
 	return {
-		getBlockStore: getStore as typeof getStore<Block>,
-		getLayerStore: getStore as typeof getStore<Layer>,
+		getBlockStore: getStore<Block>,
+		getLayerStore: getStore<Layer>,
 		flatKeys: flatKeyStore,
 		options: optionsStore,
 		duration: durationStore,
