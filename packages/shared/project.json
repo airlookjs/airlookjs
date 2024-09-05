@@ -6,7 +6,7 @@
   "tags": ["type:util", "scope:shared"],
   "targets": {
     "lint": {
-		  "executor": "@nx/eslint:lint",
+		  "executor": "@nx/eslint:lint"
 		},
 		"test": {
 			"executor": "@nx/vite:test",
