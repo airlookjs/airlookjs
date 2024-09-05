@@ -1,23 +1,22 @@
 {
-	"name": "mediainfo",
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"tags": ["type:app"],
-	"projectType": "application",
-	"sourceRoot": "packages/mediainfo/src",
-	"targets": {
-		"lint": {
-		  "executor": "@nx/eslint:lint",
-		  "outputs": ["{options.outputFile}"]
-		},
-		"build": {
-			"executor": "@nx/js:tsc"
-		},
-		"test": {
-			"executor": "@nx/vite:test",
-			"outputs": ["{options.reportsDirectory}"],
-			"options": {
-				"reportsDirectory": "../coverage/libs/util"
-			}
-		}
-	}
+  "name": "mediainfo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "packages/mediainfo/src",
+  "tags": ["type:app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../coverage/libs/util"
+      }
+    }
+  }
 }

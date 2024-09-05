@@ -7,7 +7,6 @@
   "targets": {
     "lint": {
 		  "executor": "@nx/eslint:lint",
-		  "outputs": ["{options.outputFile}"]
 		},
 		"test": {
 			"executor": "@nx/vite:test",
@@ -17,8 +16,7 @@
 			}
 		},
     "build": {
-		"executor": "@nx/js:tsc"
-	}
+      "executor": "@nx/js:tsc"
+    }
   }
-
 }

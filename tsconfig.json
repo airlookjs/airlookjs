@@ -5,8 +5,9 @@
     "allowJs": true,
   },
   "include": [
-    "eslint.config.mjs",
-    "eslint.config.js",
+    "**/*.json",
+    "eslint.base.config.js",
+    "*/*/eslint.config.js",
     "*/*/svelte.config.js",
     "*/*/tailwind.config.cjs",
     "*/*/playwright.config.ts",

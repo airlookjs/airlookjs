@@ -1,7 +1,7 @@
 {
   "name": "@airlookjs/shared",
   "type": "module",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "repository": "https://github.com/airlookjs/airlookjs.git",
@@ -14,12 +14,12 @@
   "dependencies": {
     "@fastify/cors": "^9.0.1",
     "@fastify/rate-limit": "^9.1.0",
-    "fastify": "^4.27.0",
-    "got": "^14.2.1",
+    "fastify": "^4.28.1",
+    "got": "^14.4.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.1"
+    "@types/uuid": "^9.0.8"
   },
   "publishConfig": {
     "access": "public"

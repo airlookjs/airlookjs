@@ -1,23 +1,22 @@
 {
-	"name": "node-healthcheck",
-	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "{projectRoot}/src",
-	"projectType": "library",
-	"tags": ["type:util", "scope:shared"],
-	"targets": {
-		"lint": {
-		  "executor": "@nx/eslint:lint",
-		  "outputs": ["{options.outputFile}"]
-		},
-		"build": {
-			"executor": "@nx/js:tsc"
-		},
-		"test": {
-			"executor": "@nx/vite:test",
-			"outputs": ["{options.reportsDirectory}"],
-			"options": {
-				"reportsDirectory": "../coverage/libs/util"
-			}
-		}
-	  }
+  "name": "node-healthcheck",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "{projectRoot}/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../coverage/libs/util"
+      }
+    }
+  }
 }

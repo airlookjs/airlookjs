@@ -1,7 +1,5 @@
 import type { Writable } from 'svelte/store';
-import { Sequence } from './Sequence';
-import { Layer } from './Layer';
-import { Block } from './Block';
+import type { Sequence, Layer, Block } from './Sequence';
 
 type BlockHandleType = 'inTime' | 'outTime' | 'block'; // TODO: enum
 
