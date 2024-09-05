@@ -5,6 +5,8 @@
     "types": ["vitest", "node"]
   },
   "include": [
+    "vite.config.ts",
+    "vitest.config.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
   ]
