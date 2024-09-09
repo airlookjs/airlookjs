@@ -6,8 +6,15 @@
   "tags": ["type:util", "scope:shared"],
   "targets": {
     "lint": {
-      "executor": "@nx/eslint:lint"
-    },
+		  "executor": "@nx/eslint:lint"
+		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"reportsDirectory": "../coverage/libs/util"
+			}
+		},
     "build": {
       "executor": "@nx/js:tsc"
     }
