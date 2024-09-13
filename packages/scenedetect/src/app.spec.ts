@@ -6,7 +6,7 @@ import fs from 'fs';
 import { expect, describe, it, vi, beforeAll, afterEach, afterAll } from 'vitest';
 import { ScenedetectDataResponse } from './routes.js'
 
-const TEST_FILE = 'test_file.mp4'; 
+const TEST_FILE = 'test_file.mp4';
 
 const routePrefix = '/api/test';
 const cacheDir = '.cache/scenedetecttest';
@@ -89,7 +89,7 @@ describe('scenedetect', () => {
 	});
 
 	// needs to be sequential as first run will write cache files
-	describe.only.sequential('shares that are cached', () => {
+	describe.sequential('shares that are cached', () => {
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
 				fs.rmSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
