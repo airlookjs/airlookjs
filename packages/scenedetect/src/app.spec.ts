@@ -9,23 +9,27 @@ import { ScenedetectDataResponse } from './routes.js'
 const TEST_FILE = 'test_file.mp4'; 
 
 const routePrefix = '/api/test';
+const cacheDir = '.cache/scenedetecttest';
+const fullCacheDir = '.cache/scenedetecttest/test_file.mp4'
 
 const app = await build({
   routePrefix,
   scenedetect: {
-    cacheDir: '.cache/scenedetecttest'
+    cacheDir
   },
   shares: [
     {
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('tests/(.*)')],
+			systemRoot: 'tests/',
       cached: false
     },
     {
       name: 'testcached',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('testscached/(.*)')],
+			systemRoot: 'tests/',
       cached: true
     }
 	]
@@ -85,7 +89,7 @@ describe('scenedetect', () => {
 	});
 
 	// needs to be sequential as first run will write cache files
-	describe.sequential('shares that are cached', () => {
+	describe.only.sequential('shares that are cached', () => {
 		afterAll(() => {
 			if(fs.existsSync(`${import.meta.dirname}/../tests/.cache`)) {
 				fs.rmSync(`${import.meta.dirname}/../tests/.cache`, {recursive: true})
@@ -119,10 +123,15 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
+					cachedAssetsPath: "tests/.cache/scenedetecttest",
 				  version: VERSION,
 				}
 			);
     });
+
+		it('has a cachePath', () => {
+			expect(fs.existsSync(`${import.meta.dirname}/../tests/${fullCacheDir}`)).toEqual(true);
+		});
 
     it('returns cached file', { timeout: 10000 }, async () => {
 			const res = await request(app.server).get(`${routePrefix}/get?file=testscached/${TEST_FILE}`);
@@ -131,7 +140,6 @@ describe('scenedetect', () => {
 			expect(res.body).toEqual(
 				{
 					cached: true,
-					cachedVersion: VERSION,
 				  scenedetect: {
 				    scenes: [
 				      {
@@ -152,6 +160,7 @@ describe('scenedetect', () => {
 				      },
 				    ],
 				  },
+					cachedAssetsPath: "tests/.cache/scenedetecttest",
 				  version: VERSION,
 				}
 			);

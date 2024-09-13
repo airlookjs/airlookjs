@@ -62,24 +62,21 @@ export const routes: FastifyPluginCallback<MediainfoRoutesOptions> = (fastify, o
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
-        cacheFileExtension: '.mediainfo.json',
-        lockFileExtension: '.mediainfo.lock',
         ignoreCache: !outputFormatMatchesDefault,
         canProcessFileOnHttp: true,
         processFile: async ({ file }) => getMediainfo({ file, outputFormatKey: outputFormat as OutputFormatKeys })
       })
 
-      const outMixin = {
-        version: VERSION,
-        cached: result.cached,
-      }
 
       if (OutputFormats[outputFormat as OutputFormatKeys][1] == 'XML') {
 					return res.type('text/xml').code(200)
 												.send(result.data as string)
 			} else {
+        const { data, ...rest } = result;
 				return res.code(200).send({
-          mediainfo: result.data as MediaInfo, ...outMixin})
+          mediainfo: data as MediaInfo, 
+          ...rest
+        })
 			}
 
 		} catch (error: unknown) {

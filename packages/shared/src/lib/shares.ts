@@ -12,7 +12,7 @@ export interface ShareInfo {
 	mount: string;
 	uncRoot?: string;
 	cached: boolean;
-	systemRoot?: string;
+	systemRoot: string;
 	matches: RegExp[];
 }
 
@@ -58,17 +58,15 @@ export const findCached = (filePath: string, cacheDir: string) : string => {
 }
 **/
 
-interface ProcessedDataCached<ProcessedDataResponse> {
-  data: ProcessedDataResponse;
-  cachedVersion: string;
-}
 
 export interface FileMetaData<ProcessedDataResponse> {
-	data: ProcessedDataResponse,
-  cachedVersion?: string;
-	cached: boolean,
-  version: string
+	data: ProcessedDataResponse;
+  cachedAssetsPath?: string;
+	cached: boolean;
+  version: string;
 }
+
+type ProcessedDataCached<ProcessedDataResponse> = Pick<FileMetaData<ProcessedDataResponse>, "data" | "version">;
 
 const waitForAlreadyRunningJob = async (lockFilePath: string): Promise<void> => {
   if (fs.existsSync(lockFilePath)) {
@@ -152,14 +150,11 @@ export const processFileOnHttp = async <ProcessedDataResponse>(
 }
 
 // relativeCacheFolderPath: ".cache/loudness/"
-// cacheFileExtension: ".loudness.json"
 export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
-	{ shares, fileUrl, relativeCacheFolderPath, cacheFileExtension, lockFileExtension, ignoreCache, version, canProcessFileOnHttp = false, processFile }: {
+	{ shares, fileUrl, relativeCacheFolderPath, ignoreCache, version, canProcessFileOnHttp = false, processFile }: {
 	shares: ShareInfo[], 
 	fileUrl: string, 
 	relativeCacheFolderPath: string, 
-	cacheFileExtension: string, 
-	lockFileExtension: string, 
 	ignoreCache: boolean,
   version: string,
   canProcessFileOnHttp?: boolean,
@@ -168,16 +163,15 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
   try {
     const match = findPathInShares(fileUrl, shares);
 
-    const cacheDir = path.join(path.dirname(match.filePath), relativeCacheFolderPath)
-
     const fileName = path.basename(match.filePath);
 
-    const cacheFilePath = path.join(
-      cacheDir,
-      `${fileName}${cacheFileExtension}`
-    )
+    // Cache in subdirectory named after file
+    const cacheDir = path.join(path.join(path.dirname(match.filePath), relativeCacheFolderPath), fileName);
 
-    const lockFilePath = path.join(cacheDir, `${fileName}${lockFileExtension}`);
+    const cacheFilePath = path.join(cacheDir, `${fileName}.json`);
+
+    const lockFilePath = path.join(cacheDir, `${fileName}.lock`);
+    const cachedAssetsPath = path.join(match.share.systemRoot, relativeCacheFolderPath);
 
     if (match.share.cached) {
       // check if cache dir exists, if not create it
@@ -197,12 +191,15 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
           if (cacheFileStats.mtimeMs < fileStats.mtimeMs) {
             console.info("Cached file is older than file, ignoring");
           } else {
-            const data = readCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath)
+            const cachedData = readCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath)
 
-            return {
-              ...data,
-              cached: true,
-              version
+            if (cachedData.version === version) {
+              return {
+                ...cachedData,
+                cached: true,
+                cachedAssetsPath,
+                version // TODO remove, should be in data
+              }
             }
           }
         } catch (error) {
@@ -225,13 +222,18 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
       if (match.share.cached) {
         // save the result to file
         try {
-          writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, cachedVersion: version })
+          writeCached<ProcessedDataCached<ProcessedDataResponse>>(cacheFilePath, {data, version })
         } catch (error) {
           console.error("Error writing file", error)
         }
       }
       
-      return { data, cached: false, version };
+      return { 
+        data, 
+        cached: false, 
+        ...(match.share.cached && { cachedAssetsPath }),
+        version
+      };
     } catch (error) {
       console.error(`Error computing: ${(error as Error).message}`)
       throw (error);
