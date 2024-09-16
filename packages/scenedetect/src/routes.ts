@@ -51,9 +51,6 @@ export const routes: FastifyPluginCallback<ScenedetectRoutesOptions> = (fastify,
     const { file } = request.query
 
     try {
-      console.log("SCENEDETECT ROUTES")
-      console.log(VERSION);
-
       const result = await processFileOnShareOrHttp<ScenesOutput>({
         version: VERSION,
         shares: options.shares,
