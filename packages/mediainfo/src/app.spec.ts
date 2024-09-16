@@ -24,12 +24,14 @@ const app = await build({
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('tests/(.*)')],
+			systemRoot: 'tests/',
       cached: false
     },
     {
       name: 'testcached',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('testscached/(.*)')],
+			systemRoot: 'tests/',
       cached: true
     }
   ]});
@@ -193,9 +195,6 @@ describe('mediainfo', () => {
 				"url": "https://mediaarea.net/MediaInfo",
 				"version": expect.stringMatching(mediaInfoVersion) as unknown,
       })
-
-// 				      "@ref": "/Users/drexbemh/repos/airlookjs/airlookjs/packages/mediainfo/tests/seq-3341-13-1-24bit.wav",
-
       expect(body.version).toEqual(VERSION);
 
       expect(body.mediainfo.media.track[0]).toMatchObject({
@@ -257,12 +256,12 @@ describe('mediainfo', () => {
 			expect(res.status).toBe(200);
       const body = res.body as MediainfoDataResponse;
 
-      expect(body).toMatchObject({
-        cached: false,
-        version: VERSION,
-      });
-
-			expect(body.mediainfo).toEqual({
+			expect(body).toEqual(
+				{
+					cached: false,
+					version: VERSION,
+					cachedAssetsPath: "tests/.cache/mediainfotest",
+					mediainfo: {
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,
 							"@timeLastModified": expect.stringMatching(timeMatch) as unknown,
@@ -373,6 +372,7 @@ describe('mediainfo', () => {
 							],
 						}
 				}
+			 }
 			);
     });
 
@@ -385,6 +385,7 @@ describe('mediainfo', () => {
 				{
 					cached: true,
 					version: VERSION,
+					cachedAssetsPath: "tests/.cache/mediainfotest",
 					mediainfo: {
 						"ebucore:ebuCoreMain": {
 							"@dateLastModified": expect.stringMatching(dateMatch) as unknown,

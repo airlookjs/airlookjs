@@ -29,9 +29,6 @@ export interface LoudnessRoutesOptions {
   cacheDir: string;
 }
 
-const CACHE_FILE_EXTENSION = ".loudness.json"
-const LOCK_FILE_EXTENSION = ".loudness.lock"
-
 export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, options, done) => {
 
   const unlinkQueue : string[] = [];
@@ -74,18 +71,16 @@ export const routes: FastifyPluginCallback<LoudnessRoutesOptions> = (fastify, op
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
-        cacheFileExtension: CACHE_FILE_EXTENSION,
-        lockFileExtension: LOCK_FILE_EXTENSION,
         ignoreCache: false,
         version: VERSION,
         processFile: async({ file }) => getLoudness({ file, sampleRate })
       })
 
+      const { data, ...rest } = result;
+
       return response.code(200).send({
-        ...result.data,
-        version: VERSION,
-        cached: result.cached,
-        ...(result.cached && { cachedVersion: result.cachedVersion })
+        ...data,
+        ...rest
       })
 
 
