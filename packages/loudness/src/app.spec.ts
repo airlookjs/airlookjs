@@ -34,6 +34,7 @@ const app = await build({
       name: 'test',
       mount: `${import.meta.dirname}/../tests`,// '../tests',
       matches: [RegExp('tests/(.*)')],
+      systemRoot: 'tests/',
       cached: false,
   }]});
 
@@ -44,7 +45,6 @@ beforeAll(async () => {
 })
 
 describe('GET /', () => {
-
     it('should return 200 OK', async () => {
         const res = await request(app.server).get(`${routePrefix}`);
         expect(res.status).toBe(200);

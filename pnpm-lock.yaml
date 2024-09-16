@@ -134,8 +134,8 @@ importers:
   packages/loudness:
     dependencies:
       '@airlookjs/shared':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: workspace:*
+        version: link:../shared
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -183,8 +183,8 @@ importers:
   packages/mediainfo:
     dependencies:
       '@airlookjs/shared':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.4
+        version: 0.3.4
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -275,8 +275,8 @@ importers:
   packages/scenedetect:
     dependencies:
       '@airlookjs/shared':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.4
+        version: 0.3.4
       axios:
         specifier: ^1.7.7
         version: 1.7.7
@@ -447,8 +447,8 @@ packages:
   '@adobe/css-tools@4.4.0':
     resolution: {integrity: sha512-Ff9+ksdQQB3rMncgqDK78uLznstjyfIf2Arnh22pW8kBpLs6rpKDwgnZT46hin5Hl1WzazzK64DOrhSwYpS7bQ==}
 
-  '@airlookjs/shared@0.3.2':
-    resolution: {integrity: sha512-ldzZNuUbkLT7pzDuI4ezhLsAfE9D9uLXyKV+4QguFd13+DrKqqYx9Q6fm8JHC/l+h0xKnvlGXzpAhpGLxc9YKg==}
+  '@airlookjs/shared@0.3.4':
+    resolution: {integrity: sha512-wBmkQ42NCc6Ogd0lPG52MhhVHhppIzZtZeauDjru16iKhtLHB8HBolMqhDKKMTi8H5d8crJ0DoBdbr46U2eZ9g==}
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -6863,7 +6863,7 @@ snapshots:
 
   '@adobe/css-tools@4.4.0': {}
 
-  '@airlookjs/shared@0.3.2':
+  '@airlookjs/shared@0.3.4':
     dependencies:
       '@fastify/cors': 9.0.1
       '@fastify/rate-limit': 9.1.0
@@ -9634,7 +9634,7 @@ snapshots:
       pathe: 1.1.2
       sirv: 2.0.4
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@20.12.7)(@vitest/ui@2.0.5)(less@4.1.3)(sass@1.77.8)(stylus@0.59.0)(terser@5.31.6)
+      vitest: 2.0.5(@types/node@20.16.3)(@vitest/ui@2.0.5)(less@4.1.3)(sass@1.77.8)(stylus@0.59.0)(terser@5.31.6)
 
   '@vitest/utils@2.0.5':
     dependencies:
