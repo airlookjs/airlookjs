@@ -1,4 +1,4 @@
-name: Version and Release dry run
+name: Version and Release (Dry Run)
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
       - main
     paths-ignore:
       - '**.md'
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -47,7 +48,4 @@ jobs:
       - run: git config --global user.name "github-actions[bot]"
 
       - name: Version and release packages
-        run: npx nx release --skip-publish --dry-run
-
-      - name: Publish dry-run
-        run: npx nx release publish --dry-run
+        run: npx nx release --dry-run
