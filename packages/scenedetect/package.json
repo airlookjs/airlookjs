@@ -1,6 +1,5 @@
 {
 	"name": "@airlookjs/scenedetect",
-	"version": "0.7.0",
 	"description": "scenedetect service",
 	"author": "Ole Kristensen <k-denfrie-ok@tv2.dk>",
 	"type": "module",
