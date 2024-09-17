@@ -3,6 +3,7 @@
 	"description": "scenedetect service",
 	"author": "Ole Kristensen <k-denfrie-ok@tv2.dk>",
 	"type": "module",
+  "version": "0.7.0",
 	"license": "ISC",
 	"main": "src/index.js",
 	"types": "src/index.d.ts",
