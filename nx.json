@@ -23,6 +23,7 @@
       "packages/shared"
     ],
     "version": {
+      "preVersionCommand": "npx nx run-many -t build",
       "generatorOptions": {
         "packageRoot": "{projectRoot}",
         "currentVersionResolver": "git-tag",
@@ -61,9 +62,6 @@
   ],
   "targetDefaults": {
     "nx-release-version": {
-      "options": {
-        "packageRoot": "{projectRoot}"
-      },
       "dependsOn": ["build"]
     },
     "nx-release-publish": {

@@ -1,9 +1,11 @@
-name: Release
+name: Version and Release dry run
 
 on:
-  push:
+  pull_request:
     branches:
-      - release
+      - main
+    paths-ignore:
+      - '**.md'
 
 permissions:
   actions: read
@@ -38,13 +40,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
-      - run: npx nx affected -t build
-
       - name: Print Environment Info
         run: npx nx report
 
       - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - run: git config --global user.name "github-actions[bot]"
 
-      - name: Release packages
-        run: npx nx release --skip-publish
+      - name: Version and release packages
+        run: npx nx release --skip-publish --dry-run
+
+      - name: Publish dry-run
+        run: npx nx release publish --dry-run
