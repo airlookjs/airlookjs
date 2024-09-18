@@ -1,7 +1,6 @@
 {
   "name": "@airlookjs/mediainfo",
   "description": "",
-  "version": "1.3.0",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "repository": "https://github.com/airlookjs/airlookjs.git",

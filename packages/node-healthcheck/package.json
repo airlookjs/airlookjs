@@ -1,6 +1,5 @@
 {
   "name": "@airlookjs/node-healthcheck",
-  "version": "1.4.2",
   "license": "MIT",
   "repository": "https://github.com/airlookjs/airlookjs.git",
   "type": "module",
