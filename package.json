@@ -6,7 +6,7 @@
     "build": "nx run-many --target=build --parallel",
     "lint": "nx run-many --target=lint --parallel",
     "test": "nx run-many --target=test --parallel",
-    "release": "node ./tools/release/release.js"
+    "release": "tsx ./tools/release/release.ts"
   },
   "pkgx": "node@20.10.0 pnpm@9.2.0",
   "type": "module",
