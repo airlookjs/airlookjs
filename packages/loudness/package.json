@@ -18,7 +18,7 @@
   "types": "src/index.d.ts",
   "engine": "node >= 20",
   "dependencies": {
-    "@airlookjs/shared": "workspace:*",
+    "@airlookjs/shared": "file:../shared",
     "dotenv": "16.4.5",
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",

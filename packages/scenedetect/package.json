@@ -16,7 +16,7 @@
 	},
 	"engine": "node >=18.0.0",
 	"dependencies": {
-		"@airlookjs/shared": "workspace:*",
+    "@airlookjs/shared": "file:../shared",
 		"axios": "^1.7.7",
 		"cors": "^2.8.5",
 		"csv-parse": "^5.5.6",

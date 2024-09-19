@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@airlookjs/shared": "workspace:*",
+    "@airlookjs/shared": "file:../shared",
     "cors": "^2.8.5",
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
