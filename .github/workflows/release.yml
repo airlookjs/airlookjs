@@ -1,11 +1,11 @@
-name: Version and Release (Dry Run)
+name: Version and Release
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
+  #pull_request:
+  #  branches:
+  #    - main
+  #  paths-ignore:
+  #    - '**.md'
   workflow_dispatch:
 
 permissions:
@@ -44,8 +44,5 @@ jobs:
       - name: Print Environment Info
         run: npx nx report
 
-      - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: git config --global user.name "github-actions[bot]"
-
       - name: Version and release packages
-        run: npx nx release --dry-run
+        run: npx nx release --skip-publish
