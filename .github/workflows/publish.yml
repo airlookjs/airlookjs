@@ -15,6 +15,7 @@ on:
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/main' # run publish only for the main branch
     name: Publish
     runs-on: ubuntu-latest
     env:
