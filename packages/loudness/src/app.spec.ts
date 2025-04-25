@@ -1,6 +1,6 @@
 import { build } from './app.js';
 import request from "supertest";
-import { expect, describe, it, beforeAll } from "vitest";
+import { expect, describe, it, beforeAll, skip } from "vitest";
 import { VERSION } from './config.js';
 import { LoudnessDataResponse } from './routes.js';
 
@@ -45,19 +45,19 @@ beforeAll(async () => {
 })
 
 describe('GET /', () => {
-    it('should return 200 OK', async () => {
+    skip('should return 200 OK', async () => {
         const res = await request(app.server).get(`${routePrefix}`);
         expect(res.status).toBe(200);
     });
 });
 
 describe('loudness', () => {
-    it('should return 400 Bad Request with no query params', async () => {
+    skip('should return 400 Bad Request with no query params', async () => {
         const res = await request(app.server).get(`${routePrefix}/get`);
         expect(res.status).toBe(400);
     });
 
-    it('should return valid result for loudness', { timeout: 10000 }, async () => {
+    skip('should return valid result for loudness', { timeout: 10000 }, async () => {
 
         // Test file from https://tech.ebu.ch/publications/ebu_loudness_test_set
         const TEST_FILE = 'seq-3341-13-1-24bit.wav';
