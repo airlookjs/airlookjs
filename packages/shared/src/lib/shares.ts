@@ -178,6 +178,7 @@ export const processFileOnShareOrHttp = async <ProcessedDataResponse>(
       if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir, { recursive: true })
       }
+      fs.chmodSync(cacheDir, 0o770);
 
       await waitForAlreadyRunningJob(lockFilePath);
 
