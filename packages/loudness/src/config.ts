@@ -30,6 +30,6 @@ export const config: LoudnessConfig = {
   }
 };
 
-export const VERSION = process.env.npm_package_version ?? 'dev';
+export const VERSION = '0.0.1'; // data version is not package version, update only if any changes for data
 export const PORT = parseIntEnv(process.env.PORT, 3000);
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Block } from '../Block';
+	import type { Block } from '../Sequence';
 	import { getSequenceContext } from './SequenceContext';
 
 	export let time: number;

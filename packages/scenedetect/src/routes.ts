@@ -51,23 +51,23 @@ export const routes: FastifyPluginCallback<ScenedetectRoutesOptions> = (fastify,
     const { file } = request.query
 
     try {
+      console.log("SCENEDETECT ROUTES")
+      console.log(VERSION);
+
       const result = await processFileOnShareOrHttp<ScenesOutput>({
         version: VERSION,
         shares: options.shares,
         fileUrl: file,
         relativeCacheFolderPath: options.cacheDir,
-        cacheFileExtension: '.scenedetect.json',
-        lockFileExtension: '.scenedetect.lock',
         ignoreCache: false,
         processFile: async ({ file, cachePath }) => getScenes({ file, cachePath })
       })
 
+      const { data, ...rest } = result;
 
       return response.code(200).send({
         ...result.data,
-        version: VERSION,
-        cached: result.cached,
-        ...(result.cached && { cachedVersion: result.cachedVersion })
+        ...rest,
       })
 		} catch (error: unknown) {
       console.error('Error getting mediainfo', error)

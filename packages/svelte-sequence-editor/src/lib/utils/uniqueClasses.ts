@@ -5,7 +5,7 @@ export const uniqueClasses = (classNames = '') : string => {
 		.filter((c) => !!c);
 	const unique: string[] = [];
 	classes.forEach((c) => {
-		if (unique.indexOf(c) < 0) unique.push(c);
+		if (unique.includes(c)) unique.push(c);
 	});
 	return unique.join(' ');
 };

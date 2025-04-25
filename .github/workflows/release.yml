@@ -1,9 +1,12 @@
-name: Release
+name: Version and Release
 
 on:
-  push:
-    branches:
-      - release
+  #pull_request:
+  #  branches:
+  #    - main
+  #  paths-ignore:
+  #    - '**.md'
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -25,6 +28,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set Git config
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "$(git log -n 1 --pretty=format:%an)"
+          git config user.email "$(git log -n 1 --pretty=format:%ae)"
+        
       - uses: pnpm/action-setup@v3
         with:
           version: 9.2.0
@@ -38,13 +48,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
-      - run: npx nx affected -t build
-
       - name: Print Environment Info
         run: npx nx report
 
-      - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: git config --global user.name "github-actions[bot]"
-
-      - name: Release packages
+      - name: Version and release packages
         run: npx nx release --skip-publish

@@ -1,6 +1,6 @@
 // @ts-check
 // should be able to rename to .ts and run with tsx but facing issues with changelog renderer import
-
+//import { execSync } from 'child_process';
 import { releaseChangelog, releasePublish, releaseVersion } from 'nx/release/index.js';
 import yargs from 'yargs';
 
@@ -28,14 +28,16 @@ const options = await yargs(process.argv.slice(2))
 const { workspaceVersion, projectsVersionData } = await releaseVersion({
   specifier: options.version,
   // stage package.json updates to be committed later by the changelog command
-  stageChanges: true,
+  stageChanges: false,
   dryRun: options.dryRun,
   verbose: options.verbose,
+  /*generatorOptionsOverrides: {
+    updateDependents: 'never'
+  }*/
 });
 
 console.log('📦 Workspace version:', workspaceVersion);
 console.log('📦 Projects version data:', projectsVersionData);
-
 
 // This will create a release on GitHub
 await releaseChangelog({
@@ -43,17 +45,21 @@ await releaseChangelog({
   version: workspaceVersion,
   dryRun: options.dryRun,
   verbose: options.verbose,
+  createRelease: 'github',
 });
+
 
 if (workspaceVersion === null) {
   console.log(
     '⏭️ No changes detected across any package, skipping publish step altogether',
   );
 } else {
+
   const publishStatus = await releasePublish({
     dryRun: options.dryRun,
     verbose: options.verbose,
   });
 
   process.exit(publishStatus);
+
 }

@@ -1,6 +1,5 @@
 import { parseIntEnv, type CommonServiceConfig } from '@airlookjs/shared';
 // TODO: parse config file to docker image to set up shares
-
 export interface MediainfoConfig extends CommonServiceConfig {
     mediainfo: {
         defaultOutputFormat: string;
@@ -17,5 +16,6 @@ export const config : MediainfoConfig = {
   },
 }
 
-export const VERSION = process.env.npm_package_version ?? 'dev';
+export const VERSION = '0.0.1'; // data version is not package version, update only if any changes for data
+
 export const PORT = parseIntEnv(process.env.PORT, 3000);

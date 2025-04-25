@@ -1,19 +1,19 @@
 {
-  "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "extends": "nx/presets/npm.json",
   "nxCloudAccessToken": "M2ZkZDY5ZWEtNDMwNy00YTZkLThhMmMtNGI3ZmMwZThhMzE3fHJlYWQ=",
+  "packageManager": "pnpm",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
-      "{workspaceRoot}/eslint.config.js",
+      "{projectRoot}/eslint.config.js",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.json",
       "!{projectRoot}/tsconfig.spec.json"
     ],
     "sharedGlobals": []
   },
-
   "release": {
     "projectsRelationship": "independent",
     "projects": [
@@ -29,8 +29,8 @@
         "currentVersionResolver": "git-tag",
         "fallbackCurrentVersionResolver": "disk",
         "specifierSource": "conventional-commits",
-        "updateDependents": false,
-        "skipLockFileUpdate": true
+        "skipLockFileUpdate": true,
+        "updateDependents": "auto"
       }
     },
     "changelog": {
@@ -61,12 +61,6 @@
     }
   ],
   "targetDefaults": {
-    "nx-release-version": {
-      "options": {
-        "packageRoot": "{projectRoot}",
-      },
-      "dependsOn": ["build"]
-    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"
@@ -76,7 +70,11 @@
     "test": {
       "cache": true,
       "executor": "@nx/vite:test",
-      "inputs": ["default", "^production", "{workspaceRoot}/vitest.workspace.ts"],
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/vitest.workspace.ts"
+      ],
       "dependsOn": ["^build"]
     },
     "@nx/vite:test": {
@@ -91,12 +89,11 @@
     "lint": {
       "inputs": [
         "default",
-        "{workspaceRoot}/eslint.config.js",
-        "{workspaceRoot}/eslint.config.mjs"
+        "{projectRoot}/eslint.config.js"
       ],
       "cache": true,
       "options": {
-        "eslintConfig": "{workspaceRoot}/eslint.config.js"
+        "eslintConfig": "{projectRoot}/eslint.config.js"
       },
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

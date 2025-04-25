@@ -18,3 +18,7 @@ UI package for time baswed sequence editing.
 
 ## Utility
 @airlookjs/shared
+
+# Workflow
+When making changes in airlookjs shared, you can work with them locally adding `"@airlookjs/shared": "workspace:*"` in the package.json for the project that needs to use it.
+When you need to release that change, first push and release your changes for `@airlookjs/shared`, afterward update the reference in the respective projects that use it.

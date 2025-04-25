@@ -1,48 +1,46 @@
 {
-    "name": "loudness",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "tags": ["type:app"],
-    "projectType": "application",
-    "sourceRoot": "{projectRoot}/src",
-    "targets": {
-        "lint": {
-          "executor": "@nx/eslint:lint",
-          "outputs": ["{options.outputFile}"]
+  "name": "loudness",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "{projectRoot}/src",
+  "tags": ["type:app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "outputPath": "dist/{projectRoot}",
+        "tsConfig": "{projectRoot}/tsconfig.lib.json",
+        "main": "{projectRoot}/index.ts",
+        "assets": ["{projectRoot}/install.sh", "{projectRoot}/README.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "dependsOn": ["build"],
+      "defaultConfiguration": "local",
+      "options": {
+        "file": "{projectRoot}/Dockerfile"
+      },
+      "configurations": {
+        "local": {
+          "tags": ["loudness:latest"],
+          "push": false
         },
-        "build": {
-          "executor": "@nx/js:tsc",
-          "options": {
-            "outputPath": "dist/{projectRoot}",
-            "tsConfig": "{projectRoot}/tsconfig.lib.json",
-            "main": "{projectRoot}/index.ts",
-            "assets": ["{projectRoot}/install.sh", "{projectRoot}/README.md"]
-          }
-        },
-        "container": {
-          "executor": "@nx-tools/nx-container:build",
-          "dependsOn": ["build"],
-          "defaultConfiguration": "local",
-          "options": {
-            //"context": "",
-            "file": "{projectRoot}/Dockerfile"
-          },
-          "configurations": {
-            "local": {
-              "tags": ["loudness:latest"],
-              "push": false
-            },
-            "production": {
-              "tags": ["my.image-registry.com/my-app:latest"],
-              "push": true
-            }
-          }
-        },
-        "test": {
-          "executor": "@nx/vite:test",
-          "outputs": ["{options.reportsDirectory}"],
-          "options": {
-            "reportsDirectory": "../coverage/libs/util"
-          }
+        "production": {
+          "tags": ["my.image-registry.com/my-app:latest"],
+          "push": true
         }
       }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../coverage/libs/util"
+      }
+    }
+  }
 }

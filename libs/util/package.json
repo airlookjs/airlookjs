@@ -1,11 +1,10 @@
 {
   "name": "util",
-  "version": "0.0.1",
   "dependencies": {
   },
   "main": "src/index.js",
   "types": "src/index.d.ts",
-  
+
   "type": "module",
   "private": true
 }
